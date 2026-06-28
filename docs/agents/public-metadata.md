@@ -1,38 +1,31 @@
 # Public Metadata And OSS Readiness
 
-## Scope
+Keep the repository open-source-ready even while private.
 
-Use this when editing GitHub metadata, release readiness docs, package metadata, public docs, or repo
-topics.
+## Plugin Metadata
 
-## Rules
+- Package: `martinfrancois/java-functional-style`
+- Repository: `https://github.com/martinfrancois/java-functional-style-skill`
+- License: MIT
+- Entrypoint: `README.md`
+- Private: `true`
 
-- GitHub description should be short, clickable, and user-benefit focused.
-- Current preferred wording: "Help AI coding agents use Java Functional Style and Collectors well in new code,
-  review, and cleanup without replacing one antipattern with another."
-- Keep the GitHub repository private until the maintainer explicitly says to make it public.
-- For OSS-readiness work, `.tessl-plugin/plugin.json` should be public-ready with
-  `"private": false`; this does not publish the plugin by itself.
-- Do not run a real `tessl plugin publish` or make the GitHub repository public until the
-  maintainer explicitly asks for that release step.
-- Use the maximum useful number of relevant discoverability topics when the repo becomes public.
-- Before calling the repo OSS-ready, check for a license, no private/secret references, a
-  user-focused README, contributor docs, passing lint, and benchmark claims that match current
-  evals.
-- Tessl packaging currently uses `.tessl-plugin/plugin.json`. Keep docs, scripts, workflows, and
-  release config aligned with plugin terminology unless official docs and CLI behavior change.
-- Do not add `tile.json` unless current Tessl docs and CLI behavior require it.
-- The workflow-pinned Tessl CLI version accepts the current plugin format with
-  `.tessl-plugin/plugin.json`.
-  `tessl plugin lint .`, `tessl plugin publish --dry-run --skip-evals .`, and
-  `tessl plugin publish --dry-run --bump patch .` are the authority for package validity here.
-  `tessl plugin pack` must include `skills/java-functional-style/SKILL.md` and the referenced files under
-  `skills/java-functional-style/references/`. Do not add a `skills` field or migrate to `tile.json` unless
-  those pinned CLI checks or current official docs prove the active skill is not included,
-  discoverable, or publishable.
+Preferred summary:
 
-## References
+```text
+Java functional style guidance for lambdas, method references, identity functions, callbacks, and functional interfaces.
+```
 
-- [Project Identity](project-identity.md)
-- [README Guidance](readme.md)
-- [Eval Guidance](evals.md)
+Preferred description:
+
+```text
+Help AI coding agents write, review, and refactor Java lambdas, method references, functional interfaces, identity functions, suppliers, predicates, consumers, and callbacks with behavior-preserving readability.
+```
+
+## Safety
+
+- Do not commit secrets, private hosted eval artifacts, private logs, local machine paths, or
+  non-public tokens.
+- Do not run a real Tessl publish until François explicitly asks.
+- Tessl publish dry-runs are allowed.
+- `.tessl-plugin/plugin.json` must keep `"private": true` until explicitly changed.

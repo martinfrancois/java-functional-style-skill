@@ -88,7 +88,7 @@ explain why.
 
 - [ ] The change is scoped to the sections, skill files, evals, or workflows described above.
 - [ ] Validation that applies to this change is checked above, or any unavailable check is explained.
-- [ ] If Java stream guidance changed, Java baseline compatibility plus ordering, null handling, and parallelism were considered.
+- [ ] If Java functional-style guidance changed, Java baseline compatibility plus ordering, laziness, null behavior, exceptions, side effects, and object identity were considered.
 - [ ] If evals or benchmark claims changed, the eval scenarios remain fair and do not leak answer keys, run IDs, or fixed score claims into runtime references.
 - [ ] If runtime skill text or references changed, hosted checks were widened from targeted affected scenarios to main/reference/regression as described in `docs/agents/workflow.md`, or any Tessl blocker is documented.
 - [ ] If a runtime skill/reference change was released, the final report includes the published main eval run plus post-change reference and regression run IDs, or a blocker issue for missing broad suites.

@@ -16,7 +16,7 @@ body:
       label: Area
       options:
         - Skill behavior
-        - Stream example or reference material
+        - Functional-style example or reference material
         - Evals or scoring
         - README or docs
         - Tessl install or plugin metadata

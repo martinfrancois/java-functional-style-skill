@@ -69,7 +69,7 @@ body:
     id: java-example
     attributes:
       label: Minimal Java example
-      description: If the bug is about stream guidance, paste the smallest sanitized Java example that shows it.
+      description: If the bug is about functional-style guidance, paste the smallest sanitized Java example that shows it.
       render: java
   - type: textarea
     id: logs
