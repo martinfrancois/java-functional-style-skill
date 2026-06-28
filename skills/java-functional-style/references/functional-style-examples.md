@@ -290,4 +290,6 @@ List<String> readValidLines(Path path) throws IOException {
 }
 ```
 
-A callback-heavy rewrite would obscure the checked IO and early-exit behavior.
+A callback-heavy rewrite would obscure the checked IO and early-exit behavior. In a review, the
+safe direction is to keep this loop or extract a small named helper, not to propose a clever
+`dropWhile`/`takeWhile` stream chain by default.

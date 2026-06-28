@@ -36,9 +36,12 @@ exact file. Do not answer only in chat when a file artifact is requested.
    behavior, checked exceptions, or overload resolution would change.
 4. Use `Function.identity()` when an API needs an identity `Function<T, T>`. Use
    `UnaryOperator.identity()` when an API specifically needs an identity `UnaryOperator<T>`.
-   Keep required imports.
+   Keep required imports. Do not replace non-identity callbacks such as `card -> card.copy()` or
+   `value -> normalize(value)` with identity functions.
 5. Remove no-op identity stages when the stage itself has no semantic purpose. A redundant
-   `.map(x -> x)` is usually removed, not replaced with `.map(Function.identity())`.
+   `.map(x -> x)` is usually removed, not replaced with `.map(Function.identity())`. Do not remove
+   a stage when scheduling, callback invocation, tracing, metrics, exception wrapping, or returned
+   stage identity is observable.
 6. Keep lambdas as glue. Use one-expression callbacks or method references for direct projection,
    filtering, consumption, or construction.
 7. Extract a named helper, or use a plain branch, when a callback needs branching, local temporary
@@ -53,32 +56,34 @@ exact file. Do not answer only in chat when a file artifact is requested.
    callback side effect only when the side effect is the requested outcome and is safe for the
    chosen execution mode.
 10. Keep plain branches or loops when they are clearer for checked IO, prompts, parser boundaries,
-    complex early exits, mutation-heavy logic, or behavior that depends on step-by-step control
-    flow.
+    complex early exits, sentinel-controlled windows, mutation-heavy logic, or behavior that depends
+    on step-by-step control flow. In reviews of proposed functional rewrites for these shapes,
+    reject behavior changes and say the loop or branch is the appropriate shape; do not offer a
+    clever stream, Optional, or callback pipeline unless the user specifically asks for one and it
+    is proven behavior-preserving.
 11. Verify changed branches for present values, absent values, empty inputs, null behavior,
     ordering, side effects, laziness, exceptions, object identity where observable, and Java
     baseline compatibility.
 12. Run the functional-style hard-stop scan from [hard-stops.md](references/hard-stops.md) and
     reconcile hits before finalizing.
 
-## Nuance
+## Quick Shapes
 
-- `Function.identity()` is correct for required identity `Function<T, T>` arguments.
-- `UnaryOperator.identity()` is correct for required identity `UnaryOperator<T>` arguments.
-- `.map(x -> x)` is usually a redundant stage to remove, not a style issue to replace with
-  `.map(Function.identity())`.
-- Do not remove identity callback stages from APIs where the returned stage object, scheduling,
-  async boundary, callback invocation, tracing, metrics, or exception wrapping is observable unless
-  behavior is proven equivalent. Be careful with `CompletableFuture.thenApply(Function.identity())`
-  and similar APIs.
-- Do not replace non-identity lambdas with identity functions. `card -> card.copy()` and
-  `value -> normalize(value)` are not identity callbacks.
-- Do not force streams or Optional into code where a plain branch or loop is clearer.
+```java
+cards.stream().collect(Collectors.toMap(Card::id, Function.identity(), merge, LinkedHashMap::new));
+```
+
+```java
+return optional.orElse(defaultValue); // not optional.map(x -> x).orElse(defaultValue)
+```
 
 ## Review Output
 
 - Give a direct behavior-preserving decision plus one safe snippet when useful.
 - Create `review.md` when requested, even for rejection-only reviews.
+- For reviews rejecting a forced functional rewrite, do not include alternative stream, Optional, or
+  callback-heavy snippets as examples or counterexamples. Recommend keeping the loop/branch or a
+  small named helper.
 - Explain code behavior, not internal workflow.
 - Avoid internal workflow labels such as "per the skill", "hard stop", "marker", "scan",
   "checklist", "rubric", or "criteria" unless the user asks about the workflow itself.

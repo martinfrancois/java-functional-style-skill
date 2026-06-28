@@ -52,8 +52,13 @@ Fix or explicitly classify these before finalizing:
   Java baseline compatibility when changing collector callbacks.
 - Keep supplier work lazy even when the supplier body is only one method call if that method has
   meaningful cost or side effects.
-- Keep plain branches or loops for complex early exits, mutation-heavy output, checked IO, prompts,
-  parser boundaries, or stateful algorithms.
+- Keep plain branches or loops for complex early exits, sentinel-controlled windows,
+  mutation-heavy output, checked IO, prompts, parser boundaries, or stateful algorithms. When
+  reviewing a proposed functional rewrite of this shape, recommend keeping the clear loop or branch
+  unless the user specifically asks for a fluent rewrite and it is proven equivalent. Do not offer
+  `dropWhile`/`takeWhile`, Optional, or callback-heavy replacements as the default safe direction for
+  stateful windowing. In rejection reviews, avoid alternative pipeline snippets even as
+  counterexamples; they distract from the safe direction and can introduce new defects.
 
 ## Functional-Style Scan
 

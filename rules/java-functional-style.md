@@ -8,4 +8,6 @@ Do not add no-op functional stages. Remove identity mapping stages such as `stre
 
 Extract a named helper, or use a plain branch, when a lambda or callback needs branching, local temporary variables, loops, checked exception handling, nested fluent chains, side effects, or more than one meaningful condition.
 
+When reviewing a proposed functional rewrite of stateful windowing, sentinel-controlled loops, early breaks, or mutation-heavy accumulation, reject behavior changes and prefer keeping the clear loop or branch. Do not replace it with a clever stream, Optional, or callback pipeline merely because one can be written.
+
 Preserve ordering, laziness, exception behavior, side effects, mutability, object identity where observable, and Java baseline compatibility. Do not replace a non-identity lambda with an identity function merely because the lambda is short.
