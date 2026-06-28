@@ -1,1 +1,0 @@
-Implement Java stream reducers with teeing and distinguish takeWhile from dropWhile/filter.

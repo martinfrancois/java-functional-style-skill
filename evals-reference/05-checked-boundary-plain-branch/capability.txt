@@ -1,0 +1,1 @@
+Keep checked IO and parser boundaries clear instead of hiding contract-changing checked work inside callbacks.

@@ -1,0 +1,1 @@
+Extract non-trivial Java callback bodies with temporary values and branching into named helpers while preserving value flow.

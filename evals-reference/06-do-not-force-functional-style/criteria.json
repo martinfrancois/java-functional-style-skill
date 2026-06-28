@@ -1,0 +1,43 @@
+{
+  "context": "Reference focused review: functional style should not be forced when a plain loop preserves early-exit and stateful-window behavior more clearly.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Creates review artifact",
+      "category": "safety",
+      "max_score": 10,
+      "description": "Creates review.md with a clear accept/reject recommendation."
+    },
+    {
+      "name": "Rejects behavior-changing rewrite",
+      "category": "safety",
+      "max_score": 30,
+      "description": "Explains that the proposed filters include lines before the start marker and after the stop marker, so they do not preserve the original window and early-exit behavior."
+    },
+    {
+      "name": "Does not force functional style",
+      "category": "functional_style",
+      "max_score": 30,
+      "description": "States that the original loop or an equally clear branch-based implementation is appropriate for this stateful window and early break, rather than forcing a clever callback-heavy rewrite."
+    },
+    {
+      "name": "Provides safe direction",
+      "category": "functional_style",
+      "max_score": 20,
+      "description": "If suggesting cleanup, keeps the loop/branch structure or proposes a named helper that preserves start/stop semantics, blank filtering, trimming, and encounter order."
+    },
+    {
+      "name": "Keeps review focused",
+      "category": "maintainability",
+      "max_score": 10,
+      "description": "Avoids unrelated performance claims, dependencies, concurrency, broad API redesign, or internal workflow labels."
+    }
+  ],
+  "metadata": {
+    "invocation": "natural",
+    "task_type": "review",
+    "evidence_type": "focused_reference",
+    "reference_selection": "Focused reference coverage for not forcing functional style.",
+    "runtime_reference_overlap_rationale": "Allowed only because this is reference-suite focused coverage, not ordinary broad lift."
+  }
+}

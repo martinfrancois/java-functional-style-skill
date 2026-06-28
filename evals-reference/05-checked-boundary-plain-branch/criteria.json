@@ -1,0 +1,43 @@
+{
+  "context": "Reference focused cleanup: checked IO and parser boundaries should remain explicit rather than being hidden in broad unchecked callback wrappers.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Creates coherent Java 17 artifact",
+      "category": "safety",
+      "max_score": 10,
+      "description": "Creates ConfigLoader.java with the requested method, nested record, imports, and Java 17-compatible code."
+    },
+    {
+      "name": "Preserves exception and absence contracts",
+      "category": "safety",
+      "max_score": 30,
+      "description": "Preserves Optional.empty() for absent paths, lets Files.readString IOException remain an IOException from load, and preserves IllegalArgumentException from parsing empty content."
+    },
+    {
+      "name": "Clarifies checked boundary",
+      "category": "functional_style",
+      "max_score": 35,
+      "description": "Uses a plain branch or named checked helper to make the IO boundary clear instead of catching IOException inside an Optional callback and wrapping it in UncheckedIOException."
+    },
+    {
+      "name": "Keeps parsing focused",
+      "category": "functional_style",
+      "max_score": 15,
+      "description": "Keeps parse behavior intact and does not hide parser errors, swallow exceptions, return empty for invalid content, or add broad fallback behavior."
+    },
+    {
+      "name": "Keeps cleanup focused",
+      "category": "maintainability",
+      "max_score": 10,
+      "description": "Avoids unrelated dependencies, logging, caching, async work, public API changes, or broad rewrites."
+    }
+  ],
+  "metadata": {
+    "invocation": "natural",
+    "task_type": "cleanup",
+    "evidence_type": "focused_reference",
+    "reference_selection": "Focused reference coverage for checked IO boundary cleanup.",
+    "runtime_reference_overlap_rationale": "Allowed only because this is reference-suite focused coverage, not ordinary broad lift."
+  }
+}
