@@ -16,9 +16,9 @@ VALIDATOR = REPO_ROOT / "scripts" / "validate_eval_criteria.py"
 
 
 def write_runtime_reference(root: Path) -> None:
-    references = root / "skills" / "java-streams" / "references"
+    references = root / "skills" / "java-functional-style" / "references"
     references.mkdir(parents=True)
-    (references / "stream-examples.md").write_text(
+    (references / "functional-style-examples.md").write_text(
         """# Runtime examples
 
 ```java
@@ -71,7 +71,7 @@ def write_scenario(
     scenario = root / suite / name
     scenario.mkdir(parents=True)
     (scenario / "task.md").write_text(task, encoding="utf-8")
-    (scenario / "capability.txt").write_text("java-streams\n", encoding="utf-8")
+    (scenario / "capability.txt").write_text("java-functional-style\n", encoding="utf-8")
     metadata: dict[str, object] = {
         "invocation": invocation,
         "task_type": task_type,
@@ -101,7 +101,7 @@ def write_scenario(
             },
             {
                 "name": "Uses stream quality",
-                "category": "stream_quality",
+                "category": "functional_style",
                 "max_score": 90,
                 "description": "Uses clear stream code.",
             },
@@ -223,7 +223,7 @@ class ValidateEvalCriteriaTests(unittest.TestCase):
                 root,
                 "evals-reference",
                 "26-explicit",
-                shipment_task("Use `$java-streams` to create `OverdueShipmentNotices.java`."),
+                shipment_task("Use `$java-functional-style` to create `OverdueShipmentNotices.java`."),
                 invocation="natural",
                 evidence_type="focused_reference",
                 rationale="Allowed only as focused reference coverage.",
@@ -239,7 +239,7 @@ class ValidateEvalCriteriaTests(unittest.TestCase):
                 root,
                 "evals-reference",
                 "26-explicit",
-                shipment_task("Use `$java-streams` to create `OverdueShipmentNotices.java`."),
+                shipment_task("Use `$java-functional-style` to create `OverdueShipmentNotices.java`."),
                 invocation="explicit",
                 evidence_type="focused_reference",
                 rationale="Allowed only as focused reference coverage.",
@@ -258,7 +258,7 @@ class ValidateEvalCriteriaTests(unittest.TestCase):
             },
             {
                 "name": "Avoids multi-line stream lambdas",
-                "category": "stream_quality",
+                "category": "functional_style",
                 "max_score": 80,
                 "description": "Extracts non-trivial stream lambda bodies into helpers.",
             },

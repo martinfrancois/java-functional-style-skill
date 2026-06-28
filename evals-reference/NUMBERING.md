@@ -19,7 +19,7 @@ performance advice. Keep it here unless future current-suite evidence shows it m
 promotion floor and improves main coverage.
 
 Number `27` covers high-volume uppercase implementation from
-<https://github.com/martinfrancois/java-streams-skill/issues/4>. Targeted Sonnet 4.6 run
+<https://github.com/martinfrancois/java-functional-style-skill/issues/4>. Targeted Sonnet 4.6 run
 `019ea26a-754b-718f-ac66-cd111d4b1e79` scored it `99/100` without context and `100/100` with
 context. Keep it in `evals-reference/` unless future hosted history shows it should move to main or
 regression.

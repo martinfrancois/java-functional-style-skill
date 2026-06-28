@@ -24,7 +24,7 @@ Options:
   --base-ref <ref>      Git ref to diff against for changed files (default:
                         origin/main)
   --skill-dir <path>    Skill directory for quality review
-                        (default: skills/java-streams)
+                        (default: skills/java-functional-style)
   --plan-only           Print the staged plan and do not run hosted eval commands.
   --run-broad           After targeted evals clean, run main then reference then
                         regression.
@@ -49,7 +49,7 @@ Options:
                         (default: auto). Example: regression,main,reference.
   --evidence-file <path>
                         Scenario evidence cache (default:
-                        .tessl/eval-evidence/java-streams-pre-submit.json)
+                        .tessl/eval-evidence/java-functional-style-pre-submit.json)
   --reset-evidence      Clear the evidence cache before planning.
   --ignore-evidence     Do not skip scenarios already recorded as passing.
   --focus <scope:scenario>
@@ -71,8 +71,8 @@ run_broad=false
 targeted_only=false
 plan_only=false
 base_ref="origin/main"
-skill_dir="skills/java-streams"
-evidence_file=".tessl/eval-evidence/java-streams-pre-submit.json"
+skill_dir="skills/java-functional-style"
+evidence_file=".tessl/eval-evidence/java-functional-style-pre-submit.json"
 use_evidence=true
 reset_evidence=false
 runtime_fingerprint=""

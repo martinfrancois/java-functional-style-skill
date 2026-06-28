@@ -215,7 +215,7 @@ def main() -> int:
     parser.add_argument("--repo-root", type=Path, default=Path("."))
     parser.add_argument("--base-ref", default="origin/main")
     parser.add_argument("--head-ref", default="HEAD")
-    parser.add_argument("--skill-dir", default="skills/java-streams")
+    parser.add_argument("--skill-dir", default="skills/java-functional-style")
     parser.add_argument("--limit", type=int, default=4)
     parser.add_argument("--min-score", type=float, default=1.0)
     parser.add_argument("--explain", action="store_true")

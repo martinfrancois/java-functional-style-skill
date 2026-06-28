@@ -1,6 +1,6 @@
 # Implement invoice bounds and temperature windows
 
-Use `$java-streams` to create `InvoiceBoundsAndTemperatures.java`. Assume Java 17.
+Use `$java-functional-style` to create `InvoiceBoundsAndTemperatures.java`. Assume Java 17.
 
 Implement:
 

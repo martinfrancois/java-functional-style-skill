@@ -165,7 +165,7 @@ task's behavior depends on encounter order.
 When documenting a scan, start with this header so later reviews can tell which workflow was used:
 
 ```text
-java-streams hard-stop scan v1
+java-functional-style hard-stop scan v1
 ```
 
 Run a hard-stop scan over touched Java files before finalizing. The command uses PCRE2 and
@@ -177,7 +177,7 @@ rg -nUP "count\\(\\)\\s*>\\s*0|collect\\([^;]+\\)\\s*\\.\\s*(?:isEmpty|size|getF
 ```
 
 For each hit, decide whether it is legitimate for the project Java baseline and behavior. Fix
-stream-quality issues. If a marker remains because it is legitimate, state why. When an audit asks
+functional-style issues. If a marker remains because it is legitimate, state why. When an audit asks
 for allowed stream markers or allowed usages, also call out plain `count()` when it is the requested
 numeric result rather than a `count() > 0` existence check, and state that plain `count()` is not a
 hit for the bundled scan regex.

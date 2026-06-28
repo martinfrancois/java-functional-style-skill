@@ -6,9 +6,9 @@ Use this when naming the repository, skill, package, workspace, or public source
 
 ## Rules
 
-- Repository name: `java-streams-skill`.
-- Skill name: `java-streams`.
-- Tessl package name: `martinfrancois/java-streams`.
+- Repository name: `java-functional-style-skill`.
+- Skill name: `java-functional-style`.
+- Tessl package name: `martinfrancois/java-functional-style`.
 - Tessl workspace: `martinfrancois`.
 - The GitHub repository is private until the maintainer explicitly makes it public.
 - The Tessl plugin manifest is public-ready with `"private": false`; keep it that way unless the
@@ -19,7 +19,7 @@ Use this when naming the repository, skill, package, workspace, or public source
   recreated, use the pinned CLI project command:
 
   ```bash
-  tessl project create --workspace martinfrancois java-streams-skill
+  tessl project create --workspace martinfrancois java-functional-style-skill
   ```
 
   Do this only for project identity recovery. It is not part of normal plugin publishing, release,

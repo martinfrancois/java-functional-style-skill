@@ -1,6 +1,6 @@
 # Implement order collector report
 
-Use `$java-streams` to create `OrderCollectorReport.java`. Assume Java 17.
+Use `$java-functional-style` to create `OrderCollectorReport.java`. Assume Java 17.
 
 Implement:
 

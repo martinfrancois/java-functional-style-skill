@@ -7,7 +7,7 @@ wording.
 
 ## Rules
 
-- Use `Java Streams Skill for AI Agents` as the README title.
+- Use `Java Functional Style Skill for AI Agents` as the README title.
 - Keep the README user-focused. Put contributor workflow details in `CONTRIBUTING.md` or
   `docs/agents/`.
 - The first screen should explain the practical failure mode: agents use streams but choose weak
@@ -15,7 +15,7 @@ wording.
   parallelism.
 - The README may say agents that support skill auto-selection, such as Codex and Claude Code, can
   select the skill from context.
-- Install examples should use `martinfrancois/java-streams`.
+- Install examples should use `martinfrancois/java-functional-style`.
 - Treat public docs as release-ready even while the GitHub repository is still private. Keep the
   Tessl badge and published-install wording unless the maintainer explicitly asks to hide them.
 - Keep a table of contents after the intro and before `Getting Started`.

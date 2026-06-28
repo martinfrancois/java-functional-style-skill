@@ -16,19 +16,19 @@
     },
     {
       "name": "Filters null categories before collectors",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 25,
       "description": "Filters product.category() != null before toMap or groupingBy so the refactor preserves the original null-category skip behavior and avoids groupingBy null classifier failures."
     },
     {
       "name": "Uses explicit merge for cheapest product",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 30,
       "description": "Uses Collectors.toMap with a merge function such as BinaryOperator.minBy(Comparator.comparing(Product::price)), or an equivalent grouping/min collector, so duplicate categories cannot throw."
     },
     {
       "name": "Uses groupingBy with mapping for names",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 25,
       "description": "Uses groupingBy(Product::category, mapping(Product::name, toList())) or equivalent collector-based grouping without manual computeIfAbsent."
     },

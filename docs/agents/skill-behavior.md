@@ -2,12 +2,12 @@
 
 ## Scope
 
-Use this when editing `skills/java-streams/SKILL.md`, runtime references, skill metadata, install
+Use this when editing `skills/java-functional-style/SKILL.md`, runtime references, skill metadata, install
 guidance, or auto-selection wording.
 
 ## Rules
 
-- The skill should not require users to explicitly type `$java-streams` every time.
+- The skill should not require users to explicitly type `$java-functional-style` every time.
 - Metadata should let agents auto-select it for Java tasks involving streams, collectors, primitive
   streams, stream terminal operations, `findFirst`, `findAny`, `anyMatch`, `noneMatch`, `allMatch`,
   `flatMap`,

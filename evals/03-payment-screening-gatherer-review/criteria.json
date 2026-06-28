@@ -16,19 +16,19 @@
     },
     {
       "name": "Rejects parallelStream for blocking IO",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 75,
       "description": "Rejects the proposed parallelStream change and explains that it uses the common fork-join pool, remains blocking, and is not the right default for remote API calls."
     },
     {
       "name": "Recommends bounded Gatherers.mapConcurrent",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 120,
       "description": "Recommends a Java 24 Gatherers.mapConcurrent stream chain with an explicit concurrency bound for the blocking fraud-screening calls."
     },
     {
       "name": "Shows a safe stream chain",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 45,
       "description": "Describes or sketches carrying each Payment with the fraud-screening result using a non-null holder, filtering by that result, mapping back to Payment, sorting by submittedAt, and collecting with toList."
     },

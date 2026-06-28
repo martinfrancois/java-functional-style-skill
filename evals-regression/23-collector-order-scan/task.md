@@ -1,6 +1,6 @@
 # Audit collector and ordering scan hits
 
-Use `$java-streams` to run the hard-stop scan workflow over this class. Create `review.md`.
+Use `$java-functional-style` to run the hard-stop scan workflow over this class. Create `review.md`.
 
 Assume Java 21.
 

@@ -9,7 +9,7 @@ run the same budget-aware sequence every time.
 
 - Run `scripts/pre_submit_gate.sh` with `--plan-only` (or `scripts/internal_pr_readiness.sh --plan`)
   before major edits to inspect the planned sequence.
-- Run `tessl review run --threshold 100 skills/java-streams/SKILL.md` first for any content change in
+- Run `tessl review run --threshold 100 skills/java-functional-style/SKILL.md` first for any content change in
   runtime references, runtime checks, or eval logic. If this fails, stop immediately and fix quality.
 - `scripts/pre_submit_gate.sh` executes eval runs with JSON capture and validates that every scenario is
   100% with-context before allowing the sequence to advance. If any scenario is below 100% or
@@ -17,7 +17,7 @@ run the same budget-aware sequence every time.
 - Wait for Tessl to mark the whole eval run `completed` before advancing, even if the with-context
   variant has already scored 100%. Main/reference runs may still have baseline solves or scores in
   flight, and starting the next stage early can create avoidable overlapping hosted work.
-- The hard goal for runtime skill changes is: after the last change to `skills/java-streams/SKILL.md`
+- The hard goal for runtime skill changes is: after the last change to `skills/java-functional-style/SKILL.md`
   or any file in that skill bundle, quality review is 100 and every retained scenario in `evals/`,
   `evals-reference/`, and `evals-regression/` has 100% with-context evidence for that exact skill
   bundle state. Evidence can be split across targeted and suite runs.
@@ -60,7 +60,7 @@ run the same budget-aware sequence every time.
 To avoid repeated broad failures:
 
 - Treat runtime skill text as frozen before hosted eval spending begins. The biggest budget waste is
-  collecting partial or broad evidence, then changing `skills/java-streams/SKILL.md` or bundled
+  collecting partial or broad evidence, then changing `skills/java-functional-style/SKILL.md` or bundled
   runtime references and invalidating that evidence. Do local criteria review, obvious wording fixes,
   and quality cleanup first; then start hosted runs.
 - Start with the minimum targeted surface first.
@@ -103,8 +103,8 @@ To avoid repeated broad failures:
 
   ```bash
   python3 scripts/eval_evidence.py ingest \
-    --file .tessl/eval-evidence/java-streams-pre-submit.json \
-    --fingerprint "$(python3 scripts/eval_evidence.py fingerprint --skill-dir skills/java-streams)" \
+    --file .tessl/eval-evidence/java-functional-style-pre-submit.json \
+    --fingerprint "$(python3 scripts/eval_evidence.py fingerprint --skill-dir skills/java-functional-style)" \
     --repo-root . \
     --suite reference \
     --run-json /tmp/reference-run.json
@@ -166,10 +166,10 @@ Run-count examples:
 `scripts/pre_submit_gate.sh` stores local scenario evidence in:
 
 ```bash
-.tessl/eval-evidence/java-streams-pre-submit.json
+.tessl/eval-evidence/java-functional-style-pre-submit.json
 ```
 
-The cache is keyed by a SHA-256 fingerprint of the files under `skills/java-streams/`, including
+The cache is keyed by a SHA-256 fingerprint of the files under `skills/java-functional-style/`, including
 `SKILL.md` and bundled references. When the skill bundle changes, cached evidence for the previous
 fingerprint is ignored automatically.
 

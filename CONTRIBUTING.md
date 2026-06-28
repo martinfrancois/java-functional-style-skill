@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping improve the Java Streams Skill.
+Thanks for helping improve the Java Functional Style Skill.
 
 This project helps AI coding agents write, review, and clean up Java Stream and Collector code
 without common stream antipatterns. You don't need maintainer access or a Tessl workspace to make
@@ -34,13 +34,13 @@ For suspected vulnerabilities, don't open a public issue. Follow the private rep
 ├── evals-reference/
 ├── evals-regression/
 ├── scripts/
-├── skills/java-streams/
+├── skills/java-functional-style/
 │   ├── SKILL.md
 │   ├── agents/openai.yaml
 │   └── references/
 │       ├── hard-stops.md
-│       ├── java-stream-api.md
-│       └── stream-examples.md
+│       ├── java-functional-api.md
+│       └── functional-style-examples.md
 ├── docs/agents/
 ├── AI_CONTRIBUTION_POLICY.md
 ├── CODE_OF_CONDUCT.md
@@ -49,11 +49,11 @@ For suspected vulnerabilities, don't open a public issue. Follow the private rep
 └── README.md
 ```
 
-- `skills/java-streams/SKILL.md` is the runtime instruction file loaded by agents.
-- `skills/java-streams/agents/openai.yaml` provides display metadata.
-- `skills/java-streams/references/hard-stops.md` lists replacement antipatterns and the final scan.
-- `skills/java-streams/references/stream-examples.md` contains runtime-safe examples.
-- `skills/java-streams/references/java-stream-api.md` records Java-version compatibility guidance.
+- `skills/java-functional-style/SKILL.md` is the runtime instruction file loaded by agents.
+- `skills/java-functional-style/agents/openai.yaml` provides display metadata.
+- `skills/java-functional-style/references/hard-stops.md` lists replacement antipatterns and the final scan.
+- `skills/java-functional-style/references/functional-style-examples.md` contains runtime-safe examples.
+- `skills/java-functional-style/references/java-functional-api.md` records Java-version compatibility guidance.
 - `docs/agents/` contains current maintainer policy and workflow guidance.
 - `evals/` contains the hosted Tessl main eval set used for lift reporting.
 - `evals-reference/` keeps candidate, diagnostic, and broad coverage scenarios that should not
@@ -68,7 +68,7 @@ For suspected vulnerabilities, don't open a public issue. Follow the private rep
 Run these before committing skill, eval, README, package, script, or CI changes:
 
 ```bash
-python3 scripts/validate_skill.py skills/java-streams
+python3 scripts/validate_skill.py skills/java-functional-style
 python3 scripts/validate_eval_criteria.py evals evals-reference evals-regression
 python3 -m py_compile scripts/*.py
 bash -n scripts/*.sh
@@ -78,7 +78,7 @@ tessl plugin lint .
 If you change the skill text or reference files, also run:
 
 ```bash
-tessl review run --threshold 100 skills/java-streams/SKILL.md
+tessl review run --threshold 100 skills/java-functional-style/SKILL.md
 ```
 
 If you have Tessl access, run the publish dry-run:
@@ -170,13 +170,13 @@ claim.
 
 The main eval set should stay focused on realistic tasks where context should improve stream
 quality. It must include natural activation prompts and explicit invocation prompts. Natural
-scenarios must not mention `$java-streams` or ask to use the skill. Explicit scenarios may name the
+scenarios must not mention `$java-functional-style` or ask to use the skill. Explicit scenarios may name the
 skill and must be labeled as explicit in `criteria.json`.
 
 Every scenario directory must contain `task.md`, `criteria.json`, and `capability.txt`. Main eval
 implementation criteria must include compile/artifact checks and behavior correctness checks as
 safety checks, but the main score should mainly measure stream-specific quality. Each main eval
-criterion must set `category` to `safety`, `stream_quality`, or `maintainability`.
+criterion must set `category` to `safety`, `functional_style`, or `maintainability`.
 
 Use `metadata.evidence_type` when scenario placement needs to be explicit:
 
@@ -220,7 +220,7 @@ historical evidence only; do not use them for release-readiness claims, public s
 current benchmark claims until they are rerun against the current active suite membership,
 denominator, commit/ref, natural/explicit split, and pinned CLI behavior. Main eval weights should
 stay evidence-weighted: put more points on scenario families with larger observed missed-point
-reduction, keep ordinary 100-point main scenarios around 15 safety / 80 stream-quality / 5
+reduction, keep ordinary 100-point main scenarios around 15 safety / 80 functional-style / 5
 maintainability points, and document any `main_eval_weight_multiplier` in `criteria.json` metadata.
 
 When with-context is below 100%, keep the scenario wherever it already lives. Fix the skill or eval

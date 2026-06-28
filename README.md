@@ -1,6 +1,6 @@
-# Java Streams Skill for AI Agents
+# Java Functional Style Skill for AI Agents
 
-[![tessl](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Fmartinfrancois%2Fjava-streams)](https://tessl.io/registry/martinfrancois/java-streams)
+[![tessl](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Fmartinfrancois%2Fjava-functional-style)](https://tessl.io/registry/martinfrancois/java-functional-style)
 
 AI agents often know Java streams well enough to chain `filter`, `map`, and `collect`, but not
 enough to choose the right stream operation for the job in new code, reviews, and cleanup.
@@ -37,11 +37,11 @@ Install the published Tessl plugin using the option that fits your setup:
 
 | Tool | Command |
 | --- | --- |
-| npm | `npx tessl i martinfrancois/java-streams` |
-| yarn | `yarn dlx tessl i martinfrancois/java-streams` |
-| pnpm | `pnpx tessl i martinfrancois/java-streams` |
-| bun | `bunx tessl i martinfrancois/java-streams` |
-| Tessl CLI | `tessl i martinfrancois/java-streams` |
+| npm | `npx tessl i martinfrancois/java-functional-style` |
+| yarn | `yarn dlx tessl i martinfrancois/java-functional-style` |
+| pnpm | `pnpx tessl i martinfrancois/java-functional-style` |
+| bun | `bunx tessl i martinfrancois/java-functional-style` |
+| Tessl CLI | `tessl i martinfrancois/java-functional-style` |
 
 ### 2. Use It
 
@@ -58,19 +58,19 @@ behavior.
 For important stream-heavy work, you can still name the skill explicitly:
 
 ```text
-Use $java-streams to implement this Java feature with stream and collector best practices.
+Use $java-functional-style to implement this Java feature with stream and collector best practices.
 ```
 
 For cleanup work:
 
 ```text
-Use $java-streams to clean up this Java stream chain without changing behavior.
+Use $java-functional-style to clean up this Java stream chain without changing behavior.
 ```
 
 For reviews:
 
 ```text
-Use $java-streams to review this Java stream code and suggest any fixes.
+Use $java-functional-style to review this Java stream code and suggest any fixes.
 ```
 
 ## Why This Exists
@@ -253,12 +253,12 @@ duplicate keys or nulls, overusing `parallelStream()`, and missing Java-version-
 as `takeWhile`, `teeing`, `mapMulti`, `Stream.toList()`, and gatherers.
 
 Current published scores are shown on the
-[Tessl plugin](https://tessl.io/registry/martinfrancois/java-streams).
+[Tessl plugin](https://tessl.io/registry/martinfrancois/java-functional-style).
 
 ## Origin
 
 The stream examples and pattern catalog are based on the code examples from François Martin's conference
-talk ["I didn't know you could do that with Java Streams"](https://fmartin.ch/session/i-didnt-know-you-could-do-that-with-java-streams),
+talk ["I didn't know you could do that with Java Functional Style"](https://fmartin.ch/session/i-didnt-know-you-could-do-that-with-java-functional-style),
 with the public example source here:
 <https://github.com/martinfrancois/jfokus-2026/blob/main/code.md>.
 

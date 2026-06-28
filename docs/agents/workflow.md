@@ -16,7 +16,7 @@ release-readiness.
   docs, run:
 
   ```bash
-  python3 scripts/validate_skill.py skills/java-streams
+  python3 scripts/validate_skill.py skills/java-functional-style
   python3 scripts/validate_eval_criteria.py evals evals-reference evals-regression
   python3 -m py_compile scripts/*.py
   bash -n scripts/*.sh
@@ -129,13 +129,13 @@ release-readiness.
 - Run the Tessl skill quality review at threshold 100 when changing runtime skill content:
 
   ```bash
-  tessl review run --threshold 100 skills/java-streams/SKILL.md
+  tessl review run --threshold 100 skills/java-functional-style/SKILL.md
   ```
 
 - Pull request titles and commits must use Conventional Commits. Release Please uses them to update
   `CHANGELOG.md`, `.tessl-plugin/plugin.json`, and GitHub releases.
   Any change that could affect hosted lift, baseline score, with-context score, skill activation, runtime skill behavior, active eval tasks, active eval criteria, or active eval membership must be made in a separate commit. Label it as lift-sensitive in the PR summary and include a revert strategy.
-  - Use `fix(skill): ...` for corrections to `skills/java-streams/SKILL.md` or files it links as
+  - Use `fix(skill): ...` for corrections to `skills/java-functional-style/SKILL.md` or files it links as
     runtime references.
   - Use `feat(skill): ...` when adding a new runtime capability or materially broader skill behavior.
   - Use `test(evals): ...` when adding, moving, or reclassifying scenarios without changing their
@@ -165,7 +165,7 @@ release-readiness.
 
   ```bash
   gh pr list --state open --author "github-actions[bot]" \
-    --head release-please--branches--main--components--java-streams
+    --head release-please--branches--main--components--java-functional-style
   gh pr checks <release-pr-number> --fail-fast=false
   ```
 

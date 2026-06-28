@@ -1,6 +1,6 @@
 # Refactor packet window code
 
-Use `$java-streams` to create `PacketWindow.java` with the revised class. Assume Java 17.
+Use `$java-functional-style` to create `PacketWindow.java` with the revised class. Assume Java 17.
 
 The current loop is verbose. Refactor it, but keep the chronological window semantics exactly.
 

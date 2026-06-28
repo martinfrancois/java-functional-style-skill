@@ -1,6 +1,6 @@
 # Agent Instructions
 
-Java Streams is a Tessl-compatible skill that helps AI coding agents write, review, and clean up
+Java Functional Style is a Tessl-compatible skill that helps AI coding agents write, review, and clean up
 Java Stream and Collector code without common stream antipatterns.
 
 Before starting any task, open [Workflow](docs/agents/workflow.md) and follow it.

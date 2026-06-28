@@ -1,6 +1,6 @@
 # Review Java 8 optional and prefix refactor
 
-Use `$java-streams` to review this proposed change. Create `review.md` with a short decision and a
+Use `$java-functional-style` to review this proposed change. Create `review.md` with a short decision and a
 Java 8-compatible alternative if the change should not be accepted.
 
 Assume Java 8.

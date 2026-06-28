@@ -22,17 +22,17 @@ benchmark claims, or scoring rules.
 
   Then execute only the printed targeted stages. The gate now enforces that each stage reaches
   100% with-context before allowing expansion to the next stage.
-- Keep natural activation prompts neutral. Explicit invocation prompts may name `$java-streams`, but
-  should not leak the desired fix beyond invoking the skill. Mark prompts that name `$java-streams`
+- Keep natural activation prompts neutral. Explicit invocation prompts may name `$java-functional-style`, but
+  should not leak the desired fix beyond invoking the skill. Mark prompts that name `$java-functional-style`
   as `metadata.invocation: "explicit"` and do not report them as natural activation evidence.
 - The main eval should focus on realistic failure modes where this skill should change the answer:
   Java stream code that may materialize
   unnecessarily, count for existence, sort for one extreme, mishandle order, misuse collectors,
   miss primitive streams, or overuse parallel streams.
 - Keep a documented mix of invocation styles:
-  - Natural activation scenarios don't mention `$java-streams`, "use the skill", or similar
+  - Natural activation scenarios don't mention `$java-functional-style`, "use the skill", or similar
     command-style phrasing.
-  - Explicit invocation scenarios may say `Use $java-streams`.
+  - Explicit invocation scenarios may say `Use $java-functional-style`.
   - Report natural, explicit, main eval combined, reference, and regression results separately when
     hosted data is available.
 - Include evals where the agent writes new stream code, not only reviews or refactors snippets.
@@ -68,11 +68,11 @@ benchmark claims, or scoring rules.
   - `skill_context_dependent`: a regression scenario that requires exact skill-provided text,
     commands, procedures, checklists, headers, or bundled reference text. This value is required for
     such scenarios and is invalid outside `evals-regression/`.
-- Every main eval criterion must classify `category` as `safety`, `stream_quality`, or
+- Every main eval criterion must classify `category` as `safety`, `functional_style`, or
   `maintainability`.
 - Main eval implementation scenarios need compile/artifact and behavior checks as safety checks, but
-  the public benchmark should be weighted toward `stream_quality`.
-- For main eval scenarios, use roughly `15` safety points, `80` stream-quality points, and `5`
+  the public benchmark should be weighted toward `functional_style`.
+- For main eval scenarios, use roughly `15` safety points, `80` functional-style points, and `5`
   maintainability points per 100-point scenario unless a scenario has a documented reason to differ.
 - Runtime skill references must not contain eval inventories, expected answers, score rubrics,
   hosted run IDs, or fixed score claims.
@@ -134,8 +134,8 @@ benchmark claims, or scoring rules.
   - Keep weights evidence-weighted, not evenly sampled.
   - Do not describe the main eval set as representative of all Java Stream and Collector work.
   - Give more total points to scenario families with larger observed missed-point reduction, while
-    keeping the skill broadly about Java Streams and Collectors.
-  - Normalize ordinary 100-point main scenarios around 15 safety, 80 stream-quality, and 5
+    keeping the skill broadly about Java Functional Style and Collectors.
+  - Normalize ordinary 100-point main scenarios around 15 safety, 80 functional-style, and 5
     maintainability points unless the scenario has a documented reason to differ.
   - Use `main_eval_weight_multiplier` only when a scenario family has stronger hosted delta or higher
     benchmark importance; document why in `criteria.json` metadata and this file.
@@ -143,9 +143,9 @@ benchmark claims, or scoring rules.
 - A 2x raw score ratio is useful only when earned by honest, realistic eval design. Don't suppress
   legitimate coverage just to improve lift.
 - Track raw score, percentage-point lift, raw score ratio, missed-point reduction, and the
-  `stream_quality` subtotal when updating benchmark claims.
+  `functional_style` subtotal when updating benchmark claims.
 - Use `scripts/run_eval_suite.sh` for hosted evals. It runs from a temporary plugin copy, passes
-  `--skill java-streams` so with-context runs actually exercise this skill, passes `--force` so
+  `--skill java-functional-style` so with-context runs actually exercise this skill, passes `--force` so
   post-fix checks cannot reuse stale hosted solutions, and enforces the suite variant policy. Use the
   Tessl default solver unless intentionally comparing another model. If the account has
   model-selection entitlement, Sonnet 4.6 or a better frontier model is recommended for a more
@@ -160,7 +160,7 @@ benchmark claims, or scoring rules.
 - Direct equivalent for this repository's main eval runs:
 
   ```bash
-  tessl eval run --skill java-streams --force .
+  tessl eval run --skill java-functional-style --force .
   ```
   The Tessl CLI runs the baseline control by default when plugin context is present. Use
   `--skip-baseline` only for context-only regression runs. Public docs may still show tile-oriented
@@ -182,7 +182,7 @@ benchmark claims, or scoring rules.
 - Keep hosted eval usage minimal while preserving confidence and Tessl daily rate-limit budget:
   - Freeze runtime skill text before hosted spending whenever possible. The expensive failure mode is
     not the final all-suite requirement itself; it is rerunning required evidence after later edits to
-    `skills/java-streams/SKILL.md` or bundled runtime references change the skill fingerprint. Do the
+    `skills/java-functional-style/SKILL.md` or bundled runtime references change the skill fingerprint. Do the
     local scenario/criteria crosswalk and obvious skill wording fixes before starting hosted runs.
   - A pure suite move does not require a hosted rerun when `task.md`, `criteria.json`, and
     `capability.txt` content are unchanged except for suite-placement metadata or numbering notes.
@@ -245,11 +245,11 @@ Update this section whenever active eval membership or scoring changes.
 - Explicit invocation subset: 3 scenarios.
 - Java 24 bounded remote-call / `Gatherers.mapConcurrent` coverage: 3 scenarios, 1200 checklist
   points. This dominates the current main score because hosted evidence previously showed strong
-  deltas in that family; do not over-read it as broad Java Streams coverage.
+  deltas in that family; do not over-read it as broad Java Functional Style coverage.
 - Scenarios `01-offer-availability-mapconcurrent` and `02-delivery-appointments-mapconcurrent` are
   intentionally focused Java 24 runtime-guidance coverage. They should remain different domains and
   result-carrier patterns from the bundled bounded `Gatherers.mapConcurrent` example in
-  `stream-examples.md`; report them as focused skill-use coverage rather than broad independent lift
+  `functional-style-examples.md`; report them as focused skill-use coverage rather than broad independent lift
   evidence.
 - Java 17 collector and prefix-operation coverage: 1 scenario, 200 checklist points.
 - Uppercase side-effect review moved from main number `07` back to reference number `26` because it

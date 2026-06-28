@@ -16,25 +16,25 @@
     },
     {
       "name": "Uses toMap with merge for cheapest products",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 25,
       "description": "Computes cheapestByCategory with a duplicate-safe collector, such as Collectors.toMap(Product::category, Function.identity(), BinaryOperator.minBy(...)) or groupingBy plus a minBy downstream, avoiding duplicate-key failure."
     },
     {
       "name": "Uses groupingBy with mapping for product names",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 20,
       "description": "Computes productNamesByCategory with Collectors.groupingBy(Product::category, Collectors.mapping(Product::name, Collectors.toList())) or equivalent downstream mapping."
     },
     {
       "name": "Uses flatMap and counting for item sales",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 20,
       "description": "Flattens orders to line items and computes salesByItemName with groupingBy(Item::name, counting()) or an equivalent collector, rather than nested manual map updates. Award full credit if the implementation flattens once into a local item list and reuses it for both salesByItemName and quantityStats."
     },
     {
       "name": "Uses summarizingInt for quantity stats",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 15,
       "description": "Computes quantityStats with a flattened item stream and Collectors.summarizingInt(Item::quantity) or an equivalent IntSummaryStatistics stream terminal."
     },

@@ -16,25 +16,25 @@
     },
     {
       "name": "Flattens company employees directly",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 15,
       "description": "Uses companies.stream().flatMap(company -> company.employees().stream()) or equivalent direct flattening rather than collecting nested employee sets before flattening."
     },
     {
       "name": "Uses clean conditional developer emission",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 30,
       "description": "Uses Java 17 mapMulti with pattern matching for Developer, or gives full credit for an equivalently concise filter/cast/map stream chain, without unsafe casts before type checks. A cast after a verified instanceof/Class::isInstance filter is acceptable. Do not deduct merely because the safe equivalent does not use mapMulti, does not reuse a pattern variable, or uses an explicit safe cast in the following map step."
     },
     {
       "name": "Uses takeWhile for prefix semantics",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 30,
       "description": "Implements packetsBeforeFirstLossSpike with takeWhile(packet -> packet.loss() <= threshold) or an equivalent prefix-preserving loop, not filter."
     },
     {
       "name": "Uses appropriate collectors",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 5,
       "description": "Collects emails to a Set and packets to a List with Java 17-compatible collection terminals."
     },

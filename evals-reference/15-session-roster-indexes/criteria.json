@@ -16,13 +16,13 @@
     },
     {
       "name": "Flattens nested conference data directly",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 20,
       "description": "Traverses conferences to sessions to registrations with direct flatMap-style composition or an equivalently clear stream chain, without building nested temporary collections or mutating shared result maps inside forEach."
     },
     {
       "name": "Uses collector semantics for track email lists",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 20,
       "description": "Builds opted-in emails by track with collector semantics such as groupingBy plus downstream mapping/filtering/collection, producing sorted unique email lists without a post-hoc shared mutable accumulation pass."
     },
@@ -34,13 +34,13 @@
     },
     {
       "name": "Handles duplicate rooms explicitly",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 20,
       "description": "Builds longestSessionByRoom with an explicit duplicate-room merge or grouping reduction that keeps the longer session and preserves the earlier encounter-order session on ties."
     },
     {
       "name": "Short-circuits waitlisted existence",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 10,
       "description": "Uses anyMatch or an equivalent early-exit check for hasWaitlistedRegistration rather than collecting or counting all waitlisted registrations first."
     },

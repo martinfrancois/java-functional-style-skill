@@ -1,6 +1,6 @@
 # Security Policy
 
-If you believe you've found a security issue in Java Streams Skill for AI Agents, report it
+If you believe you've found a security issue in Java Functional Style Skill for AI Agents, report it
 privately first.
 
 This policy gives reporters a clear path and explains what maintainers treat as a security issue.
@@ -22,10 +22,10 @@ announces a different support window in the release notes.
 Don't open a public issue for a suspected vulnerability.
 
 Use GitHub private vulnerability reporting through
-[Report a Vulnerability](https://github.com/martinfrancois/java-streams-skill/security/advisories/new).
+[Report a Vulnerability](https://github.com/martinfrancois/java-functional-style-skill/security/advisories/new).
 If GitHub private vulnerability reporting isn't working for you, email
-[github.security.java-streams@fmartin.ch](mailto:github.security.java-streams@fmartin.ch) with the subject
-`Security report: java-streams-skill` and share only the minimum information needed to start triage.
+[github.security.java-functional-style@fmartin.ch](mailto:github.security.java-functional-style@fmartin.ch) with the subject
+`Security report: java-functional-style-skill` and share only the minimum information needed to start triage.
 
 Don't open a public issue or pull request that discloses an unpatched vulnerability, exploit path,
 secret, or security-sensitive proof of concept. Maintainers may hide, delete, or close public reports
@@ -116,7 +116,7 @@ details by mistake.
 
 ## Credential Handling
 
-Java Streams Skill for AI Agents is a Tessl skill and eval suite, not a runtime application.
+Java Functional Style Skill for AI Agents is a Tessl skill and eval suite, not a runtime application.
 Security reports are most likely to involve credential exposure, unsafe skill instructions, eval
 fixtures or criteria, GitHub Actions logs, release/publish automation, repository settings, or the
 published Tessl plugin.

@@ -10,25 +10,25 @@
     },
     {
       "name": "Rejects proposed change",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 20,
       "description": "Clearly says the proposed parallelStream change should not be accepted."
     },
     {
       "name": "Catches shared HashMap race",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 35,
       "description": "Explains that parallel forEach mutates a shared HashMap and can race, corrupt state, or lose entries."
     },
     {
       "name": "Rejects unjustified parallelism",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 15,
       "description": "Notes that no CPU-heavy stateless work or measured benefit justifies parallelStream here."
     },
     {
       "name": "Suggests collector-owned accumulation",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 20,
       "description": "Recommends a sequential stream with Collectors.toMap(Shipment::id, Function.identity(), merge) or another collector-owned accumulation approach."
     },

@@ -10,25 +10,25 @@
     },
     {
       "name": "Rejects proposed change",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 20,
       "description": "Clearly says the proposed refactor should not be accepted as written."
     },
     {
       "name": "Catches Java baseline violation",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 30,
       "description": "Explains that Stream.toList() is unavailable on the Java 11 baseline because it was added in Java 16."
     },
     {
       "name": "Catches mutability violation",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 30,
       "description": "Explains that Stream.toList() returns an unmodifiable list and the code later mutates it with add and sort."
     },
     {
       "name": "Suggests compatible mutable replacement",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 10,
       "description": "Recommends Collectors.toCollection(ArrayList::new), Collectors.toList(), or another Java 11-compatible mutable result."
     },

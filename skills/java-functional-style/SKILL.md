@@ -1,10 +1,10 @@
 ---
-name: java-streams
+name: java-functional-style
 license: MIT
 description: Review Java stream performance advice, especially slow stream mappings, external collection mutation with forEach/add, and whether parallelStream is safe; clean up mutation and write or refactor Java Stream and Collector code. Avoid common stream antipatterns such as materializing just to inspect, sorting before min/max, counting for existence, nested stream collections, unsafe null sorting, multi-line lambdas, and careless findFirst/findAny changes. Use whenever writing, reviewing, or refactoring Java code that uses Java streams, collectors, stream pipelines, grouping, joining strings, first/any element lookup, sorting, limiting, distinct values, primitive totals, Optional values in streams, or parallel streams, including review prompts asking whether a lookup should use findFirst or findAny.
 ---
 
-# Java Streams Skill
+# Java Functional Style Skill
 
 Preserve requested behavior, public API/artifact shape, encounter order, exceptions, null handling,
 side effects, mutability, and Java-version compatibility. For implementation prompts, write the
@@ -18,15 +18,15 @@ asked.
 | File | Purpose |
 |---|---|
 | [hard-stops.md](references/hard-stops.md) | Replacement antipatterns and the marker scan to run |
-| [stream-examples.md](references/stream-examples.md) | Worked before/after examples from the reference set |
-| [java-stream-api.md](references/java-stream-api.md) | Java-version compatibility for stream and collector APIs |
+| [functional-style-examples.md](references/functional-style-examples.md) | Worked before/after examples from the reference set |
+| [java-functional-api.md](references/java-functional-api.md) | Java-version compatibility for stream and collector APIs |
 
 ## Core Workflow
 
 When the prompt asks for a named artifact such as `review.md` or a Java source file, create that
 exact file. Do not answer only in chat when a file artifact is requested.
 
-0. Check the Java baseline first. Use [java-stream-api.md](references/java-stream-api.md) for
+0. Check the Java baseline first. Use [java-functional-api.md](references/java-functional-api.md) for
    minimum versions and fallbacks; do not emulate unavailable APIs with stateful or multi-line
    lambdas.
 1. Identify the requested result and pick the matching terminal or collector:

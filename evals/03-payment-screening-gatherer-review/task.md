@@ -2,7 +2,7 @@
 
 Assume Java 24.
 
-Use `$java-streams` to review this proposed change. Create `review.md` with a short review decision
+Use `$java-functional-style` to review this proposed change. Create `review.md` with a short review decision
 and a safer Java 24 stream chain.
 
 The payment service calls a remote fraud-screening API inside `passesFraudScreen(payment)`.

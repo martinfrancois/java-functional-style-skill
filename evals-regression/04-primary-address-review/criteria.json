@@ -10,19 +10,19 @@
     },
     {
       "name": "Rejects collect-then-first",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 20,
       "description": "Says collecting all primary addresses just to inspect emptiness/read the first result is unnecessary."
     },
     {
       "name": "Chooses findFirst to preserve first-match behavior",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 20,
       "description": "Recommends filter(Address::primary).findFirst().orElse(null) to preserve the current get(0) encounter-order behavior."
     },
     {
       "name": "Names the findAny exception",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 20,
       "description": "Says findAny is appropriate only if the domain explicitly says all matching primary addresses are equivalent and encounter order does not define which one should win."
     }

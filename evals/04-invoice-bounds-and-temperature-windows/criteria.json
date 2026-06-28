@@ -10,7 +10,7 @@
     },
     {
       "name": "Uses teeing for invoice bounds",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 70,
       "description": "Uses Collectors.teeing with minBy and maxBy by Invoice::total, or an equivalent single-pass pair reduction."
     },
@@ -22,13 +22,13 @@
     },
     {
       "name": "Uses takeWhile for before-overheat prefix",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 45,
       "description": "Uses takeWhile(reading -> reading.temperatureCelsius() <= maxSafeTemperature) or an equivalent prefix-preserving loop, not filter."
     },
     {
       "name": "Uses dropWhile for after-safe-run remainder",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 45,
       "description": "Uses dropWhile(reading -> reading.temperatureCelsius() <= maxSafeTemperature) or an equivalent prefix-skipping loop, not a filter that removes later safe readings."
     },

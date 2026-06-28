@@ -2,7 +2,7 @@
 
 Use these examples for non-trivial stream refactors. They are reusable runtime guidance, not
 scenario answers. Examples cover the full reference set; check the project Java baseline before
-using APIs from [java-stream-api.md](java-stream-api.md).
+using APIs from [java-functional-api.md](java-functional-api.md).
 
 ## Direct Terminals
 

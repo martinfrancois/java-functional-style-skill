@@ -10,19 +10,19 @@
     },
     {
       "name": "Includes skill-provided scan command",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 20,
-      "description": "Includes the scan header 'java-streams hard-stop scan v1' and the rg command from hard-stops.md with complete marker coverage and the '<touched Java files>' placeholder. Equivalent shell escaping or formatting is acceptable; do not require character-perfect parity if all marker categories are present, but do not award this for a reduced, approximate, or hand-written scan command."
+      "description": "Includes the scan header 'java-functional-style hard-stop scan v1' and the rg command from hard-stops.md with complete marker coverage and the '<touched Java files>' placeholder. Equivalent shell escaping or formatting is acceptable; do not require character-perfect parity if all marker categories are present, but do not award this for a reduced, approximate, or hand-written scan command."
     },
     {
       "name": "Classifies required customer fixes",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 60,
       "description": "Correctly flags the customer class issues: existence checks, sorted-findFirst newest lookup, collect-then-join, Stream.toList mutation, parallel findAny priority break, duplicate toMap, nullable groupingBy, nullable natural sort, limit-before-sort top-N, and Optional get pattern."
     },
     {
       "name": "Classifies acceptable marker",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 10,
       "description": "Explicitly identifies totalSpend's BigDecimal reduce as acceptable rather than forcing primitive aggregation, whether it is framed as an acceptable scan hit or as an intentional non-hit that should remain unchanged."
     },

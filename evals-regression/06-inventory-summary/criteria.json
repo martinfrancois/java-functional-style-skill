@@ -16,25 +16,25 @@
     },
     {
       "name": "Uses anyMatch for existence",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 20,
       "description": "Replaces the collected out-of-stock list with products.stream().anyMatch(product -> product.stock() == 0) or an equivalent direct match terminal."
     },
     {
       "name": "Uses count without unread materialization",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 15,
       "description": "Counts unread messages with filter(...).count() or equivalent direct counting without collecting unread messages only to read size."
     },
     {
       "name": "Uses max instead of sorted temporary list",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 25,
       "description": "Computes newest with max(Comparator.comparing(Product::updatedAt)).orElse(null) or an equivalent max terminal rather than sorting all products and reading index 0."
     },
     {
       "name": "Uses Collectors.joining",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 20,
       "description": "Builds the category string with products.stream().map(Product::category).collect(Collectors.joining(\", \")) or an equivalent joining collector."
     },

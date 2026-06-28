@@ -1,6 +1,6 @@
 # Implement offer availability filtering
 
-Use `$java-streams` to create `OfferAvailability.java`. Assume Java 24.
+Use `$java-functional-style` to create `OfferAvailability.java`. Assume Java 24.
 
 Implement:
 

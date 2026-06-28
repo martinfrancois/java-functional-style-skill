@@ -6,7 +6,7 @@ set -euo pipefail
 release_pr="${RELEASE_PR:-}"
 if [[ -z "$release_pr" || "$release_pr" == "null" ]]; then
   echo "Release Please did not emit a PR output; checking for an unchanged open release PR."
-  release_branch="release-please--branches--main--components--java-streams"
+  release_branch="release-please--branches--main--components--java-functional-style"
   release_branch_prefix="release-please--branches--main"
   release_pr="$(gh pr list \
     --state open \

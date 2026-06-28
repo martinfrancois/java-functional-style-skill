@@ -16,19 +16,19 @@
     },
     {
       "name": "Identifies priority ordering contract",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 35,
       "description": "Explains that sorted by Contact::priority followed by findFirst means the lowest-priority verified contact wins, and findAny does not preserve that contract."
     },
     {
       "name": "Flags unjustified parallelStream",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 25,
       "description": "Explains that parallelStream is not justified here and makes ordered selection less predictable or more expensive without evidence of CPU-bound work."
     },
     {
       "name": "Suggests safe stream chain",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 20,
       "description": "Suggests keeping sorted(...).filter(...).findFirst(), or filtering before sorting only if that preserves the same lowest-priority verified contact behavior."
     },

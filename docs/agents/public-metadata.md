@@ -8,7 +8,7 @@ topics.
 ## Rules
 
 - GitHub description should be short, clickable, and user-benefit focused.
-- Current preferred wording: "Help AI coding agents use Java Streams and Collectors well in new code,
+- Current preferred wording: "Help AI coding agents use Java Functional Style and Collectors well in new code,
   review, and cleanup without replacing one antipattern with another."
 - Keep the GitHub repository private until the maintainer explicitly says to make it public.
 - For OSS-readiness work, `.tessl-plugin/plugin.json` should be public-ready with
@@ -26,8 +26,8 @@ topics.
   `.tessl-plugin/plugin.json`.
   `tessl plugin lint .`, `tessl plugin publish --dry-run --skip-evals .`, and
   `tessl plugin publish --dry-run --bump patch .` are the authority for package validity here.
-  `tessl plugin pack` must include `skills/java-streams/SKILL.md` and the referenced files under
-  `skills/java-streams/references/`. Do not add a `skills` field or migrate to `tile.json` unless
+  `tessl plugin pack` must include `skills/java-functional-style/SKILL.md` and the referenced files under
+  `skills/java-functional-style/references/`. Do not add a `skills` field or migrate to `tile.json` unless
   those pinned CLI checks or current official docs prove the active skill is not included,
   discoverable, or publishable.
 

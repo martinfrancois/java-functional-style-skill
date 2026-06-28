@@ -1,6 +1,6 @@
 # Review CPU-heavy parallel stream
 
-Use `$java-streams` to create `review.md`. Assume Java 17.
+Use `$java-functional-style` to create `review.md`. Assume Java 17.
 
 Review whether this parallel stream is reasonable and what caveats should be documented:
 

@@ -1,6 +1,6 @@
 # Implement stream helper methods
 
-Use `$java-streams` to create `StreamHelpers.java`. Assume Java 17.
+Use `$java-functional-style` to create `StreamHelpers.java`. Assume Java 17.
 
 Implement:
 

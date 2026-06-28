@@ -10,19 +10,19 @@
     },
     {
       "name": "Allows parallelism for this stream chain",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 20,
       "description": "Recognizes the work is CPU-heavy, stateless, and has a primitive sum reduction, so parallelism can be reasonable."
     },
     {
       "name": "Mentions overhead and measurement",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 15,
       "description": "Says the performance should be measured because parallel stream overhead can outweigh benefits."
     },
     {
       "name": "Mentions common pool",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 10,
       "description": "Notes that parallel streams use the common fork-join pool by default and may contend with other work."
     },

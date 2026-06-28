@@ -1,6 +1,6 @@
 # Clean up catalog feed
 
-Use `$java-streams` to create `CatalogFeed.java` with the revised class. Assume Java 17.
+Use `$java-functional-style` to create `CatalogFeed.java` with the revised class. Assume Java 17.
 
 The current code works for the happy path, but it is clumsy and has edge cases. Preserve the public
 method names and behavior where specified.

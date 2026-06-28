@@ -22,13 +22,13 @@
     },
     {
       "name": "Uses direct stream result production",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 3,
       "description": "Uses a direct stream chain that filters overdue shipments and collects or returns the mapped notices without external mutable accumulation, manual indexing, background workers, or unrelated caching."
     },
     {
       "name": "Avoids multi-line stream lambdas",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 80,
       "description": "Keeps lambdas passed to stream operations as concise one-expression glue or method references, with no block lambdas using braces inside the stream chain. Non-trivial overdue checks, days-late calculation, severity selection, or notice construction are extracted to named helper methods or equivalent reusable methods."
     },
@@ -43,7 +43,7 @@
     "invocation": "natural",
     "task_type": "implementation",
     "evidence_type": "focused_reference",
-    "issue": "https://github.com/martinfrancois/java-streams-skill/issues/36",
+    "issue": "https://github.com/martinfrancois/java-functional-style-skill/issues/36",
     "reference_selection": "Focused issue #36 behavior-delta coverage for extracting non-trivial stream lambda bodies into helpers.",
     "runtime_reference_overlap_rationale": "Allowed only because this is reference-suite focused coverage, not ordinary broad lift or main-suite generalization evidence."
   }

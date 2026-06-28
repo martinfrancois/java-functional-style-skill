@@ -22,13 +22,13 @@
     },
     {
       "name": "Uses takeWhile or equivalent prefix-preserving loop",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 40,
       "description": "Implements beforeFirstLossSpike with takeWhile(packet -> packet.loss() <= threshold) or keeps an equivalent break-based loop; does not use filter."
     },
     {
       "name": "Uses dropWhile or equivalent prefix-skipping loop",
-      "category": "stream_quality",
+      "category": "functional_style",
       "max_score": 40,
       "description": "Implements afterInitialHealthyPrefix with dropWhile(packet -> packet.loss() <= threshold) or keeps an equivalent prefix-skipping loop; does not use filter."
     },

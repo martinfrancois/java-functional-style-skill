@@ -1,6 +1,6 @@
 # Audit Java 8 stream API drift
 
-Use `$java-streams` to run the hard-stop scan workflow over this proposed helper. Create
+Use `$java-functional-style` to run the hard-stop scan workflow over this proposed helper. Create
 `review.md`.
 
 Assume Java 8.
