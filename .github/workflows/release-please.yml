@@ -1,0 +1,153 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  actions: write
+  contents: write
+  pull-requests: write
+  statuses: write
+
+concurrency:
+  group: release-please-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    name: Create or update release PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Release Please
+        id: release
+        uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          persist-credentials: false
+
+      - name: Trigger Tessl publish
+        if: ${{ steps.release.outputs.release_created == 'true' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ steps.release.outputs.tag_name }}
+        run: scripts/trigger_tessl_publish.sh "$TAG_NAME"
+
+      - name: Read release PR output
+        id: release-pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_PR: ${{ steps.release.outputs.pr }}
+        run: scripts/read_release_pr_output.sh
+
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        if: ${{ steps.release-pr.outputs.found == 'true' }}
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ steps.release-pr.outputs.branch }}
+
+      - name: Check Tessl token
+        id: release-pr-tessl-token
+        if: ${{ steps.release-pr.outputs.found == 'true' }}
+        env:
+          TESSL_TOKEN: ${{ secrets.TESSL_TOKEN }}
+        run: scripts/check_tessl_token_available.sh
+
+      - name: Setup Tessl CLI
+        if: ${{ steps.release-pr.outputs.found == 'true' && steps.release-pr-tessl-token.outputs.available != 'true' }}
+        uses: tesslio/setup-tessl@25ec223fc0da33b41b8044ff5ab2b85235f4f91e # v2
+        with:
+          version: "0.85.0"
+
+      - name: Setup authenticated Tessl CLI
+        if: ${{ steps.release-pr.outputs.found == 'true' && steps.release-pr-tessl-token.outputs.available == 'true' }}
+        uses: tesslio/setup-tessl@25ec223fc0da33b41b8044ff5ab2b85235f4f91e # v2
+        with:
+          version: "0.85.0"
+          token: ${{ secrets.TESSL_TOKEN }}
+
+      - name: Mark release PR validation pending
+        if: ${{ steps.release-pr.outputs.found == 'true' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: >
+          scripts/post_commit_status.sh "$(git rev-parse HEAD)"
+          "Validate skill and plugin"
+          pending
+          "Release PR validation is running"
+          "$TARGET_URL"
+
+      - name: Validate release PR
+        if: ${{ steps.release-pr.outputs.found == 'true' }}
+        id: validate-release-pr
+        continue-on-error: true
+        env:
+          TESSL_TOKEN_AVAILABLE: ${{ steps.release-pr-tessl-token.outputs.available }}
+        run: |
+          scripts/validate_repo.sh
+          if [[ "$TESSL_TOKEN_AVAILABLE" == "true" ]]; then
+            bash scripts/check_publish_dry_run.sh .
+            tessl plugin publish --dry-run .
+          fi
+
+      - name: Mark release PR validation result
+        if: ${{ steps.release-pr.outputs.found == 'true' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          VALIDATION_OUTCOME: ${{ steps.validate-release-pr.outcome }}
+        run: >
+          scripts/post_commit_status_for_outcome.sh "$(git rev-parse HEAD)"
+          "Validate skill and plugin"
+          "$VALIDATION_OUTCOME"
+          "Release PR validation passed"
+          "Release PR validation failed"
+          "$TARGET_URL"
+
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        if: ${{ steps.release-pr.outputs.found == 'true' }}
+        with:
+          node-version: "24"
+
+      - name: Mark release PR commitlint pending
+        if: ${{ steps.release-pr.outputs.found == 'true' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: >
+          scripts/post_commit_status.sh "$(git rev-parse HEAD)"
+          "Commitlint"
+          pending
+          "Release PR commitlint is running"
+          "$TARGET_URL"
+
+      - name: Commitlint release PR
+        if: ${{ steps.release-pr.outputs.found == 'true' }}
+        id: commitlint-release-pr
+        continue-on-error: true
+        env:
+          PR_TITLE: ${{ steps.release-pr.outputs.title }}
+        run: scripts/commitlint_release_pr.sh "$PR_TITLE"
+
+      - name: Mark release PR commitlint result
+        if: ${{ steps.release-pr.outputs.found == 'true' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          COMMITLINT_OUTCOME: ${{ steps.commitlint-release-pr.outcome }}
+        run: >
+          scripts/post_commit_status_for_outcome.sh "$(git rev-parse HEAD)"
+          "Commitlint"
+          "$COMMITLINT_OUTCOME"
+          "Release PR commitlint passed"
+          "Release PR commitlint failed"
+          "$TARGET_URL"
