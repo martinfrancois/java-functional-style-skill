@@ -48,7 +48,8 @@ exact file. Do not answer only in chat when a file artifact is requested.
    variables, loops, checked work, nested fluent chains, merge rules, formatting, or more than one
    meaningful condition. This includes stream lambdas from the streams package: block lambdas,
    arrows whose body starts on the next line, and nested callback bodies that continue on later
-   lines should become helpers when they do non-trivial work.
+   lines should become helpers when they do non-trivial work. For a filter with multiple domain
+   checks, name the predicate rule even when a separate mapping callback is the more obvious block.
 8. Keep supplier work lazy. Expensive fallback construction, IO, prompts, parsing, logging, or
    exception creation that is meant to happen only on absence/miss must stay inside the supplier
    passed to `orElseGet`, `computeIfAbsent`, or similar APIs.
@@ -75,6 +76,13 @@ cards.stream().collect(Collectors.toMap(Card::id, Function.identity(), merge, Li
 
 ```java
 return optional.orElse(defaultValue); // not optional.map(x -> x).orElse(defaultValue)
+```
+
+```java
+tickets.stream()
+    .filter(this::isEscalationCandidate)
+    .map(ticket -> toEscalation(ticket, now))
+    .toList();
 ```
 
 ## Review Output
