@@ -1,4 +1,4 @@
 interface:
-  display_name: "Java Functional Style Skill"
-  short_description: "Stream and Collector best practices"
-  default_prompt: "Use $java-functional-style when writing, reviewing, or refactoring Java code that uses streams, collectors, primitive streams, or stream terminal operations such as matching, finding, reducing, and collecting."
+  display_name: "Java Functional Style"
+  short_description: "Lambda, method reference, and functional-interface style"
+  default_prompt: "Use $java-functional-style when writing, reviewing, or refactoring Java lambdas, method references, functional interfaces, identity functions, suppliers, predicates, consumers, callbacks, or no-op functional stages."

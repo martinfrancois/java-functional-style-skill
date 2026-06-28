@@ -1,111 +1,83 @@
 ---
 name: java-functional-style
 license: MIT
-description: Review Java stream performance advice, especially slow stream mappings, external collection mutation with forEach/add, and whether parallelStream is safe; clean up mutation and write or refactor Java Stream and Collector code. Avoid common stream antipatterns such as materializing just to inspect, sorting before min/max, counting for existence, nested stream collections, unsafe null sorting, multi-line lambdas, and careless findFirst/findAny changes. Use whenever writing, reviewing, or refactoring Java code that uses Java streams, collectors, stream pipelines, grouping, joining strings, first/any element lookup, sorting, limiting, distinct values, primitive totals, Optional values in streams, or parallel streams, including review prompts asking whether a lookup should use findFirst or findAny.
+description: Write, review, and refactor Java lambdas, method references, functional interfaces, callbacks, predicates, functions, suppliers, consumers, identity functions, no-op functional stages, and multi-line lambdas for behavior-preserving readability. Use for Function.identity(), UnaryOperator.identity(), identity lambdas, block lambdas, callback extraction, supplier laziness, and functional-style cleanup. Do not use to force functional style where plain Java is clearer.
 ---
 
-# Java Functional Style Skill
+# Java Functional Style
 
-Preserve requested behavior, public API/artifact shape, encounter order, exceptions, null handling,
-side effects, mutability, and Java-version compatibility. For implementation prompts, write the
-requested Java source file before explaining. Keep provided helper/record/service types in that file,
-and keep them nested when requested; do not create sibling source files, package-private top-level
-replacements, hooks, test seams, delegate fields, overloads, caches, retries, or adapters unless
-asked.
+Preserve requested behavior, public API/artifact shape, ordering, laziness, exceptions, null
+behavior, side effects, mutability, object identity where observable, and Java-version
+compatibility. For implementation prompts, create the requested artifact before explaining. Do not
+turn plain Java into callbacks, streams, or Optional chains when a branch or loop is clearer.
 
 ## Reference Bundle
 
 | File | Purpose |
-|---|---|
-| [hard-stops.md](references/hard-stops.md) | Replacement antipatterns and the marker scan to run |
-| [functional-style-examples.md](references/functional-style-examples.md) | Worked before/after examples from the reference set |
-| [java-functional-api.md](references/java-functional-api.md) | Java-version compatibility for stream and collector APIs |
+| --- | --- |
+| [hard-stops.md](references/hard-stops.md) | Functional-style replacement antipatterns and the final scan |
+| [functional-style-examples.md](references/functional-style-examples.md) | Before/after examples for identity functions, no-op stages, helper extraction, laziness, and side effects |
+| [java-functional-api.md](references/java-functional-api.md) | Java baseline notes for functional interfaces and callback-related APIs |
 
 ## Core Workflow
 
 When the prompt asks for a named artifact such as `review.md` or a Java source file, create that
 exact file. Do not answer only in chat when a file artifact is requested.
 
-0. Check the Java baseline first. Use [java-functional-api.md](references/java-functional-api.md) for
-   minimum versions and fallbacks; do not emulate unavailable APIs with stateful or multi-line
-   lambdas.
-1. Identify the requested result and pick the matching terminal or collector:
+1. Check the Java baseline first. Use [java-functional-api.md](references/java-functional-api.md)
+   for minimum versions and fallbacks. Do not use APIs unavailable for the stated baseline.
+2. Identify the functional-interface contract before changing code:
+   `Function`, `UnaryOperator`, `Predicate`, `Supplier`, `Consumer`, `BiFunction`,
+   `BinaryOperator`, `Comparator`, or callbacks such as `map`, `flatMap`, `filter`,
+   `orElseGet`, `ifPresent`, `computeIfAbsent`, `removeIf`, stream operations, collector
+   callbacks, and completion callbacks.
+3. Prefer a method reference only when it names the exact operation clearly and preserves behavior.
+   Do not replace a lambda with a method reference if argument order, receiver binding, null
+   behavior, checked exceptions, or overload resolution would change.
+4. Use `Function.identity()` when an API needs an identity `Function<T, T>`. Use
+   `UnaryOperator.identity()` when an API specifically needs an identity `UnaryOperator<T>`.
+   Keep required imports.
+5. Remove no-op identity stages when the stage itself has no semantic purpose. A redundant
+   `.map(x -> x)` is usually removed, not replaced with `.map(Function.identity())`.
+6. Keep lambdas as glue. Use one-expression callbacks or method references for direct projection,
+   filtering, consumption, or construction.
+7. Extract a named helper, or use a plain branch, when a callback needs branching, local temporary
+   variables, loops, checked work, nested fluent chains, merge rules, formatting, or more than one
+   meaningful condition. This includes stream lambdas from the streams package: block lambdas,
+   arrows whose body starts on the next line, and nested callback bodies that continue on later
+   lines should become helpers when they do non-trivial work.
+8. Keep supplier work lazy. Expensive fallback construction, IO, prompts, parsing, logging, or
+   exception creation that is meant to happen only on absence/miss must stay inside the supplier
+   passed to `orElseGet`, `computeIfAbsent`, or similar APIs.
+9. Avoid external mutation from callbacks when the API can produce the result directly. Keep a
+   callback side effect only when the side effect is the requested outcome and is safe for the
+   chosen execution mode.
+10. Keep plain branches or loops when they are clearer for checked IO, prompts, parser boundaries,
+    complex early exits, mutation-heavy logic, or behavior that depends on step-by-step control
+    flow.
+11. Verify changed branches for present values, absent values, empty inputs, null behavior,
+    ordering, side effects, laziness, exceptions, object identity where observable, and Java
+    baseline compatibility.
+12. Run the functional-style hard-stop scan from [hard-stops.md](references/hard-stops.md) and
+    reconcile hits before finalizing.
 
-   | Goal | Preferred API |
-   |---|---|
-   | Arbitrary/equivalent match | `filter(...).findAny()` |
-   | First encounter-order match | `filter(...).findFirst()` |
-   | Existence check | `anyMatch` / `noneMatch` / `allMatch` |
-   | Transformed list/set | `map`/`filter` then collect |
-   | Concatenated text | `Collectors.joining` |
-   | Numeric primitive result | `mapToInt`/`mapToLong`/`mapToDouble` terminals |
-   | Two aggregates over same input (Java 12+) | `Collectors.teeing` |
-   | Grouping/indexing | `groupingBy`, `partitioningBy`, or `toMap` with merge/null handling |
+## Nuance
 
-   Find-first rule: keep `findFirst()` when code takes element `0`, sorted order, or encounter order
-   chooses the winner. In these reviews, include the exception before performance claims: `findAny`
-   fits only if all matching values are equivalent and order does not choose the winner. Keep
-   `sorted(...).filter(...).findFirst()` when it defines the selected value; suggest `min`/`max` only
-   when it preserves that winner.
+- `Function.identity()` is correct for required identity `Function<T, T>` arguments.
+- `UnaryOperator.identity()` is correct for required identity `UnaryOperator<T>` arguments.
+- `.map(x -> x)` is usually a redundant stage to remove, not a style issue to replace with
+  `.map(Function.identity())`.
+- Do not remove identity callback stages from APIs where the returned stage object, scheduling,
+  async boundary, callback invocation, tracing, metrics, or exception wrapping is observable unless
+  behavior is proven equivalent. Be careful with `CompletableFuture.thenApply(Function.identity())`
+  and similar APIs.
+- Do not replace non-identity lambdas with identity functions. `card -> card.copy()` and
+  `value -> normalize(value)` are not identity callbacks.
+- Do not force streams or Optional into code where a plain branch or loop is clearer.
 
-2. Use intent-encoding terminals: `anyMatch`, `count`, `joining`, `min`/`max`, Java 12+
-   `teeing`, and primitive terminals. Do not mutate external containers, arrays, counters, or
-   builders from `forEach`; let the stream produce the result directly.
+## Review Output
 
-   - Implementation prompts: for one-to-one transformations, write the direct stream result unless
-     mutable output or the Java baseline says otherwise; on Java 16+, prefer
-     `names.stream().map(String::toUpperCase).toList()` over a manual `ArrayList` loop.
-   - External mutation/performance reviews: show a sequential result-producing snippet first. For
-     million-item CPU maps, mention benchmarking a pure parallel variant and include:
-     "`parallelStream()` can be slower for small lists or call paths that are usually small."
-   - Parallel reviews: apply [hard-stops.md](references/hard-stops.md); no custom pool snippets
-     unless asked.
-   - Java 24 bounded blocking calls: use `Gatherers.mapConcurrent(limit, item -> carrier(item,
-     stub(item)))`, then filter/map/sort; no test hooks, overloads, `CompletableFuture` fan-out, or
-     null sentinels.
-
-   ```java
-   import java.util.List;
-
-   final class OrderChecks {
-       boolean hasOverdue(List<Order> orders) {
-           return orders.stream().anyMatch(Order::isOverdue);
-       }
-
-       record Order(boolean overdue) {
-           boolean isOverdue() {
-               return overdue;
-           }
-       }
-   }
-   ```
-3. Flatten nested sources deliberately. Use `flatMap`, `flatMap(Optional::stream)` on Java 9+,
-   and `mapMulti` on Java 16+ when clearer. Use helpers when nested lambdas would wrap. For subtype
-   primitives, filter/cast first, then call `mapToInt`/`mapToLong`/`mapToDouble` directly. For
-   nested collector callbacks, extract a named `Stream<T>` helper.
-
-   ```java
-   // Java 9+: flatten Optional values instead of filter(Optional::isPresent).map(Optional::get)
-   optionals.stream().flatMap(Optional::stream).collect(Collectors.toList());
-   ```
-4. Choose accumulation/collectors by result semantics: use `reduce(identity, op)` for immutable
-   non-primitives, `toMap` with merge behavior and deliberate null-key/value handling, non-null keys
-   for `groupingBy`, `partitioningBy` for boolean splits, and flattened nested indexes when clearer.
-   Extract duplicate-key merge rules into named helpers when ties, nulls, or ordering need more than
-   a same-line expression. Carry `element + result`, never null sentinels.
-5. Preserve ordering, mutability, short-circuit behavior, and lambda readability. Keep stream lambdas
-   as short glue or method references; use named helpers for branching, merge logic, or nested stream
-   work.
-6. Keep imperative code when it is the clearer boundary for stateful output, checked IO,
-   mutation-heavy logic, or complex early exits.
-7. Verify changed branches for empty inputs, one element, duplicates, nulls, ordering,
-   parallel-safety, and baseline compatibility. Run the marker scan from
-   [hard-stops.md](references/hard-stops.md), fix hits, and re-scan. In scan audits, keep
-   hard-stop severities: required hits stay required unless explicitly acceptable.
-
-Review output:
-
-- Give a direct behavior-preserving decision plus one safe snippet.
+- Give a direct behavior-preserving decision plus one safe snippet when useful.
 - Create `review.md` when requested, even for rejection-only reviews.
 - Explain code behavior, not internal workflow.
 - Avoid internal workflow labels such as "per the skill", "hard stop", "marker", "scan",
