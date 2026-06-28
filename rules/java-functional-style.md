@@ -6,7 +6,7 @@ Prefer method references or named JDK functions when they express the exact oper
 
 Do not add no-op functional stages. Remove identity mapping stages such as `stream.map(x -> x)`, `stream.map(Function.identity())`, `optional.map(x -> x)`, or `optional.map(Function.identity())` when removing the stage preserves behavior.
 
-Extract a named helper, or use a plain branch, when a lambda or callback needs branching, local temporary variables, loops, checked exception handling, nested fluent chains, side effects, or more than one meaningful condition.
+Extract a named helper, or use a plain branch, when a lambda or callback needs branching, local temporary variables, loops, checked exception handling, nested fluent chains, side effects, collector merge tie-breaking, or more than one meaningful condition. Do not leave chained ternary merge callbacks inline. For nested stream callbacks, prefer `.flatMap(Type::childEntries)` over `.flatMap(parent -> parent.children().stream().filter(...).map(...))`. After extracting a helper, re-scan that helper too; do not just move a multi-line callback or nested fluent callback chain into the helper.
 
 When reviewing a proposed functional rewrite of stateful windowing, sentinel-controlled loops, early breaks, or mutation-heavy accumulation, reject behavior changes and prefer keeping the clear loop or branch. Do not replace it with a clever stream, Optional, or callback pipeline merely because one can be written.
 

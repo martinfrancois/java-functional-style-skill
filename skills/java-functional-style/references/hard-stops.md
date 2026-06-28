@@ -26,6 +26,8 @@ Fix or explicitly classify these before finalizing:
   helper or plain branch would be clearer.
 - Arrows whose body starts on the next line, or callback bodies that continue nested fluent chains
   on later lines. Keep callbacks as same-line glue or extract helpers.
+- Helper extraction that only moves a multi-line callback into the helper method. Re-scan helper
+  bodies and extract again or use plain code until callbacks are glue.
 - Predicate callbacks with more than one meaningful condition when a named predicate would explain
   the rule better.
 - Callback bodies with local temporary variables, branching, formatting, merge rules, severity
