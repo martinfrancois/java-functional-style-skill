@@ -6,10 +6,11 @@ description: Write, review, and refactor Java lambdas, method references, functi
 
 # Java Functional Style
 
-Preserve requested behavior, public API/artifact shape, ordering, laziness, exceptions, null
-behavior, side effects, mutability, object identity where observable, and Java-version
-compatibility. For implementation prompts, create the requested artifact before explaining. Do not
-turn plain Java into callbacks, streams, or Optional chains when a branch or loop is clearer.
+Preserve requested behavior, public API/artifact shape, and Java-version compatibility. For
+implementation prompts, create the requested artifact before explaining. Do not turn plain Java into
+callbacks, streams, or Optional chains when a branch or loop is clearer.
+When another Java domain skill is active, let that skill own domain semantics; change only callback
+readability unless preserving behavior requires more.
 
 ## Reference Bundle
 
@@ -45,12 +46,13 @@ exact file. Do not answer only in chat when a file artifact is requested.
 6. Keep lambdas as glue. Use one-expression callbacks or method references for direct projection,
    filtering, consumption, or construction.
 7. Extract a named helper, or use a plain branch, when a callback needs branching, local temporary
-   variables, loops, checked work, nested fluent chains, merge rules, formatting, or more than one
-   meaningful condition. This includes stream lambdas from the streams package: block lambdas,
-   arrows whose body starts on the next line, and nested callback bodies that continue on later
-   lines should become helpers when they do non-trivial work. Re-scan extracted helpers too; do not
-   move a multi-line callback into the helper. For a filter with multiple domain checks, name the
-   predicate rule even when a separate mapping callback is the more obvious block.
+   variables, loops, checked work, nested chains, merge rules, formatting, or more than one
+   meaningful condition. Keep callbacks as one-expression glue; re-scan helpers so extraction does
+   not merely move a multi-line callback. When a pipeline has both a multi-condition filter and a
+   block map, extract both: `.filter(this::isEscalationCandidate).map(ticket -> toEscalation(ticket, now))`.
+   Name the filter predicate even when the block mapping callback is the more obvious cleanup. When
+   extracting derived date/time values, preserve the requested unit API; use `ChronoUnit.DAYS.between`
+   for whole elapsed days rather than `Period.getDays()`.
 8. Keep supplier work lazy. Expensive fallback construction, IO, prompts, parsing, logging, or
    exception creation that is meant to happen only on absence/miss must stay inside the supplier
    passed to `orElseGet`, `computeIfAbsent`, or similar APIs.
@@ -90,9 +92,20 @@ tickets.stream()
 
 - Give a direct behavior-preserving decision plus one safe snippet when useful.
 - Create `review.md` when requested, even for rejection-only reviews.
+- In stream reviews, state semantic preconditions before performance or nondeterminism. For
+  `findFirst` versus `findAny`: `findAny()` would be appropriate only if the domain declares all
+  matching values equivalent and encounter order does not define which one wins; parallelism or
+  unordered execution is not enough.
 - For reviews rejecting a forced functional rewrite, do not include alternative stream, Optional, or
-  callback-heavy snippets as examples or counterexamples. Recommend keeping the loop/branch or a
-  small named helper.
+  callback-heavy snippets as examples, counterexamples, or hypothetical corrected approaches. Do not
+  stop at rejection; include: "Keep the original loop or a branch-based helper; that shape preserves
+  start/stop markers, blank filtering, trimming, encounter order, and the early break." Do not add
+  secondary `.toList()` mutability notes unless mutability affects the requested contract. Never
+  mention `dropWhile`, `takeWhile`, or a possible stream solution; if cleanup is desired, say to move
+  the loop into a named helper such as `copyVisibleLines`.
 - Explain code behavior, not internal workflow.
 - Avoid internal workflow labels such as "per the skill", "hard stop", "marker", "scan",
-  "checklist", "rubric", or "criteria" unless the user asks about the workflow itself.
+  "checklist", "rubric", "criteria", "style rules", "applicable rules", "rule guidance", or
+  "rule compliance" unless the user asks about the workflow itself. Do not add "Rule guidance" or
+  "Rule compliance" sections, generic "Rule"/"Rules" headings, or direct quotes from internal
+  guidance to user-facing review artifacts.

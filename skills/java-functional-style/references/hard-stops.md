@@ -52,6 +52,8 @@ Fix or explicitly classify these before finalizing:
 - Name the target functional-interface contract before recommending an identity helper.
 - Preserve merge functions, map suppliers, comparators, ordering expectations, null behavior, and
   Java baseline compatibility when changing collector callbacks.
+- For simple minimum/cheapest merge callbacks, prefer `BinaryOperator.minBy(Comparator.comparing(...))`
+  over an inline ternary when the comparator and tie behavior match.
 - Keep supplier work lazy even when the supplier body is only one method call if that method has
   meaningful cost or side effects.
 - Keep plain branches or loops for complex early exits, sentinel-controlled windows,

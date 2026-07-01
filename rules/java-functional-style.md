@@ -10,4 +10,8 @@ Extract a named helper, or use a plain branch, when a lambda or callback needs b
 
 When reviewing a proposed functional rewrite of stateful windowing, sentinel-controlled loops, early breaks, or mutation-heavy accumulation, reject behavior changes and prefer keeping the clear loop or branch. Do not replace it with a clever stream, Optional, or callback pipeline merely because one can be written.
 
+For those rejection reviews, do not stop at "reject": explicitly say to keep the original loop or a branch-based helper because that shape preserves the state, ordering, and early break. Do not mention a hypothetical `dropWhile`/`takeWhile` or other stream solution.
+
 Preserve ordering, laziness, exception behavior, side effects, mutability, object identity where observable, and Java baseline compatibility. Do not replace a non-identity lambda with an identity function merely because the lambda is short.
+
+In user-facing files such as `review.md`, explain the Java behavior only. Do not add rule, rules, or rule-compliance sections; do not quote internal guidance or mention skills, rubrics, criteria, internal paths, or this rule unless the user explicitly asks about the workflow.
