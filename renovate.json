@@ -23,7 +23,7 @@
   },
   "dependencyDashboardApproval": false,
   "separateMajorMinor": true,
-  "separateMultipleMajor": true,
+  "separateMultipleMajor": false,
   "vulnerabilityAlerts": {
     "enabled": true,
     "labels": [
