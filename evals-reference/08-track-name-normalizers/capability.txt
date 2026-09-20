@@ -1,0 +1,1 @@
+Implement a registry of UnaryOperator callbacks whose unchanged entry uses the JDK identity operator.

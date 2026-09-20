@@ -36,8 +36,7 @@
   "metadata": {
     "invocation": "natural",
     "task_type": "review",
-    "evidence_type": "focused_reference",
-    "reference_selection": "Focused reference coverage for not forcing functional style.",
-    "runtime_reference_overlap_rationale": "Allowed only because this is reference-suite focused coverage, not ordinary broad lift."
+    "evidence_type": "ordinary_lift",
+    "reference_selection": "Candidate for main promotion; classify from the isolated hosted run."
   }
 }

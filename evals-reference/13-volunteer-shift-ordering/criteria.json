@@ -1,0 +1,48 @@
+{
+  "context": "Reference cleanup: comparator composition replacing a block comparator lambda.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Creates the requested artifact",
+      "category": "safety",
+      "max_score": 8,
+      "description": "Creates ShiftOrdering.java with the method, the nested record, needed imports, and Java 17-compatible code."
+    },
+    {
+      "name": "Preserves the order",
+      "category": "safety",
+      "max_score": 7,
+      "description": "Orders by day, then start time, then lead with null leads last, then slots ascending; returns a new list and leaves the input untouched."
+    },
+    {
+      "name": "Composes JDK comparators",
+      "category": "functional_style",
+      "max_score": 50,
+      "description": "Uses Comparator.comparing(...).thenComparing(...) composition (with Comparator.nullsLast for the lead) instead of a block comparator lambda with if/else chains."
+    },
+    {
+      "name": "Uses the primitive comparator for slots",
+      "category": "functional_style",
+      "max_score": 20,
+      "description": "Uses thenComparingInt(Shift::slots) rather than a boxed comparing(Shift::slots) or a manual Integer.compare lambda."
+    },
+    {
+      "name": "Keeps callbacks as glue",
+      "category": "functional_style",
+      "max_score": 10,
+      "description": "Every comparator key is a method reference or one-expression lambda; no block lambda remains."
+    },
+    {
+      "name": "Stays focused",
+      "category": "maintainability",
+      "max_score": 5,
+      "description": "No unrelated abstractions, sorting-algorithm changes, extra public API, or dependency changes."
+    }
+  ],
+  "metadata": {
+    "invocation": "natural",
+    "task_type": "cleanup",
+    "evidence_type": "ordinary_lift",
+    "reference_selection": "Candidate for main promotion; classify from the isolated hosted run."
+  }
+}

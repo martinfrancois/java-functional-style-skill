@@ -1,0 +1,1 @@
+Implement file reading over a list of paths while keeping the checked exception contract visible instead of wrapping it inside a callback.

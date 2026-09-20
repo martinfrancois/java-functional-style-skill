@@ -1,0 +1,42 @@
+{
+  "context": "Reference implementation: lazy fallback with computeIfAbsent and requireNonNullElseGet.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Creates the requested artifact",
+      "category": "safety",
+      "max_score": 8,
+      "description": "Creates StationResolver.java with both methods, the nested record, interface, and static factory, needed imports, and Java 17-compatible code."
+    },
+    {
+      "name": "Preserves resolve and pricing contracts",
+      "category": "safety",
+      "max_score": 7,
+      "description": "resolve returns the cached value when present and stores fetched stations; pricingFor returns configured when non-null and the standard pricing otherwise."
+    },
+    {
+      "name": "Fetches only on a cache miss",
+      "category": "functional_style",
+      "max_score": 40,
+      "description": "The directory fetch happens inside cache.computeIfAbsent(stationId, id -> directory.fetch(id)) or inside a branch that runs only when the cache has no entry; it is never called before the cache check."
+    },
+    {
+      "name": "Builds standard pricing lazily",
+      "category": "functional_style",
+      "max_score": 40,
+      "description": "Pricing.standardFor is invoked only when configured is null, for example via Objects.requireNonNullElseGet(configured, () -> Pricing.standardFor(station)) or a plain branch; not via requireNonNullElse, Optional.orElse, or a precomputed local."
+    },
+    {
+      "name": "Stays focused",
+      "category": "maintainability",
+      "max_score": 5,
+      "description": "No unrelated abstractions, synchronization redesign, extra public API, or dependency changes."
+    }
+  ],
+  "metadata": {
+    "invocation": "explicit",
+    "task_type": "implementation",
+    "evidence_type": "ordinary_lift",
+    "reference_selection": "Candidate for main promotion; classify from the isolated hosted run."
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "context": "Reference implementation: UnaryOperator registry with an identity entry.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Creates the requested artifact",
+      "category": "safety",
+      "max_score": 8,
+      "description": "Creates TrackNameNormalizers.java with both methods, needed imports, and Java 17-compatible code."
+    },
+    {
+      "name": "Preserves normalizer behavior",
+      "category": "safety",
+      "max_score": 7,
+      "description": "as-is returns the input unchanged, uppercase upper-cases, collapsed strips and collapses internal whitespace runs, the map is unmodifiable, and an unknown mode throws IllegalArgumentException that names the mode."
+    },
+    {
+      "name": "Uses UnaryOperator.identity for the unchanged entry",
+      "category": "functional_style",
+      "max_score": 55,
+      "description": "The as-is entry is UnaryOperator.identity() (with its import), not name -> name, Function.identity() cast to UnaryOperator, or a custom identity method."
+    },
+    {
+      "name": "Uses glue callbacks for the other entries",
+      "category": "functional_style",
+      "max_score": 25,
+      "description": "uppercase and collapsed are method references or one-expression lambdas (for example String::toUpperCase and a named helper for collapsing), with no block lambdas in the map definition."
+    },
+    {
+      "name": "Stays focused",
+      "category": "maintainability",
+      "max_score": 5,
+      "description": "No unrelated abstractions, caching, configuration loading, or extra public API."
+    }
+  ],
+  "metadata": {
+    "invocation": "natural",
+    "task_type": "implementation",
+    "evidence_type": "ordinary_lift",
+    "reference_selection": "Candidate for main promotion; classify from the isolated hosted run."
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "context": "Reference implementation: helper extraction for multi-condition filters and derived-value mappers.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Creates the requested artifact",
+      "category": "safety",
+      "max_score": 8,
+      "description": "Creates EpisodeDigests.java with the method, both nested records, needed imports, and Java 17-compatible code."
+    },
+    {
+      "name": "Preserves digest rules",
+      "category": "safety",
+      "max_score": 7,
+      "description": "Includes only published, non-explicit episodes longer than 10 minutes; ageDays is whole days from publishedAt to LocalDate.now(clock); fresh means at most 7 days; encounter order is kept."
+    },
+    {
+      "name": "Extracts the mapping into a named helper",
+      "category": "functional_style",
+      "max_score": 40,
+      "description": "The age and label computation and EpisodeDigest construction live in a named method (for example toDigest(episode, today)); the map callback is a one-expression lambda or method reference, not a block lambda."
+    },
+    {
+      "name": "Names the eligibility predicate",
+      "category": "functional_style",
+      "max_score": 30,
+      "description": "The three-condition filter is a named method or named Predicate (for example isIncluded or this::isEligible) rather than an inline multi-line condition in the filter call."
+    },
+    {
+      "name": "No block lambdas anywhere",
+      "category": "functional_style",
+      "max_score": 10,
+      "description": "No callback body in the file uses braces or continues onto further lines; extracted helpers contain plain code rather than another block lambda."
+    },
+    {
+      "name": "Stays focused",
+      "category": "maintainability",
+      "max_score": 5,
+      "description": "No unrelated abstractions, caching, parallelism, extra public API, or dependency changes."
+    }
+  ],
+  "metadata": {
+    "invocation": "natural",
+    "task_type": "implementation",
+    "evidence_type": "ordinary_lift",
+    "reference_selection": "Candidate for main promotion; classify from the isolated hosted run."
+  }
+}
