@@ -43,6 +43,6 @@
     "invocation": "natural",
     "task_type": "cleanup",
     "evidence_type": "ordinary_lift",
-    "main_eval_selection": "Promoted 2026-09-20 from isolated hosted run 01a0c02b-3822-71db-aef0-e746e472e5b7 (Tessl default solver): without 50/100, with 100/100; delta meets the 30 pp main floor and adds distinct callback-shape coverage."
+    "reference_selection": "Demoted to reference on 2026-09-20. With-context is 100 in every sample, but the Tessl default solver's baseline varies: 20 (01a0bfa2-c49e-7178-a1a1-910db1b92785, older skill), 50 (01a0c02b-3822-71db-aef0-e746e472e5b7), 100 (01a0c04c-f644-72ed-8e3a-d53d3f8e3d06), 84 (01a0c077-e577-704b-ad68-9b7386d95575), 100 (01a0c083-1918-704b-a748-8f26c39ad294). Mean delta is below the 30 pp floor, so it is coverage, not stable lift."
   }
 }

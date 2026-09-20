@@ -12,6 +12,8 @@ so gaps here are scenarios that live in `evals/` or `evals-regression/`.
   (`01a0c02f-abf8-776d-8038-3ae700a5d1e1`) scored without 97, with 100. Kept as reference.
 - `12-chess-pairing-method-reference-review`: method reference receiver binding review. Hosted
   run: without 99, with 100. Kept as reference.
+- `13-volunteer-shift-ordering`: comparator composition replacing a block comparator lambda.
+  Promoted and demoted on 2026-09-20; see `evals/NUMBERING.md` for the five baseline samples.
 
-Promoted to `evals/` on 2026-09-20: `09-podcast-episode-digests`, `13-volunteer-shift-ordering`,
-`14-aquarium-feeding-ledger`, `15-vineyard-harvest-summaries`. See `evals/NUMBERING.md`.
+Promoted to `evals/` on 2026-09-20: `09-podcast-episode-digests`, `14-aquarium-feeding-ledger`,
+`15-vineyard-harvest-summaries`. See `evals/NUMBERING.md`.

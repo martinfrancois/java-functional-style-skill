@@ -88,25 +88,29 @@ make this pass.
 
 Update this section whenever active eval membership or scoring changes.
 
-- Main eval set: 4 scenarios, 400 checklist points, 3 natural and 1 explicit, all implementation
-  tasks: `09` helper extraction and named predicates in a pipeline, `13` comparator composition,
-  `14` `Map.merge`, `computeIfAbsent`, and `CompletableFuture` callbacks, `15` `Optional.map` and
-  collector-downstream callbacks. Each carries 80 functional-style points, 15 safety, 5
+- Main eval set: 3 scenarios, 300 checklist points, 2 natural and 1 explicit, all implementation
+  tasks: `09` helper extraction and named predicates in a pipeline, `14` `Map.merge`,
+  `computeIfAbsent`, and `CompletableFuture` callbacks (explicit invocation), `15` `Optional.map`
+  and collector-downstream callbacks. Each carries 80 functional-style points, 15 safety, 5
   maintainability. No weight multipliers.
-- Reference suite: 3 scenarios, 300 points: `04` supplier laziness review (97/100 without),
-  `07` identity mappers in collector code (97/100 without), `12` method-reference receiver
-  binding review (99/100 without). Clean with-context, deltas below the floor.
+- Reference suite: 4 scenarios, 400 points: `04` supplier laziness review (97/100 without), `07`
+  identity mappers in collector code (97/100 without), `12` method-reference receiver binding
+  review (99/100 without), `13` comparator composition (baseline 20 to 100 across five samples;
+  see `evals/NUMBERING.md`). Clean with-context, deltas below or unstable around the floor.
 - Regression suite: 8 solved scenarios, 800 points, run with context only.
-- Isolated promotion evidence (Tessl default solver, 2026-09-20): `09` run
-  `01a0c02f-abf8-776d-8038-3ae700a5d1e1` without 20 / with 100; `13` run
-  `01a0c02b-3822-71db-aef0-e746e472e5b7` without 50 / with 100; `14` run
-  `01a0c037-590b-7193-ab1e-9558506ca102` without 44 / with 100; `15` run
-  `01a0c077-0e44-773d-b1cb-ab99ef402216` without 35 / with 100.
-- Full main-suite run before `15` joined: `01a0c04c-f644-72ed-8e3a-d53d3f8e3d06`, without
-  54% / with 100%. The `13` baseline scored 100 in that run; see `evals/NUMBERING.md`.
+- Headline main-suite run against the final bundle (Tessl default solver, 2026-09-20):
+  `01a0c091-df78-7652-b356-8f1d6afda35e`. Current main scenarios: without 90/300 (30%), with
+  300/300 (100%), ratio 3.3x, delta 70 pp. The run also carried `13` before its demotion; with it
+  counted the ratio was 2.1x.
+- Isolated promotion evidence: `09` run `01a0c02f-abf8-776d-8038-3ae700a5d1e1` without 20 / with
+  100; `14` run `01a0c037-590b-7193-ab1e-9558506ca102` without 44 / with 100; `15` run
+  `01a0c077-0e44-773d-b1cb-ab99ef402216` without 35 / with 100. Earlier full main runs
+  `01a0c04c-f644-72ed-8e3a-d53d3f8e3d06` (09 20/100, 14 42/100) and
+  `01a0c077-e577-704b-ad68-9b7386d95575` (14 30/100, 15 35/100) are consistent with these baselines.
 - Quality review `01a0c029-facf-7109-8d99-7d4da1addc95`: 100.
 - Model selection is a paid-plan feature, so no stronger-model check exists; variance evidence is
-  the isolated runs plus the full main-suite runs.
+  the repeated default-solver samples above. Sandbox cells drop at random on the free plan; use
+  `tessl eval retry <run>` (it creates a new run that reuses the completed cells).
 - Composition checks with both skills as context, with-context only: streams main
   `01a0c037-733f-742b-9b10-e62be368d466` 4/4 at 100%; optionals main
   `01a0c037-8b98-70cb-a114-2eb9911ea75c` (3 scenarios at 100%, one sandbox failure) plus
