@@ -30,7 +30,7 @@
       "name": "Label formatting uses glue",
       "category": "functional_style",
       "max_score": 15,
-      "description": "The map callback producing labels is a method reference or one-expression lambda (for example HarvestSummaries::crateLabel); upper-casing and formatting are not spread over a block lambda."
+      "description": "The map callback producing labels is a method reference or a single-expression lambda without braces; a long single expression counts as fully meeting this item. Only a block lambda with braces, local variables, or statements fails it."
     },
     {
       "name": "No block lambdas anywhere",
