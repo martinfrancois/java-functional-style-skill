@@ -106,6 +106,35 @@ rehearsals.sort(Comparator.comparing(Rehearsal::durationMinutes));
 rehearsals.sort(Comparator.comparingInt(Rehearsal::durationMinutes));
 ```
 
+## Compose comparators instead of branching
+
+```java
+// before
+rehearsals.sort((a, b) -> {
+    int dayOrder = a.day().compareTo(b.day());
+    if (dayOrder != 0) {
+        return dayOrder;
+    }
+    if (a.conductor() == null) {
+        return b.conductor() == null ? 0 : 1;
+    }
+    if (b.conductor() == null) {
+        return -1;
+    }
+    int conductorOrder = a.conductor().compareTo(b.conductor());
+    return conductorOrder != 0 ? conductorOrder : Integer.compare(a.durationMinutes(), b.durationMinutes());
+});
+
+// after
+rehearsals.sort(Comparator.comparing(Rehearsal::day)
+        .thenComparing(Rehearsal::conductor, Comparator.nullsLast(Comparator.naturalOrder()))
+        .thenComparingInt(Rehearsal::durationMinutes));
+```
+
+Keep the key order, the null placement (`nullsLast` or `nullsFirst`), and the tie behavior
+exactly as the branches had them. Use `thenComparingInt`, `thenComparingLong`, or
+`thenComparingDouble` for primitive keys.
+
 ## Keep supplier fallbacks lazy
 
 ```java

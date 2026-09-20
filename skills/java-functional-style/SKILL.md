@@ -66,9 +66,12 @@ stream, collector, or Optional semantics; this skill only changes how callbacks 
 6. Keep lambdas as one-expression glue. When a callback needs branching, local temporaries,
    loops, formatting, a merge or tie-break rule, more than one meaningful condition, or a nested
    fluent chain, extract a named helper (`toSummary(item, today)`, `isEligible(item)`) and pass
-   `this::isEligible` or a one-line lambda. Name multi-condition predicates. Re-scan every
-   extracted helper: moving a block lambda into a helper that still contains a block lambda is not
-   done.
+   `this::isEligible` or a one-line lambda. Name multi-condition predicates; combining two named
+   predicates with `&&` in the callback is fine. Re-scan every extracted helper: moving a block
+   lambda into a helper that still contains a block lambda is not done.
+   A multi-branch comparator lambda is the same smell: replace `if`/`else` chains of
+   `compareTo` calls with `Comparator.comparing(key).thenComparing(key2, nullsLast(naturalOrder()))
+   .thenComparingInt(intKey)`, keeping the same key order, null placement, and tie behavior.
 7. Keep supplier work lazy. Fallback construction, IO, prompts, parsing, and exception creation
    that should happen only on absence or miss belong inside the supplier passed to `orElseGet`,
    `orElseThrow`, `computeIfAbsent`, `Objects.requireNonNullElseGet`, or a logging supplier.
