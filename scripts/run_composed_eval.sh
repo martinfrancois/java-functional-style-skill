@@ -74,7 +74,9 @@ if [[ ! -d "$suite_path" ]]; then
   exit 1
 fi
 
-tmp_dir="$(mktemp -d)"
+# Everything Tessl reads must sit inside this repository, because `tessl eval run` resolves the
+# Tessl project from the scenarios path. The staging directory is gitignored.
+tmp_dir="$(mktemp -d "$repo_root/.tessl-composition.XXXXXX")"
 trap 'rm -rf "$tmp_dir"' EXIT
 
 composed="$tmp_dir/composed-plugin"
@@ -91,10 +93,13 @@ cat > "$composed/.tessl-plugin/plugin.json" <<JSON
 }
 JSON
 
-scenario_source="$suite_path"
-if [[ "${#scenarios[@]}" -gt 0 ]]; then
-  scenario_source="$tmp_dir/scenarios"
-  mkdir -p "$scenario_source"
+scenario_source="$tmp_dir/scenarios"
+mkdir -p "$scenario_source"
+if [[ "${#scenarios[@]}" -eq 0 ]]; then
+  for scenario in "$suite_path"/*/; do
+    cp -a "$scenario" "$scenario_source/"
+  done
+else
   for scenario in "${scenarios[@]}"; do
     if [[ ! -d "$suite_path/$scenario" ]]; then
       echo "Unknown $suite scenario in $domain_repo: $scenario" >&2
