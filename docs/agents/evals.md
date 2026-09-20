@@ -88,12 +88,19 @@ make this pass.
 
 Update this section whenever active eval membership or scoring changes.
 
-- Main eval set: empty until hosted classification promotes candidates.
-- Reference suite: 13 candidate scenarios, 1300 checklist points, 10 natural and 3 explicit.
-- Regression suite: empty.
-- No hosted benchmark evidence has been recorded for the current skill bundle. Do not publish
-  scores, run IDs, or lift ratios until they come from runs against the current `evals/` contents
-  and commit.
+- Main eval set: empty until the pending reruns below classify candidates.
+- Reference suite: 6 candidate scenarios, 600 checklist points, 5 natural and 1 explicit.
+- Regression suite: 8 solved scenarios, 800 checklist points, run with context only.
+- Hosted evidence so far (Tessl default solver, 2026-09-20):
+  - `01a0bf9d-d8ec-7269-a8d3-0c7d9986b4f1`: `07` isolated, without 20 / with 100, before the task
+    fixed the carrier style; rerun pending.
+  - `01a0bfa2-c49e-7178-a1a1-910db1b92785`: the other twelve candidates, both variants. Eight
+    scored 100/100 in both arms and moved to regression; `04` (97/100) and `12` (99/100) stay in
+    reference; `09` (20/85) and `13` (20/46) need reruns after the skill and criteria changes.
+  - Quality review `01a0c029-facf-7109-8d99-7d4da1addc95`: 100.
+- Pending before any score or lift claim: reruns of `07`, `09`, `13`, and the new `14` against
+  the current skill bundle, classification, promotion, a main-suite run, and the composition
+  checks.
 
 ## References
 
