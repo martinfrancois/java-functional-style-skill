@@ -1,78 +1,75 @@
 # Java Functional Style Hard Stops
 
-Use this reference before finalizing Java functional-style cleanup or first-pass implementation
-when the code touches lambdas, method references, functional interfaces, callbacks, suppliers,
-identity functions, or no-op functional stages.
+Use this before finalizing any change that touches lambdas, method references, functional
+interfaces, callbacks, suppliers, identity functions, or no-op functional stages.
 
-## Replacement Antipatterns
+## Replacement antipatterns
 
-Fix or explicitly classify these before finalizing:
+Fix or explicitly classify each of these before finalizing:
 
-- Identity lambdas where an API requires `Function<T, T>`, such as `x -> x`, `value -> value`,
-  `card -> card`, or `Function<T, T> f = item -> item`. Use `Function.identity()` and import
+- An identity lambda where the API requires `Function<T, T>` (`x -> x`, `item -> item`,
+  `Function<T, T> f = value -> value`). Use `Function.identity()` and import
   `java.util.function.Function`.
-- Identity lambdas where an API specifically requires `UnaryOperator<T>`, such as
-  `UnaryOperator<String> op = value -> value`. Use `UnaryOperator.identity()` and import
-  `java.util.function.UnaryOperator`.
-- Custom identity helpers such as `private static <T> T identity(T value) { return value; }` used
-  only as a functional callback. Prefer the JDK identity function required by the target API.
-- No-op functional stages such as `.map(x -> x)`, `.map(value -> value)`,
-  `.map(Function.identity())`, or `.map(UnaryOperator.identity())` when removing the stage preserves
-  behavior. Do not "fix" a redundant map by replacing it with another identity map.
-- Replacement of non-identity lambdas with identity functions. A callback that copies, normalizes,
-  validates, logs, unwraps, casts, transforms, or calls another method is not an identity callback.
-- Block lambdas for ordinary value flow: `item -> { ... }` inside `map`, `filter`, collector
-  callbacks, Optional callbacks, `computeIfAbsent`, completion stages, or similar APIs when a named
-  helper or plain branch would be clearer.
-- Arrows whose body starts on the next line, or callback bodies that continue nested fluent chains
-  on later lines. Keep callbacks as same-line glue or extract helpers.
-- Helper extraction that only moves a multi-line callback into the helper method. Re-scan helper
-  bodies and extract again or use plain code until callbacks are glue.
-- Predicate callbacks with more than one meaningful condition when a named predicate would explain
-  the rule better.
-- Callback bodies with local temporary variables, branching, formatting, merge rules, severity
-  selection, record construction with derived values, or nested fluent chains. Extract a helper.
-- Checked exception handling buried in lambdas when it changes the contract or hides IO, parser, or
-  prompt boundaries. Use a named checked helper or a plain branch unless the surrounding API
-  explicitly owns unchecked wrapping.
-- Eager fallback work before supplier-taking APIs, such as computing an expensive default before
-  `orElseGet`, constructing a cache value before `computeIfAbsent`, or prompting/parsing before an
-  absence check.
-- External mutation from callbacks when the API can produce the result directly. A callback side
-  effect may remain only when the side effect is the operation's purpose and is safe.
-- Missing imports caused by using `Function.identity()` or `UnaryOperator.identity()`.
-- Java baseline drift: `Predicate.not`, `Optional.ifPresentOrElse`, `Optional.stream`, or
-  `Stream.toList()` used below their minimum Java version.
-- Removing identity callback stages from APIs where the returned stage object, scheduling, async
-  boundary, callback invocation, tracing, metrics, exception wrapping, or object identity is
-  observable. Be careful with `CompletableFuture.thenApply(Function.identity())`.
+- An identity lambda where the declared type is `UnaryOperator<T>`. Use
+  `UnaryOperator.identity()` and import `java.util.function.UnaryOperator`.
+- A hand-written identity helper (`private static <T> T same(T value)`) used only as a callback.
+  Use the JDK helper the target API expects.
+- A no-op stage: `.map(x -> x)`, `.map(Function.identity())`, `.filter(x -> true)`,
+  `.peek(x -> {})`, or an `Optional.map` identity. Remove it when the stage is unobservable; do
+  not "fix" it by swapping in another identity callback.
+- A non-identity callback replaced by an identity helper. Copying, normalizing, validating,
+  logging, unwrapping, casting, or calling another method is not identity.
+- A block lambda (`item -> { ... }`) for ordinary value flow in `map`, `filter`, collector
+  callbacks, Optional callbacks, `computeIfAbsent`, `merge`, completion stages, or listeners when
+  a named helper or plain branch would be clearer.
+- A callback whose arrow body starts on the next line or continues a nested fluent chain on later
+  lines. Keep callbacks as same-line glue or extract a helper.
+- A helper extraction that only relocated the block lambda. Re-scan helper bodies and extract
+  again, or use plain code, until every callback is glue.
+- A predicate with more than one meaningful condition and no name.
+- A callback body with local temporaries, branching, formatting, merge or tie-break rules,
+  severity selection, or record construction from derived values. Extract a helper.
+- A method reference that changes behavior: a receiver expression evaluated once at creation
+  (`lookup()::method`), a receiver that can be null at creation, a different overload than the
+  lambda called, swapped `Comparator` or `BiFunction` argument order, or boxing where
+  `comparingInt`/`comparingLong`/`comparingDouble` exists.
+- `try`/`catch` buried in a lambda to wrap a checked exception when that hides an IO, parser, or
+  prompt boundary or changes the method's contract. Use a named checked helper or a plain branch
+  unless the surrounding API already owns unchecked wrapping.
+- Eager fallback work before a supplier-taking API: computing a default before `orElseGet`,
+  building a value before `computeIfAbsent`, calling `requireNonNullElse(v, expensive())`, or
+  prompting and parsing before the absence check.
+- External mutation from a callback when the API can produce the result directly.
+- A missing import after introducing `Function.identity()` or `UnaryOperator.identity()`.
+- Java baseline drift: `Predicate.not` below Java 11, `Optional.ifPresentOrElse` or
+  `Optional.stream` below Java 9, `Stream.toList()` below Java 16.
+- An identity stage removed from an API where the returned stage, scheduling, async boundary,
+  callback invocation, tracing, metrics, or exception wrapping is observable. Be careful with
+  `CompletableFuture.thenApply(Function.identity())`.
 
-## Review Notes
+## Review notes
 
 - Name the target functional-interface contract before recommending an identity helper.
 - Preserve merge functions, map suppliers, comparators, ordering expectations, null behavior, and
   Java baseline compatibility when changing collector callbacks.
-- For simple minimum/cheapest merge callbacks, prefer `BinaryOperator.minBy(Comparator.comparing(...))`
-  over an inline ternary when the comparator and tie behavior match.
-- Keep supplier work lazy even when the supplier body is only one method call if that method has
+- For a simple minimum or maximum merge, `BinaryOperator.minBy(Comparator.comparing(...))` beats
+  an inline ternary when the comparator and tie behavior match.
+- Keep supplier work lazy even when the supplier body is a single method call, if that method has
   meaningful cost or side effects.
-- Keep plain branches or loops for complex early exits, sentinel-controlled windows,
-  mutation-heavy output, checked IO, prompts, parser boundaries, or stateful algorithms. When
-  reviewing a proposed functional rewrite of this shape, recommend keeping the clear loop or branch
-  unless the user specifically asks for a fluent rewrite and it is proven equivalent. Do not offer
-  `dropWhile`/`takeWhile`, Optional, or callback-heavy replacements as the default safe direction for
-  stateful windowing. In rejection reviews, avoid alternative pipeline snippets even as
-  counterexamples; they distract from the safe direction and can introduce new defects.
+- For stateful windows, sentinel loops, early exits, checked IO, prompts, parser boundaries, or
+  mutation-heavy accumulation, recommend keeping the loop or branch. In a rejection review, do not
+  offer an alternative pipeline snippet even as a counterexample; it distracts from the safe
+  direction and can introduce new defects.
 
-## Functional-Style Scan
+## Functional-style scan
 
-Run this scan over touched Java files, then inspect and classify hits. The scan is broad by design:
+Run this over touched Java files, then inspect and classify hits. The scan is deliberately broad:
 hits are review prompts, not mechanical edit instructions.
 
 ```bash
-echo "java-functional-style hard-stop scan v1"
-rg -nUP "->\\s*\\{|->\\s*$|\\.map\\(\\s*(?:[A-Za-z_$][\\w$]*)\\s*->\\s*\\1\\s*\\)|\\.map\\(\\s*(?:Function|UnaryOperator)\\.identity\\(\\)\\s*\\)|(?:Function|UnaryOperator)\\s*<[^;=]+>\\s+[A-Za-z_$][\\w$]*\\s*=\\s*([A-Za-z_$][\\w$]*)\\s*->\\s*\\1\\s*;|Collectors\\.toMap\\([^;\\n]*(\\b[A-Za-z_$][\\w$]*\\b)\\s*->\\s*\\1|computeIfAbsent\\([^;\\n]*->\\s*\\{|orElseGet\\([^;\\n]*->\\s*\\{|catch\\s*\\([^)]*Exception[^)]*\\)\\s*\\{|\\.forEach\\([^;\\n]*(?:add|put|append|set)\\(|Predicate\\.not\\(|ifPresentOrElse\\(|Optional\\.stream\\(|Stream\\.toList\\(" <touched Java files>
+echo "java-functional-style hard-stop scan v2"
+rg -nUP "->\\s*\\{|->\\s*$|\\.map\\(\\s*([A-Za-z_$][\\w$]*)\\s*->\\s*\\1\\s*\\)|\\.map\\(\\s*(?:Function|UnaryOperator)\\.identity\\(\\)\\s*\\)|(?:Function|UnaryOperator)\\s*<[^;=]+>\\s+[A-Za-z_$][\\w$]*\\s*=\\s*([A-Za-z_$][\\w$]*)\\s*->\\s*\\2\\s*;|Collectors\\.toMap\\([^;\\n]*\\b([A-Za-z_$][\\w$]*)\\s*->\\s*\\3\\b|computeIfAbsent\\([^;\\n]*->\\s*\\{|orElseGet\\([^;\\n]*->\\s*\\{|requireNonNullElse\\(|\\.orElse\\([^)]*\\(|catch\\s*\\([^)]*Exception[^)]*\\)\\s*\\{|\\.forEach\\([^;\\n]*(?:add|put|append|set)\\(|Comparator\\.comparing\\(|\\)::[A-Za-z_$]|Predicate\\.not\\(|ifPresentOrElse\\(|Optional\\.stream\\(|Stream\\.toList\\(" <touched Java files>
 ```
 
-For each hit, decide whether it is a required fix, an acceptable domain-specific callback, a Java
-baseline issue, or an intentionally side-effecting operation.
+For each hit decide: required fix, acceptable domain-specific callback, Java baseline issue, or an
+intentional side effect.

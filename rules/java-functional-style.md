@@ -1,17 +1,25 @@
 # Java functional style
 
-When writing or reviewing Java code, keep lambdas and functional-interface callbacks as intent-revealing glue.
+When writing or reviewing Java, keep lambdas and functional-interface callbacks as one-expression
+glue that names a single step of the value flow.
 
-Prefer method references or named JDK functions when they express the exact operation clearly. When an API requires an identity `Function<T, T>`, use `Function.identity()` instead of a hand-written identity lambda such as `x -> x`. When an API specifically requires an identity `UnaryOperator<T>`, use `UnaryOperator.identity()`.
-
-Do not add no-op functional stages. Remove identity mapping stages such as `stream.map(x -> x)`, `stream.map(Function.identity())`, `optional.map(x -> x)`, or `optional.map(Function.identity())` when removing the stage preserves behavior.
-
-Extract a named helper, or use a plain branch, when a lambda or callback needs branching, local temporary variables, loops, checked exception handling, nested fluent chains, side effects, collector merge tie-breaking, or more than one meaningful condition. Do not leave chained ternary merge callbacks inline. For nested stream callbacks, prefer `.flatMap(Type::childEntries)` over `.flatMap(parent -> parent.children().stream().filter(...).map(...))`. After extracting a helper, re-scan that helper too; do not just move a multi-line callback or nested fluent callback chain into the helper.
-
-When reviewing a proposed functional rewrite of stateful windowing, sentinel-controlled loops, early breaks, or mutation-heavy accumulation, reject behavior changes and prefer keeping the clear loop or branch. Do not replace it with a clever stream, Optional, or callback pipeline merely because one can be written.
-
-For those rejection reviews, do not stop at "reject": explicitly say to keep the original loop or a branch-based helper because that shape preserves the state, ordering, and early break. Do not mention a hypothetical `dropWhile`/`takeWhile` or other stream solution.
-
-Preserve ordering, laziness, exception behavior, side effects, mutability, object identity where observable, and Java baseline compatibility. Do not replace a non-identity lambda with an identity function merely because the lambda is short.
-
-In user-facing files such as `review.md`, explain the Java behavior only. Do not add rule, rules, or rule-compliance sections; do not quote internal guidance or mention skills, rubrics, criteria, internal paths, or this rule unless the user explicitly asks about the workflow.
+- Use `Function.identity()` when an API needs an identity `Function<T, T>` and
+  `UnaryOperator.identity()` when the declared type is `UnaryOperator<T>`, instead of `x -> x`.
+- Remove no-op stages such as `.map(x -> x)` or `.map(Function.identity())` when removing them
+  preserves behavior; do not replace one identity callback with another.
+- Extract a named helper, or use a plain branch, when a callback needs branching, local
+  temporaries, loops, checked exception handling, a merge or tie-break rule, formatting, more than
+  one meaningful condition, or a nested fluent chain. Re-scan the helper afterwards; relocating a
+  block lambda is not extraction.
+- Keep fallback work lazy: inside `orElseGet`, `computeIfAbsent`, `requireNonNullElseGet`, or the
+  supplier the API takes, never computed before the absence check.
+- Prefer a method reference only when it keeps receiver timing, overload choice, argument order,
+  boxing, and exception behavior unchanged.
+- Keep plain loops and branches for checked IO, prompts, parser boundaries, early exits,
+  sentinel-driven windows, and mutation-heavy accumulation. Do not force streams, Optionals, or
+  callback chains where a branch or loop is clearer, and in a review of such a rewrite recommend
+  keeping the loop rather than proposing a cleverer pipeline.
+- Preserve ordering, laziness, exception behavior, side effects, mutability, observable object
+  identity, and the project's Java baseline in every change.
+- In user-facing output such as `review.md`, explain the Java behavior only; do not mention rules,
+  skills, rubrics, criteria, or internal file names unless the user asks about the workflow.

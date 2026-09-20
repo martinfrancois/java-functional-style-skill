@@ -1,295 +1,193 @@
 # Java Functional Style Examples
 
-These examples are reusable runtime guidance, not scenario solutions. Apply them only when they
-preserve the task's behavior, Java baseline, imports, null handling, ordering, laziness, side
-effects, and object identity where observable.
+Reusable shapes, not answers to any particular task. Apply one only when it keeps the task's
+behavior, Java baseline, imports, null handling, ordering, laziness, side effects, and observable
+object identity.
 
-## Identity Function Arguments
+## Identity function arguments
 
-Use `Function.identity()` when the target API requires an identity `Function<T, T>`.
-
-Before:
-
-```java
-Map<State, Integer> counts = states.stream()
-        .collect(Collectors.toMap(
-                state -> state,
-                state -> 1,
-                Integer::sum,
-                HashMap::new));
-```
-
-After:
+When the API wants an identity `Function<T, T>`, say so with the JDK helper:
 
 ```java
 import java.util.function.Function;
 
-Map<State, Integer> counts = states.stream()
-        .collect(Collectors.toMap(
-                Function.identity(),
-                state -> 1,
-                Integer::sum,
-                HashMap::new));
+Map<String, Exhibit> exhibitsById = exhibits.stream()
+        .collect(Collectors.toMap(Exhibit::id, Function.identity(), Gallery::keepEarlier, LinkedHashMap::new));
 ```
 
-For identity value mappers, preserve the key mapper, merge function, and map supplier:
-
-Before:
+Keep the key mapper, merge function, and map supplier exactly as they were. A registry of named
+transforms uses the same helper for its "unchanged" entry:
 
 ```java
-Map<String, Card> cardsById = cards.stream()
-        .collect(Collectors.toMap(
-                Card::id,
-                card -> card,
-                CardIndex::preferActive,
-                LinkedHashMap::new));
+Map<String, UnaryOperator<String>> captionStyles = Map.of(
+        "plain", UnaryOperator.identity(),
+        "upper", String::toUpperCase,
+        "trimmed", String::strip);
 ```
 
-After:
+Do not turn a real transformation into an identity helper:
 
 ```java
-import java.util.function.Function;
-
-Map<String, Card> cardsById = cards.stream()
-        .collect(Collectors.toMap(
-                Card::id,
-                Function.identity(),
-                CardIndex::preferActive,
-                LinkedHashMap::new));
+Collectors.toMap(Exhibit::id, Exhibit::summary, Gallery::keepEarlier, LinkedHashMap::new) // summary() maps, keep it
 ```
 
-Do not replace a non-identity callback with `Function.identity()`:
+## Remove no-op stages
 
 ```java
-Collectors.toMap(Card::id, card -> card.normalized(), merge, LinkedHashMap::new)
+// before
+String title = exhibitTitle.map(value -> value).orElse(fallbackTitle);
+// after
+String title = exhibitTitle.orElse(fallbackTitle);
 ```
 
-The value mapper transforms the card, so it is not an identity function.
-
-Use `UnaryOperator.identity()` only when the API specifically wants a `UnaryOperator<T>`:
-
 ```java
-UnaryOperator<String> unchanged = UnaryOperator.identity();
+// before
+List<String> tagNames = rawTags.stream().map(Function.identity()).map(String::strip).toList();
+// after
+List<String> tagNames = rawTags.stream().map(String::strip).toList();
 ```
 
-## Remove No-Op Functional Stages
+Keep an identity stage when the stage object itself is the point, for example a
+`CompletableFuture.thenApply(Function.identity())` used as a deliberate completion boundary.
+Remove it only when the surrounding code shows the extra stage is unobservable.
 
-Before:
-
-```java
-String displayName = nameFromProfile
-        .map(value -> value)
-        .orElse(defaultName);
-```
-
-After:
+## Extract helpers from block callbacks
 
 ```java
-String displayName = nameFromProfile.orElse(defaultName);
-```
-
-Before:
-
-```java
-List<String> normalized = names.stream()
-        .map(Function.identity())
-        .map(String::trim)
-        .toList();
-```
-
-After:
-
-```java
-List<String> normalized = names.stream()
-        .map(String::trim)
-        .toList();
-```
-
-Do not remove identity stages when the API boundary itself is observable:
-
-```java
-CompletableFuture<Order> sameOrder = future.thenApply(Function.identity());
-```
-
-This can be a deliberate completion-stage boundary. Remove it only when the surrounding behavior
-proves the extra stage is unnecessary.
-
-## Extract Block Callback Helpers
-
-Keep callbacks as glue. Extract temporary values and branching into a helper.
-
-Before:
-
-```java
-List<ShipmentNotice> notices = shipments.stream()
-        .filter(shipment -> shipment.deliveredAt().isEmpty()
-                && shipment.dueDate().isBefore(today))
-        .map(shipment -> {
-            long daysLate = ChronoUnit.DAYS.between(shipment.dueDate(), today);
-            String severity = daysLate >= 14 ? "critical" : "late";
-            return new ShipmentNotice(shipment.id(), shipment.customerEmail(), daysLate, severity);
+// before
+List<MaintenanceAlert> alerts = readings.stream()
+        .filter(reading -> reading.sensor().active()
+                && reading.humidity() > limits.maxHumidity()
+                && !reading.sensor().muted())
+        .map(reading -> {
+            double excess = reading.humidity() - limits.maxHumidity();
+            String level = excess > 15 ? "critical" : "warning";
+            return new MaintenanceAlert(reading.sensor().id(), level, excess);
         })
         .toList();
-```
 
-After:
-
-```java
-List<ShipmentNotice> notices = shipments.stream()
-        .filter(shipment -> isOverdue(shipment, today))
-        .map(shipment -> toNotice(shipment, today))
+// after
+List<MaintenanceAlert> alerts = readings.stream()
+        .filter(reading -> exceedsHumidityLimit(reading, limits))
+        .map(reading -> toAlert(reading, limits))
         .toList();
 
-private static boolean isOverdue(Shipment shipment, LocalDate today) {
-    return shipment.deliveredAt().isEmpty() && shipment.dueDate().isBefore(today);
+private static boolean exceedsHumidityLimit(Reading reading, Limits limits) {
+    return reading.sensor().active()
+            && reading.humidity() > limits.maxHumidity()
+            && !reading.sensor().muted();
 }
 
-private static ShipmentNotice toNotice(Shipment shipment, LocalDate today) {
-    long daysLate = ChronoUnit.DAYS.between(shipment.dueDate(), today);
-    return new ShipmentNotice(
-            shipment.id(),
-            shipment.customerEmail(),
-            daysLate,
-            daysLate >= 14 ? "critical" : "late");
+private static MaintenanceAlert toAlert(Reading reading, Limits limits) {
+    double excess = reading.humidity() - limits.maxHumidity();
+    return new MaintenanceAlert(reading.sensor().id(), excess > 15 ? "critical" : "warning", excess);
 }
 ```
 
-## Name Multi-Condition Predicates
+Both callbacks were extracted: the multi-condition predicate got a name, and the block mapping
+became a method whose body is plain code. Re-scan the helpers; they must not hide another block
+lambda.
 
-Before:
+## Method references that change behavior
 
 ```java
-List<Customer> billable = customers.stream()
-        .filter(customer -> customer.active()
-                && customer.paymentMethod() != null
-                && !customer.suspended()
-                && customer.balance().signum() > 0)
-        .toList();
+Supplier<Tuner> tuner = registry.current()::tuner;      // registry.current() runs once, now
+Supplier<Tuner> tuner = () -> registry.current().tuner(); // runs on every get()
 ```
 
-After:
+Pick the one whose timing the code needs. The same applies to `this::field`-style references on
+objects that may be null at creation time, and to overloaded methods where the reference resolves
+to a different overload than the lambda did.
 
 ```java
-List<Customer> billable = customers.stream()
-        .filter(BillingRules::isBillable)
-        .toList();
-
-private static boolean isBillable(Customer customer) {
-    return customer.active()
-            && customer.paymentMethod() != null
-            && !customer.suspended()
-            && customer.balance().signum() > 0;
-}
+// before: boxes every comparison
+rehearsals.sort(Comparator.comparing(Rehearsal::durationMinutes));
+// after
+rehearsals.sort(Comparator.comparingInt(Rehearsal::durationMinutes));
 ```
 
-## Keep Supplier Fallbacks Lazy
-
-Before:
+## Keep supplier fallbacks lazy
 
 ```java
-Profile fallback = loadProfileFromRemote(userId);
-Profile profile = cachedProfile.orElse(fallback);
+// before: the recipe is parsed even when the cache already has it
+Recipe parsed = parseRecipe(source);
+Recipe recipe = recipeCache.computeIfAbsent(source.id(), ignored -> parsed);
+// after
+Recipe recipe = recipeCache.computeIfAbsent(source.id(), ignored -> parseRecipe(source));
 ```
 
-After:
-
 ```java
-Profile profile = cachedProfile.orElseGet(() -> loadProfileFromRemote(userId));
+// before: buildDefaults() always runs
+Settings settings = Objects.requireNonNullElse(loaded, buildDefaults());
+// after
+Settings settings = Objects.requireNonNullElseGet(loaded, this::buildDefaults);
 ```
 
-For cache misses, keep creation inside the mapping function:
+The same rule applies to `Optional.orElseGet`, `orElseThrow(() -> ...)`, and logging APIs that
+accept a `Supplier`.
+
+## Keep checked boundaries visible
 
 ```java
-Widget widget = widgets.computeIfAbsent(id, WidgetFactory::create);
-```
-
-Do not precompute the widget before `computeIfAbsent` unless it is intentionally eager.
-
-## Keep Checked Boundaries Clear
-
-Do not hide checked IO or parsing contracts inside broad unchecked lambda wrappers when a plain
-branch or named helper makes the behavior clearer.
-
-Before:
-
-```java
-Optional<Config> config = path
-        .map(p -> {
+// before: the IOException contract is hidden inside the callback
+List<Score> scores = files.stream()
+        .map(file -> {
             try {
-                return parseConfig(Files.readString(p));
+                return parseScore(Files.readString(file));
             } catch (IOException e) {
                 throw new UncheckedIOException(e);
             }
-        });
-```
+        })
+        .toList();
 
-After:
-
-```java
-Optional<Config> config = Optional.empty();
-if (path.isPresent()) {
-    config = Optional.of(parseConfig(Files.readString(path.get())));
+// after: the method that reads declares what it throws
+List<Score> readScores(List<Path> files) throws IOException {
+    List<Score> scores = new ArrayList<>();
+    for (Path file : files) {
+        scores.add(parseScore(Files.readString(file)));
+    }
+    return scores;
 }
 ```
 
-Or use a named helper when the surrounding contract already accepts unchecked wrapping:
+When the surrounding API already accepts unchecked wrapping, a named helper such as
+`ScoreFiles::readUnchecked` makes the conversion visible instead of burying it in a block lambda.
+
+## Side effects
 
 ```java
-Optional<Config> config = path.map(ConfigLoader::readUnchecked);
+// before
+List<String> badges = new ArrayList<>();
+members.stream().map(Member::badgeName).forEach(badges::add);
+// after
+List<String> badges = members.stream().map(Member::badgeName).toList();
 ```
 
-The helper name makes the exception boundary explicit.
+A side effect that is the requested outcome stays a callback (`events.forEach(auditLog::record)`),
+but check that it is safe for parallel or asynchronous execution before keeping it.
 
-## Side Effects
-
-Avoid external mutation from callbacks when the API can produce the result directly.
-
-Before:
+## Plain Java when it reads better
 
 ```java
-List<String> labels = new ArrayList<>();
-items.stream()
-        .map(Item::label)
-        .forEach(label -> labels.add(label));
-```
-
-After:
-
-```java
-List<String> labels = items.stream()
-        .map(Item::label)
-        .toList();
-```
-
-Keep a callback side effect when the side effect is the requested outcome:
-
-```java
-events.forEach(auditLog::record);
-```
-
-If the callback may run in parallel or asynchronously, verify that the side effect is safe for that
-execution mode.
-
-## Do Not Force Functional Style
-
-Use plain Java when it communicates the behavior better:
-
-```java
-List<String> readValidLines(Path path) throws IOException {
+List<String> activeStanzas(List<String> lines) {
     List<String> result = new ArrayList<>();
-    for (String line : Files.readAllLines(path)) {
-        if (line.isBlank()) {
+    boolean inside = false;
+    for (String line : lines) {
+        if (line.equals("BEGIN")) {
+            inside = true;
             continue;
         }
-        if (line.startsWith("#")) {
+        if (line.equals("END")) {
             break;
         }
-        result.add(line.trim());
+        if (inside && !line.isBlank()) {
+            result.add(line.strip());
+        }
     }
     return result;
 }
 ```
 
-A callback-heavy rewrite would obscure the checked IO and early-exit behavior. In a review, the
-safe direction is to keep this loop or extract a small named helper, not to propose a clever
-`dropWhile`/`takeWhile` stream chain by default.
+A sentinel-driven window with an early exit reads best as this loop. In a review of a proposed
+stream rewrite, say that the loop (or a named helper around it) is the right shape and reject the
+behavior change; do not offer a cleverer pipeline as the "fixed" version.

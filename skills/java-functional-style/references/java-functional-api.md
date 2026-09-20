@@ -19,16 +19,18 @@ If the baseline is unclear, prefer Java 8-compatible code or state the assumptio
 | `Consumer` | 8 | Use for side effects only when the side effect is the requested outcome and safe. |
 | `BiFunction` / `BinaryOperator` | 8 | Use for merge and combination callbacks; extract helpers for tie-breaking, nulls, or branching. |
 | `Comparator` | 8 | Prefer comparing helpers when a comparison needs normalization, null handling, or multiple branches. |
-| `Optional` callbacks | 8 | `map`, `flatMap`, `filter`, `orElseGet`, and `ifPresent` are callback examples; Optional semantics belong to `java-optionals`. |
-| Stream callbacks | 8 | `map`, `flatMap`, `filter`, and collector callbacks are callback examples; stream semantics belong to `java-streams`. |
+| `Optional` callbacks | 8 | `map`, `flatMap`, `filter`, `orElseGet`, and `ifPresent` take callbacks; which Optional operation to use is the `java-optionals` skill's job. |
+| Stream callbacks | 8 | `map`, `flatMap`, `filter`, and collector callbacks take callbacks; which stream operation or collector to use is the `java-streams` skill's job. |
 | `Map.computeIfAbsent` | 8 | Mapping function is lazy per miss; keep expensive creation inside it and avoid externally precomputing the value. |
-| `Collection.removeIf` | 8 | Predicate callback mutates the collection by design; preserve that side effect deliberately. |
+| `Collection.removeIf` / `List.replaceAll` | 8 | The callback mutates the collection by design; preserve that side effect deliberately. `replaceAll` takes a `UnaryOperator`. |
+| `Map.merge` / `Map.compute` | 8 | Remapping callbacks; extract a helper when the merge rule branches. |
+| `Objects.requireNonNullElseGet` | 9 | Lazy default for nullable values; `requireNonNullElse` evaluates its default eagerly. |
 
 ## Later Java Baselines
 
 | API or feature | Minimum Java | Notes |
 | --- | ---: | --- |
-| `Optional.stream` | 9 | Optional flattening helper. Mention only as callback/API compatibility; Optional and stream semantics belong to their domain skills. |
+| `Optional.stream` | 9 | Optional flattening helper; Java 8 needs `filter(Optional::isPresent).map(Optional::get)`. |
 | `Optional.ifPresentOrElse` | 9 | Use when both present and absent branches are clear callbacks. Use plain branches when checked work or complex flow is clearer. |
 | `Predicate.not` | 11 | Readable for simple negated method references, such as `Predicate.not(String::isBlank)`. Do not obscure complex predicates. |
 | `Optional.isEmpty` | 11 | Readability helper for absence checks. |

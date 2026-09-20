@@ -1,111 +1,100 @@
 ---
 name: java-functional-style
 license: MIT
-description: Write, review, and refactor Java lambdas, method references, functional interfaces, callbacks, predicates, functions, suppliers, consumers, identity functions, no-op functional stages, and multi-line lambdas for behavior-preserving readability. Use for Function.identity(), UnaryOperator.identity(), identity lambdas, block lambdas, callback extraction, supplier laziness, and functional-style cleanup. Do not use to force functional style where plain Java is clearer.
+description: Write, review, and refactor Java lambdas, method references, and functional-interface callbacks (Function, Predicate, Supplier, Consumer, Comparator, BiFunction) so they stay readable and behavior-preserving. Use whenever Java code creates or changes a callback passed to a stream, Optional, Map, CompletableFuture, or listener API; when a cleanup or review touches identity lambdas (x returning x), block or multi-line lambdas, method references, suppliers, or side-effecting callbacks; or when the user asks to make Java code cleaner or more functional, even if they never say "lambda". Do not use for stream or Optional semantics themselves, and do not use it to force functional style where a plain loop or branch is clearer.
 ---
 
 # Java Functional Style
 
-Preserve requested behavior, public API/artifact shape, and Java-version compatibility. For
-implementation prompts, create the requested artifact before explaining. Do not turn plain Java into
-callbacks, streams, or Optional chains when a branch or loop is clearer.
-When another Java domain skill is active, let that skill own domain semantics; change only callback
-readability unless preserving behavior requires more.
+Lambdas are glue. A callback should name one step of the value flow; everything else belongs in a
+named method, a plain branch, or the JDK helper that already exists for it. Preserve requested
+behavior, public API and artifact shape, ordering, laziness, exceptions, null behavior, side
+effects, and Java-version compatibility while making callbacks readable.
+
+For implementation prompts, create the requested artifact (a Java source file, `review.md`, or
+whatever the prompt names) before explaining. When another Java domain skill is active, let it own
+stream, collector, or Optional semantics; this skill only changes how callbacks are written.
 
 ## Reference Bundle
 
-| File | Purpose |
+| File | Load it when |
 | --- | --- |
-| [hard-stops.md](references/hard-stops.md) | Functional-style replacement antipatterns and the final scan |
-| [functional-style-examples.md](references/functional-style-examples.md) | Before/after examples for identity functions, no-op stages, helper extraction, laziness, and side effects |
-| [java-functional-api.md](references/java-functional-api.md) | Java baseline notes for functional interfaces and callback-related APIs |
+| [hard-stops.md](references/hard-stops.md) | Before finalizing: the replacement antipatterns and the scan command |
+| [functional-style-examples.md](references/functional-style-examples.md) | You want a before/after shape for identity functions, no-op stages, helper extraction, laziness, side effects, or plain Java |
+| [java-functional-api.md](references/java-functional-api.md) | The project baseline is below Java 17, or you are unsure which functional API a baseline has |
 
-## Core Workflow
+## Workflow
 
-When the prompt asks for a named artifact such as `review.md` or a Java source file, create that
-exact file. Do not answer only in chat when a file artifact is requested.
+1. Check the Java baseline first (build files, toolchains, CI, docs). If it is unclear, write Java
+   8-compatible callbacks or state the assumption. See
+   [java-functional-api.md](references/java-functional-api.md).
+2. Name the functional-interface contract before touching a callback: `Function`,
+   `UnaryOperator`, `Predicate`, `Supplier`, `Consumer`, `BiFunction`, `BinaryOperator`,
+   `Comparator`, or the callback parameter of `map`, `filter`, `orElseGet`, `computeIfAbsent`,
+   `merge`, `removeIf`, `replaceAll`, `thenApply`, or a listener. The contract decides which JDK
+   helper applies and which behaviors are observable.
+3. Use the JDK identity helper when the API needs an identity callback. `Function.identity()`
+   for a `Function<T, T>` (for example the value mapper of `Collectors.toMap`, a `groupingBy`
+   downstream `mapping`, or a `Map<String, Function<...>>` "no transform" entry) and
+   `UnaryOperator.identity()` when the declared type is `UnaryOperator<T>`. Write `x -> x` only
+   where no functional interface is involved. Add the import. Never turn a callback that copies,
+   normalizes, unwraps, casts, or calls something into an identity helper.
+4. Remove no-op stages instead of renaming them. `.map(x -> x)`, `.map(Function.identity())`,
+   `.filter(x -> true)`, and `.peek(x -> {})` add nothing when the stage itself is unobservable.
+   Keep a stage when the returned object, scheduling, callback invocation, tracing, or exception
+   wrapping is observable (`CompletableFuture.thenApply(Function.identity())` can be a deliberate
+   boundary).
+5. Prefer a method reference only when it names the exact operation and keeps behavior. Check
+   receiver binding (`expr::method` evaluates `expr` once, at creation, and throws `NullPointerException`
+   there if it is null), overload resolution, argument order for `Comparator` and `BiFunction`,
+   boxing (`Comparator.comparingInt` over `comparing` for primitives), and checked exceptions.
+   When any of these change, keep the lambda or extract a helper.
+6. Keep lambdas as one-expression glue. When a callback needs branching, local temporaries,
+   loops, formatting, a merge or tie-break rule, more than one meaningful condition, or a nested
+   fluent chain, extract a named helper (`toSummary(item, today)`, `isEligible(item)`) and pass
+   `this::isEligible` or a one-line lambda. Name multi-condition predicates. Re-scan every
+   extracted helper: moving a block lambda into a helper that still contains a block lambda is not
+   done.
+7. Keep supplier work lazy. Fallback construction, IO, prompts, parsing, and exception creation
+   that should happen only on absence or miss belong inside the supplier passed to `orElseGet`,
+   `orElseThrow`, `computeIfAbsent`, `Objects.requireNonNullElseGet`, or a logging supplier.
+   `orElse(compute())` and `requireNonNullElse(value, compute())` always evaluate `compute()`.
+8. Let the API produce the result. Do not mutate an external list, map, counter, or builder from
+   a callback when the API can return the value (`toList`, `toMap`, `merge`, `reduce`). Keep a
+   side-effecting callback only when the side effect is the requested outcome, and check it is
+   safe for the execution mode (parallel, async, or listener threads).
+9. Keep checked exceptions at a visible boundary. Do not bury `try`/`catch` inside a callback to
+   wrap an `IOException` unless the surrounding API already owns unchecked wrapping. Use a named
+   helper that declares or converts the exception on purpose, or a plain loop or branch.
+10. Choose plain Java when it reads better: checked IO, prompts, parser boundaries, early exits,
+    sentinel-driven windows, mutation-heavy accumulation, and step-by-step control flow. In a
+    review of a proposed functional rewrite of such code, reject the behavior change and recommend
+    keeping the loop or branch (or moving it into a named helper); do not counter-propose a
+    cleverer pipeline unless the user asked for one and you have shown it is equivalent.
+11. Verify each changed callback for present and absent values, empty input, nulls, ordering,
+    laziness, exception type and timing, side effects, object identity where observable, and the
+    Java baseline. Then run the scan in [hard-stops.md](references/hard-stops.md) and reconcile
+    every hit.
 
-1. Check the Java baseline first. Use [java-functional-api.md](references/java-functional-api.md)
-   for minimum versions and fallbacks. Do not use APIs unavailable for the stated baseline.
-2. Identify the functional-interface contract before changing code:
-   `Function`, `UnaryOperator`, `Predicate`, `Supplier`, `Consumer`, `BiFunction`,
-   `BinaryOperator`, `Comparator`, or callbacks such as `map`, `flatMap`, `filter`,
-   `orElseGet`, `ifPresent`, `computeIfAbsent`, `removeIf`, stream operations, collector
-   callbacks, and completion callbacks.
-3. Prefer a method reference only when it names the exact operation clearly and preserves behavior.
-   Do not replace a lambda with a method reference if argument order, receiver binding, null
-   behavior, checked exceptions, or overload resolution would change.
-4. Use `Function.identity()` when an API needs an identity `Function<T, T>`. Use
-   `UnaryOperator.identity()` when an API specifically needs an identity `UnaryOperator<T>`.
-   Keep required imports. Do not replace non-identity callbacks such as `card -> card.copy()` or
-   `value -> normalize(value)` with identity functions.
-5. Remove no-op identity stages when the stage itself has no semantic purpose. A redundant
-   `.map(x -> x)` is usually removed, not replaced with `.map(Function.identity())`. Do not remove
-   a stage when scheduling, callback invocation, tracing, metrics, exception wrapping, or returned
-   stage identity is observable.
-6. Keep lambdas as glue. Use one-expression callbacks or method references for direct projection,
-   filtering, consumption, or construction.
-7. Extract a named helper, or use a plain branch, when a callback needs branching, local temporary
-   variables, loops, checked work, nested chains, merge rules, formatting, or more than one
-   meaningful condition. Keep callbacks as one-expression glue; re-scan helpers so extraction does
-   not merely move a multi-line callback. When a pipeline has both a multi-condition filter and a
-   block map, extract both: `.filter(this::isEscalationCandidate).map(ticket -> toEscalation(ticket, now))`.
-   Name the filter predicate even when the block mapping callback is the more obvious cleanup. When
-   extracting derived date/time values, preserve the requested unit API; use `ChronoUnit.DAYS.between`
-   for whole elapsed days rather than `Period.getDays()`.
-8. Keep supplier work lazy. Expensive fallback construction, IO, prompts, parsing, logging, or
-   exception creation that is meant to happen only on absence/miss must stay inside the supplier
-   passed to `orElseGet`, `computeIfAbsent`, or similar APIs.
-9. Avoid external mutation from callbacks when the API can produce the result directly. Keep a
-   callback side effect only when the side effect is the requested outcome and is safe for the
-   chosen execution mode.
-10. Keep plain branches or loops when they are clearer for checked IO, prompts, parser boundaries,
-    complex early exits, sentinel-controlled windows, mutation-heavy logic, or behavior that depends
-    on step-by-step control flow. In reviews of proposed functional rewrites for these shapes,
-    reject behavior changes and say the loop or branch is the appropriate shape; do not offer a
-    clever stream, Optional, or callback pipeline unless the user specifically asks for one and it
-    is proven behavior-preserving.
-11. Verify changed branches for present values, absent values, empty inputs, null behavior,
-    ordering, side effects, laziness, exceptions, object identity where observable, and Java
-    baseline compatibility.
-12. Run the functional-style hard-stop scan from [hard-stops.md](references/hard-stops.md) and
-    reconcile hits before finalizing.
+## Gotchas
 
-## Quick Shapes
-
-```java
-cards.stream().collect(Collectors.toMap(Card::id, Function.identity(), merge, LinkedHashMap::new));
-```
-
-```java
-return optional.orElse(defaultValue); // not optional.map(x -> x).orElse(defaultValue)
-```
-
-```java
-tickets.stream()
-    .filter(this::isEscalationCandidate)
-    .map(ticket -> toEscalation(ticket, now))
-    .toList();
-```
+- `Optional.orElse(expensive())` and `Objects.requireNonNullElse(v, expensive())` evaluate the
+  argument every time, even when the value is present.
+- `Map.computeIfAbsent` must not modify the same map inside its mapping function; that throws
+  `ConcurrentModificationException` on `HashMap` since Java 9.
+- `service::handle` captures `service` when the reference is created; a lambda
+  `x -> service.handle(x)` reads the field on every call. They differ when the field is reassigned
+  or null at creation time.
+- `Comparator.comparing(Item::price)` boxes primitives on every comparison; use `comparingInt`,
+  `comparingLong`, or `comparingDouble`.
+- `Predicate.not` needs Java 11, `Optional.ifPresentOrElse` and `Optional.stream` need Java 9,
+  `Stream.toList()` needs Java 16.
+- A lambda that captures a loop variable or a mutable local only compiles when the variable is
+  effectively final; copy it into a final local rather than switching to an array or holder hack.
 
 ## Review Output
 
-- Give a direct behavior-preserving decision plus one safe snippet when useful.
-- Create `review.md` when requested, even for rejection-only reviews.
-- In stream reviews, state semantic preconditions before performance or nondeterminism. For
-  `findFirst` versus `findAny`: `findAny()` would be appropriate only if the domain declares all
-  matching values equivalent and encounter order does not define which one wins; parallelism or
-  unordered execution is not enough.
-- For reviews rejecting a forced functional rewrite, do not include alternative stream, Optional, or
-  callback-heavy snippets as examples, counterexamples, or hypothetical corrected approaches. Do not
-  stop at rejection; include: "Keep the original loop or a branch-based helper; that shape preserves
-  start/stop markers, blank filtering, trimming, encounter order, and the early break." Do not add
-  secondary `.toList()` mutability notes unless mutability affects the requested contract. Never
-  mention `dropWhile`, `takeWhile`, or a possible stream solution; if cleanup is desired, say to move
-  the loop into a named helper such as `copyVisibleLines`.
-- Explain code behavior, not internal workflow.
-- Avoid internal workflow labels such as "per the skill", "hard stop", "marker", "scan",
-  "checklist", "rubric", "criteria", "style rules", "applicable rules", "rule guidance", or
-  "rule compliance" unless the user asks about the workflow itself. Do not add "Rule guidance" or
-  "Rule compliance" sections, generic "Rule"/"Rules" headings, or direct quotes from internal
-  guidance to user-facing review artifacts.
+- Lead with the behavior-preserving decision, then at most one safe snippet.
+- Create `review.md` when the prompt asks for it, even for a rejection-only review.
+- Explain Java behavior. Do not mention skills, rules, rubrics, criteria, scans, checklists, or
+  internal file names unless the user asks about the workflow itself.
