@@ -1,36 +1,41 @@
 # Ownership Boundaries
 
-`java-functional-style` owns general Java lambda and functional-interface style.
+`java-functional-style` owns general Java lambda and functional-interface style: method
+references, identity functions, no-op functional stages, callback readability and helper
+extraction, supplier laziness, method-reference pitfalls, checked-exception boundaries in
+callbacks, and callback side-effect boundaries.
 
-`java-streams` owns stream and collector semantics.
+`java-streams` owns stream and collector semantics. `java-optionals` owns Optional semantics.
 
-`java-optionals` owns Optional semantics.
+Each package works on its own. This package must never depend on a sibling being installed, and
+its guidance must not decide which stream operation, collector, or Optional method to use. When
+both a domain skill and this package are active, the domain skill owns semantics and this package
+only changes how callbacks are written.
 
 Install the domain skill and this package together when you want both semantic guidance and
 callback-style guidance.
 
-## Composition Quality Gate
+## Composition Check
 
-Do not open a PR, draft PR, or recommend merging until the composed setup has empirically proven
-equal or better quality than the current baseline.
-
-For streams:
+The sibling packages keep their released runtime text unchanged. What this package must prove is
+that adding it does not make a sibling worse:
 
 ```text
-current java-streams behavior <= slimmed java-streams + java-functional-style behavior
+java-streams alone (published)   <= java-streams + java-functional-style (with-context)
+java-optionals alone (published) <= java-optionals + java-functional-style (with-context)
 ```
 
-For optionals, if optional runtime guidance or evals are changed:
+Run the check from local checkouts with the sibling evals unchanged:
 
-```text
-current java-optionals behavior <= slimmed java-optionals + java-functional-style behavior
+```bash
+scripts/run_composed_eval.sh ../java-streams-skill main
+scripts/run_composed_eval.sh ../java-optionals-skill main
 ```
 
-The proof must use the existing evals before any criteria are rewritten, moved, weakened, or
-deleted. Criterion-level results must be equal or better, not just total scores.
+Every retained scenario must reach 100% with-context. Broaden to `reference` and `regression`
+when budget allows and always after a change that touches review wording. Criterion-level
+results must be equal or better at criterion level, not only in the total.
 
-If hosted eval infrastructure, Tessl authentication, or comparison tooling is unavailable, stop
-after local changes and report the blocker. Local validation alone does not satisfy this gate.
-
-Do not solve regressions by copying all generic lambda guidance back into the domain skills. Add
-only the smallest bridge text if evidence proves it is needed.
+Run the check after any change to `skills/java-functional-style/` or `rules/`. If it regresses a
+sibling, fix it here. Do not edit sibling evals, and do not copy sibling guidance into this
+package to compensate.

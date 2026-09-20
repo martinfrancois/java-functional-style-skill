@@ -31,6 +31,7 @@ Run the local checks relevant to your change:
 ```bash
 python3 scripts/validate_skill.py skills/java-functional-style
 python3 scripts/validate_eval_criteria.py evals evals-reference evals-regression
+python3 scripts/test_validate_eval_criteria.py
 python3 -m py_compile scripts/*.py
 bash -n scripts/*.sh
 python3 scripts/validate_json_files.py
@@ -51,9 +52,14 @@ Do not run a real Tessl publish unless François explicitly asks.
 
 ## Eval Integrity
 
-Do not rewrite, delete, weaken, or move existing stream or Optional eval criteria to hide a
-composition regression. Before PRs are opened, the composed setup must prove equal or better than
-the current domain-skill baselines on existing evals.
+Runtime skill text, references, and the rule must not contain answers to eval tasks: no helper
+names, identifiers, or criterion phrasing from any scenario. New scenarios start in
+`evals-reference/`, use fresh domains, and move to `evals/` only after an isolated hosted run and
+the classifier recommendation. See `docs/agents/evals.md`.
+
+Runtime changes must also pass the composition check: the sibling skills' evals, unchanged, run
+with both skills as context via `scripts/run_composed_eval.sh`. Never edit a sibling's evals to hide
+a regression.
 
 ## Commit Style
 

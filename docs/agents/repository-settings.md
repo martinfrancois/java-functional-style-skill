@@ -39,5 +39,5 @@ Required secret:
 
 - `TESSL_TOKEN` is required for authenticated Tessl review, dry-run publish, and real publish.
 
-Real publish must not be run until François explicitly asks. PRs must not be opened until the
-composition quality gate passes.
+Real publish runs only through the release workflow. Runtime changes are not done until the
+hosted checks and the composition check pass.

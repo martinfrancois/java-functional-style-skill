@@ -30,22 +30,9 @@ This page captures the internal pre-submission procedure for skill and eval chan
   explaining the cause.
 - If Tessl eval access is blocked, stop and record exact blocked commands.
 
-## Composition Gate
+## Composition Check
 
-Before opening any PR:
-
-- Stream composition must prove:
-
-  ```text
-  current java-streams behavior <= slimmed java-streams + java-functional-style behavior
-  ```
-
-- Optional composition must prove the equivalent relationship if Optional runtime guidance or evals
-  changed.
-- Criterion-level results must be equal or better.
-- Local validation alone is not enough.
-
-## Evidence Cache
-
-If scripts use local evidence caching, key it by the SHA-256 fingerprint of files under
-`skills/java-functional-style/` and invalidate evidence when the skill bundle changes.
+After the functional-style suites are clean for the final skill bundle, run the composition check
+from [Ownership Boundaries](ownership-boundaries.md) with `scripts/run_composed_eval.sh` against
+local checkouts of the sibling repositories. Every sibling scenario must stay at 100%
+with-context; criterion-level results must be equal or better.
