@@ -88,10 +88,11 @@ make this pass.
 
 Update this section whenever active eval membership or scoring changes.
 
-- Main eval set: 3 scenarios, 300 checklist points, 2 natural and 1 explicit, all implementation
+- Main eval set: 4 scenarios, 400 checklist points, 3 natural and 1 explicit, all implementation
   tasks: `09` helper extraction and named predicates in a pipeline, `13` comparator composition,
-  `14` `Map.merge`, `computeIfAbsent`, and `CompletableFuture` callbacks. Each carries 80
-  functional-style points, 15 safety, 5 maintainability.
+  `14` `Map.merge`, `computeIfAbsent`, and `CompletableFuture` callbacks, `15` `Optional.map` and
+  collector-downstream callbacks. Each carries 80 functional-style points, 15 safety, 5
+  maintainability. No weight multipliers.
 - Reference suite: 3 scenarios, 300 points: `04` supplier laziness review (97/100 without),
   `07` identity mappers in collector code (97/100 without), `12` method-reference receiver
   binding review (99/100 without). Clean with-context, deltas below the floor.
@@ -99,10 +100,17 @@ Update this section whenever active eval membership or scoring changes.
 - Isolated promotion evidence (Tessl default solver, 2026-09-20): `09` run
   `01a0c02f-abf8-776d-8038-3ae700a5d1e1` without 20 / with 100; `13` run
   `01a0c02b-3822-71db-aef0-e746e472e5b7` without 50 / with 100; `14` run
-  `01a0c037-590b-7193-ab1e-9558506ca102` without 44 / with 100.
+  `01a0c037-590b-7193-ab1e-9558506ca102` without 44 / with 100; `15` run
+  `01a0c077-0e44-773d-b1cb-ab99ef402216` without 35 / with 100.
+- Full main-suite run before `15` joined: `01a0c04c-f644-72ed-8e3a-d53d3f8e3d06`, without
+  54% / with 100%. The `13` baseline scored 100 in that run; see `evals/NUMBERING.md`.
 - Quality review `01a0c029-facf-7109-8d99-7d4da1addc95`: 100.
-- Full main-suite run, stronger-model check, and composition checks: see the PR that promoted
-  the scenarios; record their run IDs here when they complete.
+- Model selection is a paid-plan feature, so no stronger-model check exists; variance evidence is
+  the isolated runs plus the full main-suite runs.
+- Composition checks with both skills as context, with-context only: streams main
+  `01a0c037-733f-742b-9b10-e62be368d466` 4/4 at 100%; optionals main
+  `01a0c037-8b98-70cb-a114-2eb9911ea75c` (3 scenarios at 100%, one sandbox failure) plus
+  `01a0c045-04f9-72f3-956e-f30dd5fb9381` (the fourth at 100%).
 
 ## References
 

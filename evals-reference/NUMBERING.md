@@ -14,4 +14,4 @@ so gaps here are scenarios that live in `evals/` or `evals-regression/`.
   run: without 99, with 100. Kept as reference.
 
 Promoted to `evals/` on 2026-09-20: `09-podcast-episode-digests`, `13-volunteer-shift-ordering`,
-`14-aquarium-feeding-ledger`. See `evals/NUMBERING.md`.
+`14-aquarium-feeding-ledger`, `15-vineyard-harvest-summaries`. See `evals/NUMBERING.md`.

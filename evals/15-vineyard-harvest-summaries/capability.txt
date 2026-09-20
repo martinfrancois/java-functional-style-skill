@@ -1,0 +1,1 @@
+Implement Optional.map, collector downstream, and formatting callbacks that stay one-expression glue by extracting named helpers for derived values.
