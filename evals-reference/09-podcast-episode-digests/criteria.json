@@ -24,7 +24,7 @@
       "name": "Names the eligibility predicate",
       "category": "functional_style",
       "max_score": 30,
-      "description": "The three-condition filter is a named method or named Predicate (for example isIncluded or this::isEligible) rather than an inline multi-line condition in the filter call."
+      "description": "The eligibility conditions are named: the filter uses a named method or Predicate (for example this::isIncluded), or combines two or three named predicate methods with && in a one-line callback. Raw inline conditions such as episode.published() && !episode.explicit() && ... inside the filter call, or several chained filter calls with raw conditions, do not count."
     },
     {
       "name": "No block lambdas anywhere",

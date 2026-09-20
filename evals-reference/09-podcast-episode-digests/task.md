@@ -19,4 +19,5 @@ record Episode(String id, String title, LocalDate publishedAt, Duration length, 
 record EpisodeDigest(String id, String title, long ageDays, String label) {}
 ```
 
-Do not add dependencies, caching, or extra public API.
+The surrounding code base writes such transforms as a stream pipeline over the input list; keep
+that style. Do not add dependencies, caching, or extra public API.

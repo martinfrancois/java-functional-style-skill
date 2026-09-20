@@ -1,0 +1,1 @@
+Implement Map.merge, computeIfAbsent, and CompletableFuture callbacks that stay one-expression glue by extracting named helpers for accumulation and report building.

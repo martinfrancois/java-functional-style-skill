@@ -20,4 +20,5 @@ Map<String, Loan> latestByMemberId(List<Loan> loans)
 record Loan(String id, String memberId, String isbn, LocalDate dueDate) {}
 ```
 
-Do not add dependencies, caching, or extra public API.
+The surrounding code base builds such indexes with `Collectors.toMap` over a stream; keep that
+style. Do not add dependencies, caching, or extra public API.
