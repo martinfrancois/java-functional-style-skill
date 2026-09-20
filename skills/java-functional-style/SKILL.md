@@ -39,11 +39,25 @@ stream, collector, or Optional semantics; this skill only changes how callbacks 
    `UnaryOperator.identity()` when the declared type is `UnaryOperator<T>`. Write `x -> x` only
    where no functional interface is involved. Add the import. Never turn a callback that copies,
    normalizes, unwraps, casts, or calls something into an identity helper.
+
+   ```java
+   // before
+   Map<String, Exhibit> byId = exhibits.stream().collect(Collectors.toMap(Exhibit::id, e -> e));
+   // after
+   Map<String, Exhibit> byId = exhibits.stream().collect(Collectors.toMap(Exhibit::id, Function.identity()));
+   ```
 4. Remove no-op stages instead of renaming them. `.map(x -> x)`, `.map(Function.identity())`,
    `.filter(x -> true)`, and `.peek(x -> {})` add nothing when the stage itself is unobservable.
    Keep a stage when the returned object, scheduling, callback invocation, tracing, or exception
    wrapping is observable (`CompletableFuture.thenApply(Function.identity())` can be a deliberate
    boundary).
+
+   ```java
+   // before
+   String title = exhibitTitle.map(value -> value).orElse(fallbackTitle);
+   // after
+   String title = exhibitTitle.orElse(fallbackTitle);
+   ```
 5. Prefer a method reference only when it names the exact operation and keeps behavior. Check
    receiver binding (`expr::method` evaluates `expr` once, at creation, and throws `NullPointerException`
    there if it is null), overload resolution, argument order for `Comparator` and `BiFunction`,
@@ -67,14 +81,13 @@ stream, collector, or Optional semantics; this skill only changes how callbacks 
    wrap an `IOException` unless the surrounding API already owns unchecked wrapping. Use a named
    helper that declares or converts the exception on purpose, or a plain loop or branch.
 10. Choose plain Java when it reads better: checked IO, prompts, parser boundaries, early exits,
-    sentinel-driven windows, mutation-heavy accumulation, and step-by-step control flow. In a
-    review of a proposed functional rewrite of such code, reject the behavior change and recommend
-    keeping the loop or branch (or moving it into a named helper); do not counter-propose a
-    cleverer pipeline unless the user asked for one and you have shown it is equivalent.
+    sentinel-driven windows, mutation-heavy accumulation, and step-by-step control flow. When
+    reviewing a functional rewrite of such code, reject the behavior change and recommend keeping
+    the loop or branch; do not counter-propose another pipeline.
 11. Verify each changed callback for present and absent values, empty input, nulls, ordering,
     laziness, exception type and timing, side effects, object identity where observable, and the
-    Java baseline. Then run the scan in [hard-stops.md](references/hard-stops.md) and reconcile
-    every hit.
+    Java baseline. Then run the `rg` scan from [hard-stops.md](references/hard-stops.md) over
+    the touched files and reconcile every hit before finishing.
 
 ## Gotchas
 
