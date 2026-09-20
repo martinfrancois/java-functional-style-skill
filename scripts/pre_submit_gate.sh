@@ -326,6 +326,12 @@ collect_changed() {
 
   while IFS= read -r file; do
     [[ -z "$file" ]] && continue
+    # A scenario directory that was deleted on this branch has nothing to run.
+    case "$file" in
+      evals/*/*|evals-reference/*/*|evals-regression/*/*)
+        [[ -d "$(echo "$file" | awk -F/ '{print $1 "/" $2}')" ]] || continue
+        ;;
+    esac
 
     case "$file" in
       evals/*/*)
