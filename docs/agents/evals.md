@@ -88,19 +88,21 @@ make this pass.
 
 Update this section whenever active eval membership or scoring changes.
 
-- Main eval set: empty until the pending reruns below classify candidates.
-- Reference suite: 6 candidate scenarios, 600 checklist points, 5 natural and 1 explicit.
-- Regression suite: 8 solved scenarios, 800 checklist points, run with context only.
-- Hosted evidence so far (Tessl default solver, 2026-09-20):
-  - `01a0bf9d-d8ec-7269-a8d3-0c7d9986b4f1`: `07` isolated, without 20 / with 100, before the task
-    fixed the carrier style; rerun pending.
-  - `01a0bfa2-c49e-7178-a1a1-910db1b92785`: the other twelve candidates, both variants. Eight
-    scored 100/100 in both arms and moved to regression; `04` (97/100) and `12` (99/100) stay in
-    reference; `09` (20/85) and `13` (20/46) need reruns after the skill and criteria changes.
-  - Quality review `01a0c029-facf-7109-8d99-7d4da1addc95`: 100.
-- Pending before any score or lift claim: reruns of `07`, `09`, `13`, and the new `14` against
-  the current skill bundle, classification, promotion, a main-suite run, and the composition
-  checks.
+- Main eval set: 3 scenarios, 300 checklist points, 2 natural and 1 explicit, all implementation
+  tasks: `09` helper extraction and named predicates in a pipeline, `13` comparator composition,
+  `14` `Map.merge`, `computeIfAbsent`, and `CompletableFuture` callbacks. Each carries 80
+  functional-style points, 15 safety, 5 maintainability.
+- Reference suite: 3 scenarios, 300 points: `04` supplier laziness review (97/100 without),
+  `07` identity mappers in collector code (97/100 without), `12` method-reference receiver
+  binding review (99/100 without). Clean with-context, deltas below the floor.
+- Regression suite: 8 solved scenarios, 800 points, run with context only.
+- Isolated promotion evidence (Tessl default solver, 2026-09-20): `09` run
+  `01a0c02f-abf8-776d-8038-3ae700a5d1e1` without 20 / with 100; `13` run
+  `01a0c02b-3822-71db-aef0-e746e472e5b7` without 50 / with 100; `14` run
+  `01a0c037-590b-7193-ab1e-9558506ca102` without 44 / with 100.
+- Quality review `01a0c029-facf-7109-8d99-7d4da1addc95`: 100.
+- Full main-suite run, stronger-model check, and composition checks: see the PR that promoted
+  the scenarios; record their run IDs here when they complete.
 
 ## References
 

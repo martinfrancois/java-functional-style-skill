@@ -43,6 +43,6 @@
     "invocation": "natural",
     "task_type": "implementation",
     "evidence_type": "ordinary_lift",
-    "reference_selection": "Candidate for main promotion; classify from the isolated hosted run."
+    "main_eval_selection": "Promoted 2026-09-20 from isolated hosted run 01a0c02f-abf8-776d-8038-3ae700a5d1e1 (Tessl default solver): without 20/100, with 100/100; delta meets the 30 pp main floor and adds distinct callback-shape coverage."
   }
 }

@@ -46,9 +46,9 @@
     }
   ],
   "metadata": {
-    "invocation": "natural",
+    "invocation": "explicit",
     "task_type": "implementation",
     "evidence_type": "ordinary_lift",
-    "reference_selection": "Candidate for main promotion; classify from the isolated hosted run."
+    "main_eval_selection": "Promoted 2026-09-20. Natural-invocation isolated run 01a0c02f-abf8-776d-8038-3ae700a5d1e1: without 30/100, with 100/100. Explicit-invocation run 01a0c037-590b-7193-ab1e-9558506ca102 (current task text): without 44/100, with 100/100. Delta meets the 30 pp main floor and adds Map.merge, computeIfAbsent, and CompletableFuture callback coverage."
   }
 }
