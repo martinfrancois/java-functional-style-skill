@@ -4,46 +4,33 @@
   "checklist": [
     {
       "name": "Creates the requested artifact",
-      "category": "safety",
       "max_score": 8,
       "description": "Creates ShiftOrdering.java with the method, the nested record, needed imports, and Java 17-compatible code."
     },
     {
       "name": "Preserves the order",
-      "category": "safety",
       "max_score": 7,
       "description": "Orders by day, then start time, then lead with null leads last, then slots ascending; returns a new list and leaves the input untouched."
     },
     {
       "name": "Composes JDK comparators",
-      "category": "functional_style",
       "max_score": 50,
       "description": "Uses Comparator.comparing(...).thenComparing(...) composition (with Comparator.nullsLast for the lead) instead of a block comparator lambda with if/else chains."
     },
     {
       "name": "Uses the primitive comparator for slots",
-      "category": "functional_style",
       "max_score": 20,
       "description": "Uses thenComparingInt(Shift::slots) rather than a boxed comparing(Shift::slots) or a manual Integer.compare lambda."
     },
     {
       "name": "Keeps callbacks as glue",
-      "category": "functional_style",
       "max_score": 10,
       "description": "Every comparator key is a method reference or one-expression lambda; no block lambda remains."
     },
     {
       "name": "Stays focused",
-      "category": "maintainability",
       "max_score": 5,
       "description": "No unrelated abstractions, sorting-algorithm changes, extra public API, or dependency changes."
     }
-  ],
-  "metadata": {
-    "invocation": "natural",
-    "task_type": "cleanup",
-    "evidence_type": "focused_reference",
-    "reference_selection": "Demoted to reference on 2026-09-20. With-context is 100 in every sample, but the Tessl default solver's baseline varies: 20 (01a0bfa2-c49e-7178-a1a1-910db1b92785, older skill), 50 (01a0c02b-3822-71db-aef0-e746e472e5b7), 100 (01a0c04c-f644-72ed-8e3a-d53d3f8e3d06), 84 (01a0c077-e577-704b-ad68-9b7386d95575), 100 (01a0c083-1918-704b-a748-8f26c39ad294), 100 (01a0c091-df78-7652-b356-8f1d6afda35e). Mean delta is below the 30 pp floor, so it is coverage, not stable lift.",
-    "runtime_reference_overlap_rationale": "The runtime comparator-composition example was written after this scenario failed with context, so the two share the day-then-nullable-then-int shape; the scenario therefore counts as focused coverage of that example, never as ordinary lift."
-  }
+  ]
 }

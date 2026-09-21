@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "invocation": "natural",
+    "task_type": "implementation",
+    "evidence_type": "ordinary_lift",
+    "main_eval_selection": "Promoted 2026-09-20 from screening run 01a0c02f-abf8-776d-8038-3ae700a5d1e1 (three scenarios, Tessl default solver): without 20/100, with 100/100; delta meets the 30 pp main floor and adds distinct callback-shape coverage. Repeated in full main runs 01a0c04c-f644-72ed-8e3a-d53d3f8e3d06 and 01a0c091-df78-7652-b356-8f1d6afda35e at 20/100 without."
+  },
+  "categories": {
+    "Creates the requested artifact": "safety",
+    "Preserves digest rules": "safety",
+    "Extracts the mapping into a named helper": "functional_style",
+    "Names the eligibility predicate": "functional_style",
+    "No block lambdas anywhere": "functional_style",
+    "Stays focused": "maintainability"
+  }
+}

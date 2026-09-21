@@ -4,40 +4,28 @@
   "checklist": [
     {
       "name": "Creates coherent Java 17 artifact",
-      "category": "safety",
       "max_score": 10,
       "description": "Creates EscalationReport.java with the requested method, nested records, imports, and Java 17-compatible code."
     },
     {
       "name": "Preserves escalation behavior",
-      "category": "safety",
       "max_score": 25,
       "description": "Preserves filtering for open, assigned, non-snoozed tickets; uses Instant.now(clock); computes age from openedAt to now; marks priority at least 8 or age at least 48 hours as urgent; and preserves encounter order."
     },
     {
       "name": "Extracts block mapping logic",
-      "category": "functional_style",
       "max_score": 35,
       "description": "Moves the mapping callback's temporary Duration, branching, and TicketEscalation construction into a named helper or equivalent named method rather than keeping a block lambda or multi-line callback body."
     },
     {
       "name": "Names the predicate rule",
-      "category": "functional_style",
       "max_score": 20,
       "description": "Extracts or clearly names the multi-condition ticket eligibility predicate instead of leaving several meaningful checks buried in a wrapped callback."
     },
     {
       "name": "Keeps refactor focused",
-      "category": "maintainability",
       "max_score": 10,
       "description": "Avoids unrelated caching, concurrency, dependencies, API redesign, public helper expansion, or broad style rewrites."
     }
-  ],
-  "metadata": {
-    "invocation": "natural",
-    "task_type": "cleanup",
-    "evidence_type": "solved_regression",
-    "regression_selection": "Hosted run 01a0bfa2-c49e-7178-a1a1-910db1b92785 (2026-09-20, Tessl default solver): both variants at 100/100. With-context rerun against the final bundle: 100/100 in run 01a0c1de-cc4b-70ef-a074-106a34a465c5.",
-    "weighting_note": "Weighting inherited from the first draft of this package; reweighting would change the rubric and require a rerun, and regression scenarios are not part of the public score."
-  }
+  ]
 }

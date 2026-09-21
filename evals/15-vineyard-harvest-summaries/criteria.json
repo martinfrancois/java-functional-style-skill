@@ -4,51 +4,38 @@
   "checklist": [
     {
       "name": "Creates the requested artifact",
-      "category": "safety",
       "max_score": 8,
       "description": "Creates HarvestSummaries.java with the three methods, the four nested records, needed imports, and Java 17-compatible code."
     },
     {
       "name": "Preserves summary semantics",
-      "category": "safety",
       "max_score": 7,
       "description": "noteFor returns empty for an absent plot and computes whole days and the readiness threshold correctly; statsByVariety counts crates, sums kilograms, and rounds the average to one decimal; crateLabels keeps encounter order and the exact label format."
     },
     {
       "name": "Optional mapping uses a named helper",
-      "category": "functional_style",
       "max_score": 30,
       "description": "The Optional.map callback is a method reference or one-expression lambda that calls a named method building the HarvestNote (for example plot -> toNote(plot, today)); the day arithmetic and readiness branching are not written as a block lambda inside map."
     },
     {
       "name": "Downstream reduction uses a named helper",
-      "category": "functional_style",
       "max_score": 30,
       "description": "The groupingBy downstream (for example collectingAndThen(toList(), HarvestSummaries::toStats) or an equivalent named collector helper) delegates the crate count, total, and rounded average to a named method; no block lambda with local variables sits inside the collector call."
     },
     {
       "name": "Label formatting uses glue",
-      "category": "functional_style",
       "max_score": 15,
       "description": "The map callback producing labels is a method reference or a single-expression lambda without braces; a long single expression counts as fully meeting this item. Only a block lambda with braces, local variables, or statements fails it."
     },
     {
       "name": "No block lambdas anywhere",
-      "category": "functional_style",
       "max_score": 5,
       "description": "No callback body in the file uses braces or continues onto further lines; extracted helpers contain plain code rather than another block lambda."
     },
     {
       "name": "Stays focused",
-      "category": "maintainability",
       "max_score": 5,
       "description": "No unrelated abstractions, caching, parallelism, extra public API, or dependency changes."
     }
-  ],
-  "metadata": {
-    "invocation": "natural",
-    "task_type": "implementation",
-    "evidence_type": "ordinary_lift",
-    "main_eval_selection": "Promoted 2026-09-20 from run 01a0c077-0e44-773d-b1cb-ab99ef402216 (Tessl default solver): without 35/100, with 100/100. Two earlier attempts (01a0c04d-f23f-727d-8777-be1120cd3cda for the with-context cell, 01a0c058-ab49-750d-bae2-1896aa39333b for the baseline retry) each lost one cell to a sandbox failure while the other cell scored the same. Later full main runs scored the baseline at 35 and 35. Adds Optional.map and collector-downstream callback coverage."
-  }
+  ]
 }

@@ -1,0 +1,15 @@
+{
+  "metadata": {
+    "invocation": "natural",
+    "task_type": "implementation",
+    "evidence_type": "ordinary_lift",
+    "reference_selection": "Kept as reference after rerun 01a0c02f-abf8-776d-8038-3ae700a5d1e1: without 97/100, with 100/100; identity mappers are already solved by the default solver, so this is coverage, not lift."
+  },
+  "categories": {
+    "Creates the requested artifact": "safety",
+    "Preserves index semantics": "safety",
+    "Uses Function.identity for the value mapper": "functional_style",
+    "Keeps merge callbacks readable": "functional_style",
+    "Stays focused": "maintainability"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "invocation": "natural",
+    "task_type": "implementation",
+    "evidence_type": "solved_regression",
+    "regression_selection": "Hosted run 01a0bfa2-c49e-7178-a1a1-910db1b92785 (2026-09-20, Tessl default solver): both variants at 100/100. With-context rerun against the final bundle: 100/100 in run 01a0c1de-cc4b-70ef-a074-106a34a465c5."
+  },
+  "categories": {
+    "Creates the requested artifact": "safety",
+    "Preserves the exception contract": "safety",
+    "No try/catch inside a callback": "functional_style",
+    "Uses a visible checked boundary": "functional_style",
+    "No unwrap-rewrap ceremony": "functional_style",
+    "Stays focused": "maintainability"
+  }
+}
