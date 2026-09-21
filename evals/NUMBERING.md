@@ -5,19 +5,27 @@ points.
 
 Promoted on 2026-09-20 (Tessl default solver):
 
-- `09-podcast-episode-digests`: run `01a0c02f-abf8-776d-8038-3ae700a5d1e1`, without 20, with 100.
-  Covers helper extraction and named predicates in a stream pipeline.
-- `14-aquarium-feeding-ledger`: natural run `01a0c02f-abf8-776d-8038-3ae700a5d1e1`, without 30,
+- `09-podcast-episode-digests`: screening run `01a0c02f-abf8-776d-8038-3ae700a5d1e1` (three
+  scenarios), without 20, with 100; the baseline repeated 20 in the full main runs
+  `01a0c04c-f644-72ed-8e3a-d53d3f8e3d06` and `01a0c091-df78-7652-b356-8f1d6afda35e`. Covers helper
+  extraction and named predicates in a stream pipeline.
+- `14-aquarium-feeding-ledger`: natural screening run `01a0c02f-abf8-776d-8038-3ae700a5d1e1`, without 30,
   with 100; explicit-invocation run `01a0c037-590b-7193-ab1e-9558506ca102` (current text), without
   44, with 100. Covers block lambdas in `Map.merge`, `computeIfAbsent`, and `CompletableFuture`
   callbacks.
 - `15-vineyard-harvest-summaries`: run `01a0c077-0e44-773d-b1cb-ab99ef402216`, without 35, with
   100. Covers block lambdas in `Optional.map`, a `groupingBy` downstream, and label formatting.
 
+Headline run for this suite: `01a0c091-df78-7652-b356-8f1d6afda35e` (Tessl default solver), main
+scenarios without 90/300 (30%), with 300/300 (100%). Baseline samples per scenario across all
+runs: `09` 20, 20, 20; `14` 30, 44, 42, 30, 35; `15` 35, 35, 35. Model selection is a paid-plan
+feature, so no stronger-model sample exists.
+
 Demoted the same day: `13-volunteer-shift-ordering` (comparator composition). Its with-context
-result is 100 in every sample, but the default solver's baseline came in at 20, 50, 100, 84, and
+result is 100 in every sample, but the default solver's baseline came in at 20, 50, 100, 84, 100, and
 100 across runs `01a0bfa2-c49e-7178-a1a1-910db1b92785`, `01a0c02b-3822-71db-aef0-e746e472e5b7`,
-`01a0c04c-f644-72ed-8e3a-d53d3f8e3d06`, `01a0c077-e577-704b-ad68-9b7386d95575`, and `01a0c083-1918-704b-a748-8f26c39ad294`. The mean delta is
+`01a0c04c-f644-72ed-8e3a-d53d3f8e3d06`, `01a0c077-e577-704b-ad68-9b7386d95575`, `01a0c083-1918-704b-a748-8f26c39ad294`, and
+`01a0c091-df78-7652-b356-8f1d6afda35e`. The mean delta is
 under the 30 pp floor, so it is reference coverage.
 
 `09` and `15` are natural-activation implementation tasks; `14` invokes the skill explicitly so the main suite keeps both styles (explicit run above). Identity-function, supplier-laziness,

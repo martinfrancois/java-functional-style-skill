@@ -49,6 +49,6 @@
     "invocation": "natural",
     "task_type": "implementation",
     "evidence_type": "ordinary_lift",
-    "main_eval_selection": "Promoted 2026-09-20 from isolated hosted run 01a0c077-0e44-773d-b1cb-ab99ef402216 (Tessl default solver): without 35/100, with 100/100. Two earlier attempts (01a0c04d-..., 01a0c058-...) lost one cell each to sandbox failures while the other cell scored the same. Adds Optional.map and collector-downstream callback coverage."
+    "main_eval_selection": "Promoted 2026-09-20 from run 01a0c077-0e44-773d-b1cb-ab99ef402216 (Tessl default solver): without 35/100, with 100/100. Two earlier attempts (01a0c04d-f23f-727d-8777-be1120cd3cda for the with-context cell, 01a0c058-ab49-750d-bae2-1896aa39333b for the baseline retry) each lost one cell to a sandbox failure while the other cell scored the same. Later full main runs scored the baseline at 35 and 35. Adds Optional.map and collector-downstream callback coverage."
   }
 }

@@ -43,6 +43,6 @@
     "invocation": "explicit",
     "task_type": "review",
     "evidence_type": "ordinary_lift",
-    "reference_selection": "Candidate for main promotion; classify from the isolated hosted run."
+    "reference_selection": "Kept as reference after run 01a0bfa2-c49e-7178-a1a1-910db1b92785 (Tessl default solver): without 99/100, with 100/100. The default solver already catches receiver binding, so this is coverage, not lift. With-context rerun against the final bundle: 100/100 in run 01a0c1de-dc0a-7653-990c-5b345cd0bcc3."
   }
 }

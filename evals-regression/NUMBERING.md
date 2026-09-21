@@ -12,3 +12,6 @@ scored both variants at 100/100:
 - `08-track-name-normalizers`
 - `10-bike-station-fallbacks`
 - `11-trail-permit-reader`
+
+With-context rerun against the final runtime bundle on 2026-09-21: all eight at 100/100 in run
+`01a0c1de-cc4b-70ef-a074-106a34a465c5`.
