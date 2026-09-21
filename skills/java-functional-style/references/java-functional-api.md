@@ -30,7 +30,7 @@ If the baseline is unclear, prefer Java 8-compatible code or state the assumptio
 
 | API or feature | Minimum Java | Notes |
 | --- | ---: | --- |
-| `Optional.stream` | 9 | Optional flattening helper; Java 8 needs `filter(Optional::isPresent).map(Optional::get)`. |
+| `Optional.stream` | 9 | Baseline note only; which Optional idiom to use on older baselines is the `java-optionals` skill's job. |
 | `Optional.ifPresentOrElse` | 9 | Use when both present and absent branches are clear callbacks. Use plain branches when checked work or complex flow is clearer. |
 | `Predicate.not` | 11 | Readable for simple negated method references, such as `Predicate.not(String::isBlank)`. Do not obscure complex predicates. |
 | `Optional.isEmpty` | 11 | Readability helper for absence checks. |
