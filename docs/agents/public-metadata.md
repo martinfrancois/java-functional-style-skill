@@ -1,6 +1,6 @@
 # Public Metadata And OSS Readiness
 
-Keep the repository open-source-ready even while private.
+The repository is public; keep it open-source-ready.
 
 ## Plugin Metadata
 
@@ -28,4 +28,5 @@ Help AI coding agents write, review, and refactor Java lambdas, method reference
   non-public tokens.
 - Real Tessl publishes run only through the release workflow.
 - Tessl publish dry-runs are allowed.
-- `.tessl-plugin/plugin.json` must keep `"private": true` until explicitly changed.
+- `.tessl-plugin/plugin.json` keeps `"private": true` until the registry approves the public
+  request.

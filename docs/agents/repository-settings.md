@@ -1,11 +1,10 @@
 # Repository Settings
 
-The new GitHub repository should mirror useful settings from `java-streams-skill` while staying
-private.
+The GitHub repository mirrors the settings of `java-streams-skill`.
 
 ## Applied Settings
 
-- Visibility: private
+- Visibility: public
 - Issues: enabled
 - Wiki: disabled
 - Projects: disabled

@@ -9,7 +9,8 @@ This Tessl package teaches AI coding agents to write, review, and refactor Java 
 references, and functional-interface callbacks (`Function`, `Predicate`, `Supplier`, `Consumer`,
 `Comparator`, `BiFunction`) so they stay readable while preserving behavior.
 
-The GitHub repository and the Tessl plugin are private for now.
+The GitHub repository is public. The Tessl plugin is private until the registry approves the
+public request; the install commands below work once it is public.
 
 ## Contents
 

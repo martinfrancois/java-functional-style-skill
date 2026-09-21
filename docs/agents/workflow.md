@@ -7,10 +7,8 @@ release-readiness.
 
 ## Rules
 
-- Keep the GitHub repository private until the maintainer asks to make it public.
-- Keep `.tessl-plugin/plugin.json` at `"private": true` until the maintainer asks otherwise.
-  Tessl only lets a plugin go public after a "Make Public" request on the registry page of an
-  already published plugin, so the first release publishes private and the flip is a follow-up.
+- Keep `.tessl-plugin/plugin.json` at `"private": true` until the registry approves the "Make
+  Public" request for the published plugin; then flip it in a `fix(release)` commit of its own.
 - Do not run a real Tessl publish by hand. Releases publish through
   `.github/workflows/publish-tessl.yml` when Release Please creates the tag.
 - Do not claim lift, release-readiness, or composition safety without the hosted run IDs that

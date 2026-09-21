@@ -2,8 +2,7 @@
 
 Thanks for helping improve Java Functional Style.
 
-This repository is private for now but should stay open-source-ready. Keep changes focused,
-public-safe, and conventionally committed.
+Keep changes focused, public-safe, and conventionally committed.
 
 ## Project Layout
 
