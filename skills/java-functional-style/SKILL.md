@@ -12,8 +12,10 @@ behavior, public API and artifact shape, ordering, laziness, exceptions, null be
 effects, and Java-version compatibility while making callbacks readable.
 
 For implementation prompts, create the requested artifact (a Java source file, `review.md`, or
-whatever the prompt names) before explaining. When another Java domain skill is active, let it own
-stream, collector, or Optional semantics; this skill only changes how callbacks are written.
+whatever the prompt names) before explaining. Keep provided record, helper, and interface types in
+that file, nested when the prompt says so; add no sibling files, top-level types, or extra public
+API. When another Java domain skill is active, let it own stream, collector, or Optional semantics;
+this skill only changes how callbacks are written.
 
 ## Reference Bundle
 
@@ -36,9 +38,9 @@ stream, collector, or Optional semantics; this skill only changes how callbacks 
 3. Use the JDK identity helper when the API needs an identity callback. `Function.identity()`
    for a `Function<T, T>` (for example the value mapper of `Collectors.toMap`, a `groupingBy`
    downstream `mapping`, or a `Map<String, Function<...>>` "no transform" entry) and
-   `UnaryOperator.identity()` when the declared type is `UnaryOperator<T>`. Write `x -> x` only
-   where no functional interface is involved. Add the import. Never turn a callback that copies,
-   normalizes, unwraps, casts, or calls something into an identity helper.
+   `UnaryOperator.identity()` when the declared type is `UnaryOperator<T>`. Add the import. Never
+   turn a callback that copies, normalizes, unwraps, casts, or calls something into an identity
+   helper.
 
    ```java
    // before
@@ -63,19 +65,25 @@ stream, collector, or Optional semantics; this skill only changes how callbacks 
    there if it is null), overload resolution, argument order for `Comparator` and `BiFunction`,
    boxing (`Comparator.comparingInt` over `comparing` for primitives), and checked exceptions.
    When any of these change, keep the lambda or extract a helper.
-6. Keep lambdas as one-expression glue. When a callback needs branching, local temporaries,
-   loops, formatting, a merge or tie-break rule, more than one meaningful condition, or a nested
-   fluent chain, extract a named helper (`toSummary(item, today)`, `isEligible(item)`) and pass
-   `this::isEligible` or a one-line lambda. Name multi-condition predicates; combining two named
-   predicates with `&&` in the callback is fine. Re-scan every extracted helper: moving a block
-   lambda into a helper that still contains a block lambda is not done.
+
+   ```java
+   Supplier<Config> a = registry.current()::config;      // registry.current() runs once, now
+   Supplier<Config> b = () -> registry.current().config(); // runs on every get()
+   ```
+6. Keep lambdas as one-expression glue. Extract a named helper when a callback needs branching,
+   local temporaries, loops, formatting, a merge or tie-break rule, more than one condition, or a
+   nested fluent chain, then pass `this::isEligible` or `item -> toSummary(item, today)`. Name
+   multi-condition predicates; composing named predicates with `and`, `or`, `negate`, or `&&` is
+   still glue. Build a result object from derived values in one named method, not in the callback
+   after two helper calls. Re-scan every extracted helper; a helper that still holds a block lambda
+   is not done.
    A multi-branch comparator lambda is the same smell: replace `if`/`else` chains of
    `compareTo` calls with `Comparator.comparing(key).thenComparing(key2, nullsLast(naturalOrder()))
    .thenComparingInt(intKey)`, keeping the same key order, null placement, and tie behavior.
 7. Keep supplier work lazy. Fallback construction, IO, prompts, parsing, and exception creation
    that should happen only on absence or miss belong inside the supplier passed to `orElseGet`,
-   `orElseThrow`, `computeIfAbsent`, `Objects.requireNonNullElseGet`, or a logging supplier.
-   `orElse(compute())` and `requireNonNullElse(value, compute())` always evaluate `compute()`.
+   `orElseThrow`, `computeIfAbsent`, `Objects.requireNonNullElseGet`, or a logging supplier (see
+   the first gotcha for the eager forms).
 8. Let the API produce the result. Do not mutate an external list, map, counter, or builder from
    a callback when the API can return the value (`toList`, `toMap`, `merge`, `reduce`). Keep a
    side-effecting callback only when the side effect is the requested outcome, and check it is
