@@ -1,8 +1,7 @@
 # README Guidance
 
 - Use `Java Functional Style Skill for AI Agents` as the README title.
-- Say the repository is public and that the Tessl plugin is private until the registry approves
-  the public request.
+- Say the repository and the Tessl plugin are public.
 - Do not include benchmark claims until hosted evals are rerun and documented; link the Tessl
   plugin page for published scores once the package is public.
 - README examples must use domains that no eval scenario uses; the criteria validator's overlap

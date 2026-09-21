@@ -9,8 +9,7 @@ This Tessl package teaches AI coding agents to write, review, and refactor Java 
 references, and functional-interface callbacks (`Function`, `Predicate`, `Supplier`, `Consumer`,
 `Comparator`, `BiFunction`) so they stay readable while preserving behavior.
 
-The GitHub repository is public. The Tessl plugin is private until the registry approves the
-public request; the install commands below work once it is public.
+The GitHub repository and the Tessl plugin are public.
 
 ## Contents
 
@@ -115,7 +114,8 @@ callbacks, method references that change behavior, and forced functional rewrite
 reference and regression scenarios, because the default model already handles them without the
 skill; they protect against regressions rather than contribute to the score.
 
-Published scores will be shown on the Tessl plugin page once the package is public.
+Current published scores are shown on the
+[Tessl plugin](https://tessl.io/registry/martinfrancois/java-functional-style).
 
 ## Contributing
 
