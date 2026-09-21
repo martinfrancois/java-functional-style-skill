@@ -1,6 +1,6 @@
 {
   "name": "martinfrancois/java-functional-style",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Help AI coding agents write, review, and refactor Java lambdas, method references, functional interfaces, identity functions, suppliers, predicates, consumers, and callbacks with behavior-preserving readability.",
   "summary": "Java functional style guidance for lambdas, method references, identity functions, callbacks, and functional interfaces.",
   "repository": "https://github.com/martinfrancois/java-functional-style-skill",

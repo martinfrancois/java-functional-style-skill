@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/martinfrancois/java-functional-style-skill/compare/v0.1.0...v0.1.1) (2026-09-21)
+
+
+### Bug Fixes
+
+* **release:** publish the plugin as public ([#11](https://github.com/martinfrancois/java-functional-style-skill/issues/11)) ([b0e5e36](https://github.com/martinfrancois/java-functional-style-skill/commit/b0e5e36c7231abbd9fcd2e219e678cc1b7a55b9a))
+
 ## [0.1.0](https://github.com/martinfrancois/java-functional-style-skill/compare/v0.1.0...v0.1.0) (2026-09-21)
 
 
