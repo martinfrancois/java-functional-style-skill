@@ -1,6 +1,7 @@
 # README Guidance
 
-- Use `Java Functional Style Skill for AI Agents` as the README title.
+- Use `Java Functional Style Skill for AI Agents` as the README title, followed by the Tessl badge
+  linking to the registry page.
 - Say the repository and the Tessl plugin are public.
 - Do not include benchmark claims until hosted evals are rerun and documented; link the Tessl
   plugin page for published scores once the package is public.
