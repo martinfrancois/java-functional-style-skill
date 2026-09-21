@@ -4,8 +4,8 @@
 - Say the repo and Tessl plugin are private for now.
 - Do not include benchmark claims until hosted evals are rerun and documented; link the Tessl
   plugin page for published scores once the package is public.
-- README examples must use domains that no eval scenario uses; the criteria validator treats
-  runtime references and the README alike.
+- README examples must use domains that no eval scenario uses; the criteria validator's overlap
+  scan covers SKILL.md, the references, the rule, and the README.
 - Install examples should use `martinfrancois/java-functional-style`.
 - Explain that the package is useful alone and as a companion to:
   - `martinfrancois/java-streams`

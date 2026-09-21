@@ -48,7 +48,7 @@ tessl plugin publish --dry-run --bump patch .
 tessl plugin publish --dry-run .
 ```
 
-Do not run a real Tessl publish unless François explicitly asks.
+Real Tessl publishes run only through the release workflow.
 
 ## Eval Integrity
 

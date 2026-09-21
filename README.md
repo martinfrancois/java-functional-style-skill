@@ -41,8 +41,8 @@ skill on its own.
 Two pieces of maintainer feedback started this package. A reviewer of the Java Streams skill
 pointed out that agents keep writing multi-line lambdas instead of extracting a method
 ([lambdas are glue code](http://blog.agiledeveloper.com/2015/06/lambdas-are-glue-code.html)), and a
-cleanup sweep produced `Collectors.toMap(state -> state, ...)` where `Function.identity()` was the
-obvious choice. Both are general Java callback habits, not stream or Optional semantics, so they
+cleanup sweep produced `Collectors.toMap(x -> x, ...)` where `Function.identity()` was the obvious
+choice. Both are general Java callback habits, not stream or Optional semantics, so they
 belong in a package that any Java skill can sit next to.
 
 ## What It Helps With
@@ -63,9 +63,9 @@ It does not force streams, Optionals, or functional style where a loop or branch
 
 `java-functional-style` owns general Java lambda and functional-interface style.
 
-[`java-streams`](https://github.com/martinfrancois/java-streams-skill) owns stream and collector
-semantics. [`java-optionals`](https://github.com/martinfrancois/java-optionals-skill) owns Optional
-semantics.
+`martinfrancois/java-streams` ([repository](https://github.com/martinfrancois/java-streams-skill))
+owns stream and collector semantics. `martinfrancois/java-optionals`
+([repository](https://github.com/martinfrancois/java-optionals-skill)) owns Optional semantics.
 
 Each package works on its own. Install the domain skill and this package together when you want
 both semantic guidance and callback-style guidance.
@@ -106,10 +106,13 @@ The skill is tested on Java implementation, review, and cleanup tasks that invol
 task is run without the skill and with the skill, then scored on whether the agent keeps the
 requested behavior while writing clearer callback code.
 
-The evals cover the places where agents write plausible but weak callbacks: hand-written identity
-lambdas, block lambdas with derived values and branching, eager fallback computation, method
-references that change behavior, checked exceptions wrapped inside callbacks, and forced functional
-rewrites of code that reads better as a loop.
+The published score comes from the main eval set, which covers the places where the default
+eval model still writes weak callbacks: block lambdas with derived values and branching in stream
+pipelines, in `Map.merge` and `CompletableFuture` callbacks, and in `Optional.map` and collector
+downstreams. Identity lambdas, eager fallback computation, checked exceptions wrapped inside
+callbacks, method references that change behavior, and forced functional rewrites are covered by
+reference and regression scenarios, because the default model already handles them without the
+skill; they protect against regressions rather than contribute to the score.
 
 Published scores will be shown on the Tessl plugin page once the package is public.
 

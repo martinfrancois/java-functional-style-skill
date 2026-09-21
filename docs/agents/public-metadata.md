@@ -26,6 +26,6 @@ Help AI coding agents write, review, and refactor Java lambdas, method reference
 
 - Do not commit secrets, private hosted eval artifacts, private logs, local machine paths, or
   non-public tokens.
-- Do not run a real Tessl publish until François explicitly asks.
+- Real Tessl publishes run only through the release workflow.
 - Tessl publish dry-runs are allowed.
 - `.tessl-plugin/plugin.json` must keep `"private": true` until explicitly changed.

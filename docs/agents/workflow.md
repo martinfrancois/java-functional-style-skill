@@ -7,8 +7,8 @@ release-readiness.
 
 ## Rules
 
-- Keep the GitHub repository private until François explicitly asks to make it public.
-- Keep `.tessl-plugin/plugin.json` at `"private": true` until François explicitly asks otherwise.
+- Keep the GitHub repository private until the maintainer asks to make it public.
+- Keep `.tessl-plugin/plugin.json` at `"private": true` until the maintainer asks otherwise.
   Tessl only lets a plugin go public after a "Make Public" request on the registry page of an
   already published plugin, so the first release publishes private and the flip is a follow-up.
 - Do not run a real Tessl publish by hand. Releases publish through
@@ -84,11 +84,17 @@ unless repairing release state with explicit maintainer direction.
 
 Merging a releasable PR (`feat`, `fix`) into `main` makes Release Please open a release PR;
 merging that PR creates the tag and GitHub release and dispatches the Tessl publish workflow,
-which publishes the plugin and runs the main eval suite for the registry score. The publish
-workflow needs the `tessl-release` environment and the `TESSL_TOKEN` secret, both already set.
+which runs `tessl plugin publish`; Tessl then runs the main suite server-side and shows the score
+on the registry. The publish workflow needs the `tessl-release` environment and the `TESSL_TOKEN`
+secret, both already set.
 
-The first release should be `0.1.0`. The manifest already says `0.1.0` with no tag behind it, so
-put `Release-As: 0.1.0` in the footer of the squash commit that lands the package on `main`.
+The first release should be `0.1.0`. With no tag behind the manifest, Release Please would pick
+its own initial version, so type `Release-As: 0.1.0` by hand into the body of the squash commit
+that lands the package on `main` (the default squash body is the commit list; replace it). The
+first changelog will also list the scaffold and Renovate commits already on `main`.
+
+Runtime changes are not done until the hosted checks in [Eval Guidance](evals.md) and the
+composition check in [Ownership Boundaries](ownership-boundaries.md) have passed.
 
 ## References
 

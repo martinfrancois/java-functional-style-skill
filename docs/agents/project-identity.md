@@ -7,7 +7,7 @@
 - Runtime skill path: `skills/java-functional-style/SKILL.md`
 - Always-on rule path: `rules/java-functional-style.md`
 - Current visibility: private
-- Plugin manifest must keep `"private": true` until François explicitly asks otherwise.
+- Plugin manifest must keep `"private": true` until the maintainer asks otherwise.
 
 If a local checkout is not linked to a Tessl project yet:
 
@@ -15,4 +15,4 @@ If a local checkout is not linked to a Tessl project yet:
 tessl project create --workspace martinfrancois java-functional-style-skill
 ```
 
-Do not run a real Tessl publish unless François explicitly asks.
+Real Tessl publishes run only through the release workflow.

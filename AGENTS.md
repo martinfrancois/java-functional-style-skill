@@ -9,9 +9,6 @@ Before starting any task, open [Workflow](docs/agents/workflow.md) and follow it
 When the user corrects wording, naming, scope, eval design, public metadata, or project policy, make
 that correction durable in the relevant file under `docs/agents/`.
 
-Runtime skill or rule changes are not done until the hosted checks in
-[Eval Guidance](docs/agents/evals.md) and the composition check in
-[Ownership Boundaries](docs/agents/ownership-boundaries.md) have passed.
 
 ## Maintenance
 
