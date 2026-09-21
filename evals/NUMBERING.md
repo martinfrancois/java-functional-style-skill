@@ -31,3 +31,6 @@ under the 30 pp floor, so it is reference coverage.
 `09` and `15` are natural-activation implementation tasks; `14` invokes the skill explicitly so the main suite keeps both styles (explicit run above). Identity-function, supplier-laziness,
 checked-boundary, and method-reference scenarios did not clear the floor because the default
 solver already handles them; they remain as reference or regression coverage.
+
+Publish-time run for 0.1.0 on the registry (`01a0c202-7e44-7304-9a2f-32009bdb2c18`, Tessl default
+solver): without 93/300 (31%), with 299/300 (99.7%), 3.2x.

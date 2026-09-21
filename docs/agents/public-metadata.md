@@ -8,7 +8,7 @@ The repository is public; keep it open-source-ready.
 - Repository: `https://github.com/martinfrancois/java-functional-style-skill`
 - License: MIT
 - Entrypoint: `README.md`
-- Private: `true`
+- Private: `false`
 
 Preferred summary:
 
@@ -28,5 +28,4 @@ Help AI coding agents write, review, and refactor Java lambdas, method reference
   non-public tokens.
 - Real Tessl publishes run only through the release workflow.
 - Tessl publish dry-runs are allowed.
-- `.tessl-plugin/plugin.json` keeps `"private": true` until the registry approves the public
-  request.
+- `.tessl-plugin/plugin.json` says `"private": false`.

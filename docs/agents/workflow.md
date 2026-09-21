@@ -7,8 +7,8 @@ release-readiness.
 
 ## Rules
 
-- Keep `.tessl-plugin/plugin.json` at `"private": true` until the registry approves the "Make
-  Public" request for the published plugin; then flip it in a `fix(release)` commit of its own.
+- `.tessl-plugin/plugin.json` says `"private": false`; public is irreversible on the registry, so
+  never flip it back by hand.
 - Do not run a real Tessl publish by hand. Releases publish through
   `.github/workflows/publish-tessl.yml` when Release Please creates the tag.
 - Do not claim lift, release-readiness, or composition safety without the hosted run IDs that
