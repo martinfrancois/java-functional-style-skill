@@ -6,8 +6,8 @@
 - Tessl package name: `martinfrancois/java-functional-style`
 - Runtime skill path: `skills/java-functional-style/SKILL.md`
 - Always-on rule path: `rules/java-functional-style.md`
-- Current visibility: private
-- Plugin manifest must keep `"private": true` until the maintainer asks otherwise.
+- Current visibility: public GitHub repository; the Tessl plugin stays private until the registry
+  approves the "Make Public" request, then `"private": false` ships in its own release.
 
 If a local checkout is not linked to a Tessl project yet:
 

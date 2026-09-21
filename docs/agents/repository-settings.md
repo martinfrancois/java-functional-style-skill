@@ -1,11 +1,10 @@
 # Repository Settings
 
-The new GitHub repository should mirror useful settings from `java-streams-skill` while staying
-private.
+The GitHub repository mirrors the settings of `java-streams-skill`.
 
 ## Applied Settings
 
-- Visibility: private
+- Visibility: public
 - Issues: enabled
 - Wiki: disabled
 - Projects: disabled
@@ -14,7 +13,8 @@ private.
 - Rebase merge: enabled
 - Merge commits: disabled
 - Branch protection: none on `main`, matching the source repository at bootstrap time
-- Actions permissions: enabled, all actions allowed
+- Actions permissions: enabled, all actions allowed; "Allow GitHub Actions to create and approve
+  pull requests" on, because Release Please opens its release PR with `GITHUB_TOKEN`
 - Environment: `tessl-release`
 
 Topics:
