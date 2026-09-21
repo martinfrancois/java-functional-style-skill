@@ -18,7 +18,11 @@ scoring rules.
   `Use $java-functional-style`, must set `metadata.invocation` to `explicit`, and are not natural
   activation evidence.
 - Every Java scenario task states the Java version to assume.
-- Every scenario directory contains `task.md`, `criteria.json`, and `capability.txt`. Review-only
+- Every scenario directory contains `task.md`, `criteria.json`, `criteria-meta.json`, and
+  `capability.txt`. `criteria.json` holds only what Tessl's schema knows (`context`, `type`, and
+  checklist items with `name`, `description`, `max_score`), so `tessl eval lint` stays clean;
+  `criteria-meta.json` holds this repository's `metadata` object and a `categories` map from
+  checklist name to category. The validators read the merged view. Review-only
   tasks still require a concrete artifact such as `review.md`.
 - Use domains that no runtime example and no sibling-skill eval uses. Stream and Optional
   scenarios live in their own repositories; a functional-style scenario may use a stream or an
@@ -39,7 +43,7 @@ lift.
 
 ## Evidence Types
 
-`metadata.evidence_type` states how a scenario may be reported:
+`metadata.evidence_type` (in `criteria-meta.json`) states how a scenario may be reported:
 
 - `ordinary_lift`: both variants are fair to compare and the task shares no domain identifiers
   with runtime references. Valid in `evals/` and `evals-reference/`. This is the default for new
@@ -92,7 +96,7 @@ make this pass.
 
 Update this section whenever active eval membership or scoring changes. Run IDs and per-run
 numbers live in `evals/NUMBERING.md`, `evals-reference/NUMBERING.md`,
-`evals-regression/NUMBERING.md`, and each scenario's `criteria.json` metadata, never here.
+`evals-regression/NUMBERING.md`, and each scenario's `criteria-meta.json`, never here.
 
 - Main eval set: 3 scenarios, 300 checklist points, 2 natural and 1 explicit, all implementation
   tasks: `09` helper extraction and named predicates in a pipeline, `14` `Map.merge`,

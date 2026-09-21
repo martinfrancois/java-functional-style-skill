@@ -4,45 +4,33 @@
   "checklist": [
     {
       "name": "Creates review.md with a decision",
-      "category": "safety",
       "max_score": 8,
       "description": "Creates review.md with a clear accept/reject recommendation for the proposal."
     },
     {
       "name": "Explains the observable difference",
-      "category": "safety",
       "max_score": 7,
       "description": "States that after reload the original still reads the replacement source while the proposal keeps returning ratings from the initial source."
     },
     {
       "name": "Rejects source::snapshot",
-      "category": "functional_style",
       "max_score": 50,
       "description": "Identifies that source::snapshot binds the receiver when the supplier is created in the constructor, so later reassignment of source is ignored, and rejects that part of the change."
     },
     {
       "name": "Accepts Pairing::white",
-      "category": "functional_style",
       "max_score": 20,
       "description": "States that replacing p -> p.white() with Pairing::white preserves behavior and is fine to keep."
     },
     {
       "name": "Gives a safe direction",
-      "category": "functional_style",
       "max_score": 10,
       "description": "Recommends keeping the lambda () -> source.snapshot() (or an equivalent that reads the field on each call) for the supplier."
     },
     {
       "name": "Stays focused",
-      "category": "maintainability",
       "max_score": 5,
       "description": "Does not propose unrelated redesign such as making source final, adding synchronization, or changing the public API, and does not mention internal workflow labels."
     }
-  ],
-  "metadata": {
-    "invocation": "explicit",
-    "task_type": "review",
-    "evidence_type": "ordinary_lift",
-    "reference_selection": "Kept as reference after run 01a0bfa2-c49e-7178-a1a1-910db1b92785 (Tessl default solver): without 99/100, with 100/100. The default solver already catches receiver binding, so this is coverage, not lift. With-context rerun against the final bundle: 100/100 in run 01a0c1de-dc0a-7653-990c-5b345cd0bcc3."
-  }
+  ]
 }

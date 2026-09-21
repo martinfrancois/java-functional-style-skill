@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "invocation": "natural",
+    "task_type": "cleanup",
+    "evidence_type": "focused_reference",
+    "reference_selection": "Demoted to reference on 2026-09-20. With-context is 100 in every sample, but the Tessl default solver's baseline varies: 20 (01a0bfa2-c49e-7178-a1a1-910db1b92785, older skill), 50 (01a0c02b-3822-71db-aef0-e746e472e5b7), 100 (01a0c04c-f644-72ed-8e3a-d53d3f8e3d06), 84 (01a0c077-e577-704b-ad68-9b7386d95575), 100 (01a0c083-1918-704b-a748-8f26c39ad294), 100 (01a0c091-df78-7652-b356-8f1d6afda35e). Mean delta is below the 30 pp floor, so it is coverage, not stable lift.",
+    "runtime_reference_overlap_rationale": "The runtime comparator-composition example was written after this scenario failed with context, so the two share the day-then-nullable-then-int shape; the scenario therefore counts as focused coverage of that example, never as ordinary lift."
+  },
+  "categories": {
+    "Creates the requested artifact": "safety",
+    "Preserves the order": "safety",
+    "Composes JDK comparators": "functional_style",
+    "Uses the primitive comparator for slots": "functional_style",
+    "Keeps callbacks as glue": "functional_style",
+    "Stays focused": "maintainability"
+  }
+}

@@ -83,9 +83,12 @@ def write_scenario(
                 "description": "Uses clear callback code.",
             },
         ],
-        "metadata": metadata,
     }
+    categories = {item["name"]: item.pop("category") for item in criteria["checklist"] if "category" in item}
     (scenario / "criteria.json").write_text(json.dumps(criteria, indent=2) + "\n", encoding="utf-8")
+    (scenario / "criteria-meta.json").write_text(
+        json.dumps({"metadata": metadata, "categories": categories}, indent=2) + "\n", encoding="utf-8"
+    )
     return scenario
 
 

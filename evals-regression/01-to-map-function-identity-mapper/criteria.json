@@ -4,40 +4,28 @@
   "checklist": [
     {
       "name": "Creates coherent Java 17 artifact",
-      "category": "safety",
       "max_score": 10,
       "description": "Creates IdentityMapperCleanup.java with the requested methods, nested records, imports, and Java 17-compatible code."
     },
     {
       "name": "Preserves collector behavior",
-      "category": "safety",
       "max_score": 20,
       "description": "Preserves the original key mappers, merge functions, explicit HashMap and LinkedHashMap suppliers, returned map types, encounter-order implications, and snapshot conversion behavior."
     },
     {
       "name": "Uses JDK identity functions for identity mappers",
-      "category": "functional_style",
       "max_score": 35,
       "description": "Replaces the true identity key and value mapper lambdas with Function.identity() and adds the needed import instead of keeping x -> x style callbacks or custom identity helpers."
     },
     {
       "name": "Does not replace non-identity transformations",
-      "category": "functional_style",
       "max_score": 20,
       "description": "Keeps the snapshot value mapper as a real transformation and does not replace it with Function.identity(), remove it, or otherwise change CardSnapshot creation."
     },
     {
       "name": "Keeps cleanup focused",
-      "category": "maintainability",
       "max_score": 15,
       "description": "Avoids unrelated stream rewrites, API redesign, new dependencies, caching, concurrency, or broad style churn."
     }
-  ],
-  "metadata": {
-    "invocation": "natural",
-    "task_type": "cleanup",
-    "evidence_type": "solved_regression",
-    "regression_selection": "Hosted run 01a0bfa2-c49e-7178-a1a1-910db1b92785 (2026-09-20, Tessl default solver): both variants at 100/100. With-context rerun against the final bundle: 100/100 in run 01a0c1de-cc4b-70ef-a074-106a34a465c5.",
-    "weighting_note": "Weighting inherited from the first draft of this package; reweighting would change the rubric and require a rerun, and regression scenarios are not part of the public score."
-  }
+  ]
 }
