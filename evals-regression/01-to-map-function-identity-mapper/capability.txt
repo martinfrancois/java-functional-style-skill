@@ -1,0 +1,1 @@
+Refactor Java collector callbacks that use identity lambdas while preserving merge functions, map suppliers, imports, and non-identity transformations.

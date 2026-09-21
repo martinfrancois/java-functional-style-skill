@@ -1,0 +1,43 @@
+{
+  "context": "Reference focused cleanup: checked IO and parser boundaries should remain explicit rather than being hidden in broad unchecked callback wrappers.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Creates coherent Java 17 artifact",
+      "category": "safety",
+      "max_score": 10,
+      "description": "Creates ConfigLoader.java with the requested method, nested record, imports, and Java 17-compatible code."
+    },
+    {
+      "name": "Preserves exception and absence contracts",
+      "category": "safety",
+      "max_score": 30,
+      "description": "Preserves Optional.empty() for absent paths, lets Files.readString IOException remain an IOException from load, and preserves IllegalArgumentException from parsing empty content."
+    },
+    {
+      "name": "Clarifies checked boundary",
+      "category": "functional_style",
+      "max_score": 35,
+      "description": "Uses a plain branch or named checked helper to make the IO boundary clear instead of catching IOException inside an Optional callback and wrapping it in UncheckedIOException."
+    },
+    {
+      "name": "Keeps parsing focused",
+      "category": "functional_style",
+      "max_score": 15,
+      "description": "Keeps parse behavior intact and does not hide parser errors, swallow exceptions, return empty for invalid content, or add broad fallback behavior."
+    },
+    {
+      "name": "Keeps cleanup focused",
+      "category": "maintainability",
+      "max_score": 10,
+      "description": "Avoids unrelated dependencies, logging, caching, async work, public API changes, or broad rewrites."
+    }
+  ],
+  "metadata": {
+    "invocation": "natural",
+    "task_type": "cleanup",
+    "evidence_type": "solved_regression",
+    "regression_selection": "Hosted run 01a0bfa2-c49e-7178-a1a1-910db1b92785 (2026-09-20, Tessl default solver): both variants at 100/100. With-context rerun against the final bundle: 100/100 in run 01a0c1de-cc4b-70ef-a074-106a34a465c5.",
+    "weighting_note": "Weighting inherited from the first draft of this package; reweighting would change the rubric and require a rerun, and regression scenarios are not part of the public score."
+  }
+}

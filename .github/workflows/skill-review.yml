@@ -15,7 +15,7 @@ on:
       - "README.md"
       - "CONTRIBUTING.md"
       - "docs/agents/**"
-      - "skills/java-streams/**"
+      - "skills/java-functional-style/**"
 
 concurrency:
   group: skill-review-${{ github.workflow }}-${{ github.ref }}
@@ -29,7 +29,7 @@ jobs:
     env:
       TESSL_TOKEN_AVAILABLE: ${{ secrets.TESSL_TOKEN != '' }}
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Skip review when Tessl token is unavailable
         if: ${{ env.TESSL_TOKEN_AVAILABLE != 'true' }}
@@ -39,9 +39,9 @@ jobs:
         if: ${{ env.TESSL_TOKEN_AVAILABLE == 'true' }}
         uses: tesslio/setup-tessl@25ec223fc0da33b41b8044ff5ab2b85235f4f91e # v2
         with:
-          version: "0.85.0"
+          version: "0.108.0"
           token: ${{ secrets.TESSL_TOKEN }}
 
       - name: Review skill
         if: ${{ env.TESSL_TOKEN_AVAILABLE == 'true' }}
-        run: tessl review run --workspace martinfrancois --threshold 100 skills/java-streams/SKILL.md
+        run: tessl review run --workspace martinfrancois --threshold 100 skills/java-functional-style/SKILL.md

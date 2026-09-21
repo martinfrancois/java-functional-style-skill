@@ -69,14 +69,20 @@ def scenario_task_map(repo_root: Path, suite: str) -> dict[str, str]:
 
 
 def fingerprint_skill(skill_dir: Path) -> str:
+    """Fingerprint the runtime bundle: the skill directory plus the always-on rules."""
     if not skill_dir.is_dir():
         raise SystemExit(f"Missing skill directory: {skill_dir}")
 
     digest = hashlib.sha256()
-    for path in sorted(skill_dir.rglob("*")):
+    bundle_roots = [skill_dir]
+    rules_dir = skill_dir.parent.parent / "rules"
+    if rules_dir.is_dir():
+        bundle_roots.append(rules_dir)
+    for root in bundle_roots:
+      for path in sorted(root.rglob("*")):
         if not path.is_file():
             continue
-        relative = path.relative_to(skill_dir).as_posix()
+        relative = (root.name + "/" + path.relative_to(root).as_posix())
         digest.update(relative.encode("utf-8"))
         digest.update(b"\0")
         digest.update(path.read_bytes())

@@ -1,0 +1,1 @@
+Implement collector-based indexes whose value mapper is the element itself, using the JDK identity function and readable merge callbacks.

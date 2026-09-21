@@ -1,0 +1,1 @@
+Replace a hand-written multi-branch comparator lambda with composed JDK comparators that preserve ordering, null handling, and primitive comparison.

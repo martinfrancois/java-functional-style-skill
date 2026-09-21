@@ -1,0 +1,44 @@
+{
+  "context": "Reference focused explicit review: supplier-taking APIs must keep expensive fallback work lazy.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Creates review artifact",
+      "category": "safety",
+      "max_score": 10,
+      "description": "Creates review.md with a clear recommendation and a safer replacement snippet."
+    },
+    {
+      "name": "Identifies eager remote work",
+      "category": "safety",
+      "max_score": 25,
+      "description": "Explains that both methods call remote.load before knowing whether a fallback or cache-miss value is needed, causing unnecessary slow calls and observable rate-limit side effects."
+    },
+    {
+      "name": "Keeps Optional fallback lazy",
+      "category": "functional_style",
+      "max_score": 25,
+      "description": "Recommends moving the remote.load call into orElseGet or an equivalent lazy branch so it runs only when the cache lookup is absent."
+    },
+    {
+      "name": "Keeps computeIfAbsent creation lazy",
+      "category": "functional_style",
+      "max_score": 25,
+      "description": "Recommends calling remote.load inside the computeIfAbsent mapping function, or an equivalent lazy miss-only branch, rather than precomputing the value."
+    },
+    {
+      "name": "Preserves contracts and focus",
+      "category": "maintainability",
+      "max_score": 15,
+      "description": "Keeps method signatures and cache behavior intact, avoids unrelated concurrency/caching redesign, and does not claim the remote call is pure or harmless."
+    }
+  ],
+  "metadata": {
+    "invocation": "explicit",
+    "task_type": "review",
+    "evidence_type": "focused_reference",
+    "reference_selection": "Kept as reference after run 01a0bfa2-c49e-7178-a1a1-910db1b92785 (Tessl default solver): without 97/100, with 100/100. Supplier laziness is already solved by the default solver, so this is focused coverage, not lift. With-context rerun against the final bundle: 100/100 in run 01a0c1de-dc0a-7653-990c-5b345cd0bcc3.",
+    "runtime_reference_overlap_rationale": "The task shares the computeIfAbsent and lazy-fallback shape with the runtime laziness example on purpose; it checks the skill keeps that behavior and is reported as focused reference coverage only.",
+    "weighting_note": "35 safety / 50 functional-style / 15 maintainability, inherited from the first draft of this package; reweighting would change the rubric and require a rerun, and the scenario is not part of the public score."
+  }
+}

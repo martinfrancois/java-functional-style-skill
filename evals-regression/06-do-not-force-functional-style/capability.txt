@@ -1,0 +1,1 @@
+Preserve clear plain Java loops and branches when functional-style rewrites would obscure early exits or mutation-heavy behavior.

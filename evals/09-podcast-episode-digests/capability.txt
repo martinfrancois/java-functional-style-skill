@@ -1,0 +1,1 @@
+Implement a filter-and-map pipeline whose callbacks stay one-expression glue by extracting a named predicate and a named mapping helper.

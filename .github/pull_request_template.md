@@ -44,7 +44,7 @@ during the PR.
 
 Checks most contributors can run:
 
-- [ ] `python3 scripts/validate_skill.py skills/java-streams`
+- [ ] `python3 scripts/validate_skill.py skills/java-functional-style`
 - [ ] `python3 scripts/validate_eval_criteria.py evals evals-reference evals-regression`
 - [ ] `python3 -m py_compile scripts/*.py`
 - [ ] `bash -n scripts/*.sh`
@@ -55,7 +55,7 @@ Tessl-authenticated checks:
 
 - [ ] `bash scripts/check_publish_dry_run.sh .`
 - [ ] `tessl plugin publish --dry-run --bump patch .`
-- [ ] `tessl review run --workspace martinfrancois --threshold 100 skills/java-streams/SKILL.md`, if skill text or references changed
+- [ ] `tessl review run --workspace martinfrancois --threshold 100 skills/java-functional-style/SKILL.md`, if skill text or references changed
 - [ ] Targeted main/reference `scripts/run_eval_suite.sh <main|reference> <scenario-name>`, if skill behavior or those evals changed
 - [ ] Targeted regression `scripts/run_eval_suite.sh regression <scenario-name>`, if regression evals changed
 - [ ] Every substantively changed eval scenario was rerun targeted and reached 100% with context, or the PR explains the Tessl blocker and remaining work
@@ -88,7 +88,7 @@ explain why.
 
 - [ ] The change is scoped to the sections, skill files, evals, or workflows described above.
 - [ ] Validation that applies to this change is checked above, or any unavailable check is explained.
-- [ ] If Java stream guidance changed, Java baseline compatibility plus ordering, null handling, and parallelism were considered.
+- [ ] If Java functional-style guidance changed, Java baseline compatibility plus ordering, laziness, null behavior, exceptions, side effects, and object identity were considered.
 - [ ] If evals or benchmark claims changed, the eval scenarios remain fair and do not leak answer keys, run IDs, or fixed score claims into runtime references.
 - [ ] If runtime skill text or references changed, hosted checks were widened from targeted affected scenarios to main/reference/regression as described in `docs/agents/workflow.md`, or any Tessl blocker is documented.
 - [ ] If a runtime skill/reference change was released, the final report includes the published main eval run plus post-change reference and regression run IDs, or a blocker issue for missing broad suites.

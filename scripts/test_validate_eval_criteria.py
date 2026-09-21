@@ -16,39 +16,22 @@ VALIDATOR = REPO_ROOT / "scripts" / "validate_eval_criteria.py"
 
 
 def write_runtime_reference(root: Path) -> None:
-    references = root / "skills" / "java-streams" / "references"
+    references = root / "skills" / "java-functional-style" / "references"
     references.mkdir(parents=True)
-    (references / "stream-examples.md").write_text(
+    (references / "functional-style-examples.md").write_text(
         """# Runtime examples
 
 ```java
-List<ShipmentNotice> overdueNotices(List<Shipment> shipments, Clock clock) {
-    LocalDate today = LocalDate.now(clock);
-    return shipments.stream()
-            .filter(shipment -> isOverdue(shipment, today))
-            .map(shipment -> toNotice(shipment, today))
-            .toList();
-}
-
-private static ShipmentNotice toNotice(Shipment shipment, LocalDate today) {
-    long daysLate = ChronoUnit.DAYS.between(shipment.dueDate(), today);
-    return new ShipmentNotice(shipment.id(), shipment.customerEmail(), daysLate,
-            daysLate >= 14 ? "critical" : "late");
-}
+Map<String, Card> cardsById = cards.stream()
+        .collect(Collectors.toMap(
+                Card::id,
+                Function.identity(),
+                CardIndex::preferActive,
+                LinkedHashMap::new));
 ```
 
 ```java
-Map<String, List<String>> emailsByTrack = conferences.stream()
-        .flatMap(conference -> conference.sessions().stream())
-        .collect(Collectors.groupingBy(
-                Session::track,
-                Collectors.flatMapping(SessionReports::optedInEmails, Collectors.toList())));
-
-private static Stream<String> optedInEmails(Session session) {
-    return session.registrations().stream()
-            .filter(Registration::optedIn)
-            .map(Registration::email);
-}
+Profile profile = cachedProfile.orElseGet(() -> loadProfileFromRemote(userId));
 ```
 """,
         encoding="utf-8",
@@ -65,23 +48,17 @@ def write_scenario(
     task_type: str = "implementation",
     evidence_type: str | None = "ordinary_lift",
     rationale: str | None = None,
-    extra_metadata: dict[str, object] | None = None,
     checklist: list[dict[str, object]] | None = None,
 ) -> Path:
     scenario = root / suite / name
     scenario.mkdir(parents=True)
     (scenario / "task.md").write_text(task, encoding="utf-8")
-    (scenario / "capability.txt").write_text("java-streams\n", encoding="utf-8")
-    metadata: dict[str, object] = {
-        "invocation": invocation,
-        "task_type": task_type,
-    }
+    (scenario / "capability.txt").write_text("java-functional-style\n", encoding="utf-8")
+    metadata: dict[str, object] = {"invocation": invocation, "task_type": task_type}
     if evidence_type is not None:
         metadata["evidence_type"] = evidence_type
     if rationale is not None:
         metadata["runtime_reference_overlap_rationale"] = rationale
-    if extra_metadata:
-        metadata.update(extra_metadata)
     criteria = {
         "context": "Fixture scenario.",
         "type": "weighted_checklist",
@@ -100,10 +77,10 @@ def write_scenario(
                 "description": "Returns the requested output.",
             },
             {
-                "name": "Uses stream quality",
-                "category": "stream_quality",
+                "name": "Uses functional style",
+                "category": "functional_style",
                 "max_score": 90,
-                "description": "Uses clear stream code.",
+                "description": "Uses clear callback code.",
             },
         ],
         "metadata": metadata,
@@ -112,33 +89,33 @@ def write_scenario(
     return scenario
 
 
-def shipment_task(prefix: str = "Create `OverdueShipmentNotices.java`.") -> str:
-    return f"""# Implement overdue shipment notices
+def identity_mapper_task(prefix: str = "Create `IdentityMapperCleanup.java`.") -> str:
+    return f"""# Refactor callback mappers
 
 {prefix} Assume Java 17.
 
-Implement:
-
 ```java
-List<ShipmentNotice> overdueNotices(List<Shipment> shipments, Clock clock)
-record Shipment(String id, String customerEmail, LocalDate dueDate, Optional<LocalDate> deliveredAt) {{}}
-record ShipmentNotice(String id, String customerEmail, long daysLate, String severity) {{}}
-```
+Map<String, Card> cardsById(List<Card> cards) {{
+    return cards.stream()
+            .collect(Collectors.toMap(
+                    Card::id,
+                    card -> card,
+                    CardIndex::preferActive,
+                    LinkedHashMap::new));
+}}
 
-Severity is `"critical"` when `daysLate` is at least 14, otherwise `"late"`.
+record Card(String id) {{}}
+```
 """
 
 
-def session_task() -> str:
-    return """# Implement session roster indexes
+def supplier_task(prefix: str = "Create `review.md`.") -> str:
+    return f"""# Review fallback laziness
 
-Create `SessionRosterIndexes.java`. Assume Java 17.
+{prefix} Assume Java 17.
 
 ```java
-Map<String, List<String>> optedInEmailsByTrack(List<Conference> conferences)
-record Conference(List<Session> sessions) {}
-record Session(String id, String room, String track, int minutes, List<Registration> registrations) {}
-record Registration(String email, boolean optedIn, boolean waitlisted) {}
+Profile profile = cachedProfile.orElse(loadProfileFromRemote(userId));
 ```
 """
 
@@ -162,7 +139,7 @@ class ValidateEvalCriteriaTests(unittest.TestCase):
     def test_main_ordinary_lift_overlap_fails(self) -> None:
         temp, root = self.with_repo()
         with temp:
-            scenario = write_scenario(root, "evals", "01-overlap", shipment_task())
+            scenario = write_scenario(root, "evals", "01-overlap", identity_mapper_task())
             result = self.run_validator(root, scenario)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("ordinary_lift is incompatible", result.stderr)
@@ -174,7 +151,7 @@ class ValidateEvalCriteriaTests(unittest.TestCase):
                 root,
                 "evals",
                 "01-overlap",
-                shipment_task(),
+                identity_mapper_task(),
                 rationale="Focused coverage kept intentionally.",
             )
             result = self.run_validator(root, scenario)
@@ -184,7 +161,7 @@ class ValidateEvalCriteriaTests(unittest.TestCase):
     def test_reference_ordinary_lift_overlap_fails(self) -> None:
         temp, root = self.with_repo()
         with temp:
-            scenario = write_scenario(root, "evals-reference", "28-overdue", shipment_task())
+            scenario = write_scenario(root, "evals-reference", "01-identity", identity_mapper_task())
             result = self.run_validator(root, scenario)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("ordinary_lift is incompatible", result.stderr)
@@ -195,8 +172,8 @@ class ValidateEvalCriteriaTests(unittest.TestCase):
             scenario = write_scenario(
                 root,
                 "evals-reference",
-                "28-overdue",
-                shipment_task(),
+                "01-identity",
+                identity_mapper_task(),
                 evidence_type="focused_reference",
                 rationale="Allowed only as focused reference coverage.",
             )
@@ -209,8 +186,8 @@ class ValidateEvalCriteriaTests(unittest.TestCase):
             scenario = write_scenario(
                 root,
                 "evals-regression",
-                "20-shipment-review",
-                shipment_task(),
+                "01-identity-regression",
+                identity_mapper_task(),
                 evidence_type="solved_regression",
             )
             result = self.run_validator(root, scenario)
@@ -222,8 +199,8 @@ class ValidateEvalCriteriaTests(unittest.TestCase):
             scenario = write_scenario(
                 root,
                 "evals-reference",
-                "26-explicit",
-                shipment_task("Use `$java-streams` to create `OverdueShipmentNotices.java`."),
+                "04-explicit",
+                supplier_task("Use `$java-functional-style` to create `review.md`."),
                 invocation="natural",
                 evidence_type="focused_reference",
                 rationale="Allowed only as focused reference coverage.",
@@ -238,37 +215,38 @@ class ValidateEvalCriteriaTests(unittest.TestCase):
             scenario = write_scenario(
                 root,
                 "evals-reference",
-                "26-explicit",
-                shipment_task("Use `$java-streams` to create `OverdueShipmentNotices.java`."),
+                "04-explicit",
+                supplier_task("Use `$java-functional-style` to create `review.md`."),
                 invocation="explicit",
+                task_type="review",
                 evidence_type="focused_reference",
                 rationale="Allowed only as focused reference coverage.",
             )
             result = self.run_validator(root, scenario)
         self.assertEqual(result.returncode, 0, result.stderr)
 
-    def test_scenario_28_focused_overlap_keeps_80_point_lambda_criterion(self) -> None:
+    def test_focused_identity_mapper_can_heavily_weight_behavior(self) -> None:
         temp, root = self.with_repo()
         checklist = [
             {
                 "name": "Creates artifact",
                 "category": "safety",
                 "max_score": 5,
-                "description": "Creates OverdueShipmentNotices.java.",
+                "description": "Creates IdentityMapperCleanup.java.",
             },
             {
-                "name": "Avoids multi-line stream lambdas",
-                "category": "stream_quality",
+                "name": "Uses JDK identity functions",
+                "category": "functional_style",
                 "max_score": 80,
-                "description": "Extracts non-trivial stream lambda bodies into helpers.",
+                "description": "Uses Function.identity for true identity mapper callbacks.",
             },
         ]
         with temp:
             scenario = write_scenario(
                 root,
                 "evals-reference",
-                "28-overdue-shipment-notices",
-                shipment_task(),
+                "01-to-map-function-identity-mapper",
+                identity_mapper_task(),
                 evidence_type="focused_reference",
                 rationale="Allowed only as focused reference coverage.",
                 checklist=checklist,
@@ -276,19 +254,19 @@ class ValidateEvalCriteriaTests(unittest.TestCase):
             result = self.run_validator(root, scenario)
         self.assertEqual(result.returncode, 0, result.stderr)
 
-    def test_scenario_15_session_overlap_passes_only_when_focused(self) -> None:
+    def test_missing_rationale_for_focused_overlap_fails(self) -> None:
         temp, root = self.with_repo()
         with temp:
             scenario = write_scenario(
                 root,
                 "evals-reference",
-                "15-session-roster-indexes",
-                session_task(),
+                "01-identity",
+                identity_mapper_task(),
                 evidence_type="focused_reference",
-                rationale="Allowed only as focused reference coverage.",
             )
             result = self.run_validator(root, scenario)
-        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("runtime-reference overlap must set", result.stderr)
 
 
 if __name__ == "__main__":

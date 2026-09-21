@@ -30,7 +30,7 @@ Model-selection note:
 
 Do not pass --variant or --skip-baseline. This script chooses variants from the suite purpose.
 The default Tessl solver is used unless an explicit --agent is passed after --.
-The runner passes --skill java-streams so with-context runs exercise this skill instead of relying on
+The runner passes --skill java-functional-style so with-context runs exercise this skill instead of relying on
 solver auto-selection for final readiness evidence. It also passes --force so runs after a skill or
 runner fix cannot reuse stale hosted solutions.
 USAGE
@@ -139,7 +139,7 @@ fi
 
 repo_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 source_path="$repo_root/$source_dir"
-skill_args=(--skill java-streams)
+skill_args=(--skill java-functional-style)
 freshness_args=(--force)
 if [[ ! -d "$source_path" ]]; then
   echo "Missing suite directory: $source_path" >&2

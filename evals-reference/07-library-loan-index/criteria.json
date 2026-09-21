@@ -1,0 +1,42 @@
+{
+  "context": "Reference implementation: identity value mappers and merge callbacks in toMap indexes.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Creates the requested artifact",
+      "category": "safety",
+      "max_score": 8,
+      "description": "Creates LoanIndex.java with both methods, the nested Loan record, needed imports, and Java 17-compatible code."
+    },
+    {
+      "name": "Preserves index semantics",
+      "category": "safety",
+      "max_score": 7,
+      "description": "byLoanId keeps the first loan per id and encounter order (for example LinkedHashMap); latestByMemberId keeps the loan with the latest dueDate per member, keeps the first on ties, and preserves member encounter order."
+    },
+    {
+      "name": "Uses Function.identity for the value mapper",
+      "category": "functional_style",
+      "max_score": 50,
+      "description": "Both indexes use Function.identity() (with the java.util.function.Function import) as the value mapper rather than a hand-written identity lambda such as loan -> loan or a custom identity helper."
+    },
+    {
+      "name": "Keeps merge callbacks readable",
+      "category": "functional_style",
+      "max_score": 30,
+      "description": "The latest-due-date merge is expressed as a one-expression callback that reads clearly (for example BinaryOperator.maxBy over Comparator.comparing(Loan::dueDate) with tie handling, or a named helper method), not a block lambda with local variables or branching inside the collector call."
+    },
+    {
+      "name": "Stays focused",
+      "category": "maintainability",
+      "max_score": 5,
+      "description": "No unrelated abstractions, caching, concurrency, extra public API, or dependency changes."
+    }
+  ],
+  "metadata": {
+    "invocation": "natural",
+    "task_type": "implementation",
+    "evidence_type": "ordinary_lift",
+    "reference_selection": "Kept as reference after rerun 01a0c02f-abf8-776d-8038-3ae700a5d1e1: without 97/100, with 100/100; identity mappers are already solved by the default solver, so this is coverage, not lift."
+  }
+}

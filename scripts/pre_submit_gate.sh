@@ -24,7 +24,7 @@ Options:
   --base-ref <ref>      Git ref to diff against for changed files (default:
                         origin/main)
   --skill-dir <path>    Skill directory for quality review
-                        (default: skills/java-streams)
+                        (default: skills/java-functional-style)
   --plan-only           Print the staged plan and do not run hosted eval commands.
   --run-broad           After targeted evals clean, run main then reference then
                         regression.
@@ -49,7 +49,7 @@ Options:
                         (default: auto). Example: regression,main,reference.
   --evidence-file <path>
                         Scenario evidence cache (default:
-                        .tessl/eval-evidence/java-streams-pre-submit.json)
+                        .tessl/eval-evidence/java-functional-style-pre-submit.json)
   --reset-evidence      Clear the evidence cache before planning.
   --ignore-evidence     Do not skip scenarios already recorded as passing.
   --focus <scope:scenario>
@@ -71,8 +71,8 @@ run_broad=false
 targeted_only=false
 plan_only=false
 base_ref="origin/main"
-skill_dir="skills/java-streams"
-evidence_file=".tessl/eval-evidence/java-streams-pre-submit.json"
+skill_dir="skills/java-functional-style"
+evidence_file=".tessl/eval-evidence/java-functional-style-pre-submit.json"
 use_evidence=true
 reset_evidence=false
 runtime_fingerprint=""
@@ -326,29 +326,19 @@ collect_changed() {
 
   while IFS= read -r file; do
     [[ -z "$file" ]] && continue
-
+    scope="${file%%/*}"
+    scenario="$(cut -d/ -f2 <<<"$file")"
+    # A scenario directory that was deleted on this branch has nothing to run.
     case "$file" in
-      evals/*/*)
-        scope="${file%%/*}"
-        scenario="$(echo "$file" | awk -F/ '{print $2}')"
-        if [[ "$scope" == "evals" ]]; then
-          changed_main+=("$scenario")
-        fi
+      evals/*/*|evals-reference/*/*|evals-regression/*/*)
+        [[ -d "$scope/$scenario" ]] || continue
         ;;
-      evals-reference/*/*)
-        scope="${file%%/*}"
-        scenario="$(echo "$file" | awk -F/ '{print $2}')"
-        if [[ "$scope" == "evals-reference" ]]; then
-          changed_reference+=("$scenario")
-        fi
-        ;;
-      evals-regression/*/*)
-        scope="${file%%/*}"
-        scenario="$(echo "$file" | awk -F/ '{print $2}')"
-        if [[ "$scope" == "evals-regression" ]]; then
-          changed_regression+=("$scenario")
-        fi
-        ;;
+    esac
+
+    case "$scope" in
+      evals) changed_main+=("$scenario") ;;
+      evals-reference) changed_reference+=("$scenario") ;;
+      evals-regression) changed_regression+=("$scenario") ;;
     esac
   done < "$changed_list"
 
@@ -1128,10 +1118,10 @@ resolve_broad_order() {
 
 changed_runtime=false
 changed_runtime_paths="$(
-  git diff --name-only "$base_ref"...HEAD -- "$skill_dir" 2>/dev/null || true
-  git diff --name-only -- "$skill_dir" 2>/dev/null || true
-  git diff --cached --name-only -- "$skill_dir" 2>/dev/null || true
-  git ls-files -o --exclude-standard -- "$skill_dir" 2>/dev/null || true
+  git diff --name-only "$base_ref"...HEAD -- "$skill_dir" rules 2>/dev/null || true
+  git diff --name-only -- "$skill_dir" rules 2>/dev/null || true
+  git diff --cached --name-only -- "$skill_dir" rules 2>/dev/null || true
+  git ls-files -o --exclude-standard -- "$skill_dir" rules 2>/dev/null || true
 )"
 if [[ -n "$changed_runtime_paths" ]]; then
   changed_runtime=true

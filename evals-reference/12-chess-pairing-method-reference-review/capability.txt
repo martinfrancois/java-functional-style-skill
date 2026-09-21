@@ -1,0 +1,1 @@
+Review a lambda-to-method-reference change and tell apart the reference that preserves behavior from the one that changes when its receiver is bound.

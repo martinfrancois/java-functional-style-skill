@@ -1,0 +1,54 @@
+{
+  "context": "Reference implementation: block lambdas in Map.merge, computeIfAbsent, and CompletableFuture callbacks.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Creates the requested artifact",
+      "category": "safety",
+      "max_score": 8,
+      "description": "Creates FeedingLedger.java with the three methods, the three nested records, needed imports, and Java 17-compatible code."
+    },
+    {
+      "name": "Preserves ledger semantics",
+      "category": "safety",
+      "max_score": 7,
+      "description": "totalsByTank sums grams, counts feedings, and keeps the latest fedAt per tank in encounter order; feedingsByKeeper groups in encounter order; reportFor counts and sums only feedings with the matching tankId."
+    },
+    {
+      "name": "Merge accumulation uses a named helper",
+      "category": "functional_style",
+      "max_score": 35,
+      "description": "The Map.merge remapping callback is a method reference or one-expression lambda that delegates to a named method (for example FeedingTotal::plus or FeedingLedger::combine); the accumulation of grams, count, and latest instant is not written as a block lambda inside merge."
+    },
+    {
+      "name": "Report building uses a named helper",
+      "category": "functional_style",
+      "max_score": 30,
+      "description": "The thenApply callback is a method reference or one-expression lambda that calls a named method building the TankReport; filtering, counting, and summing are not written as a block lambda inside thenApply."
+    },
+    {
+      "name": "computeIfAbsent stays glue",
+      "category": "functional_style",
+      "max_score": 10,
+      "description": "The computeIfAbsent mapping function is a one-expression callback such as k -> new ArrayList<>() or ignored -> new ArrayList<>(), not a block lambda."
+    },
+    {
+      "name": "No block lambdas anywhere",
+      "category": "functional_style",
+      "max_score": 5,
+      "description": "No callback body in the file uses braces or continues onto further lines; extracted helpers contain plain code rather than another block lambda."
+    },
+    {
+      "name": "Stays focused",
+      "category": "maintainability",
+      "max_score": 5,
+      "description": "No unrelated abstractions, synchronization, executors, extra public API, or dependency changes."
+    }
+  ],
+  "metadata": {
+    "invocation": "explicit",
+    "task_type": "implementation",
+    "evidence_type": "ordinary_lift",
+    "main_eval_selection": "Promoted 2026-09-20. Natural-invocation screening run 01a0c02f-abf8-776d-8038-3ae700a5d1e1: without 30/100, with 100/100. Explicit-invocation run 01a0c037-590b-7193-ab1e-9558506ca102 (current task text): without 44/100, with 100/100. Later full main runs scored the baseline at 42, 30, 35, and 35. Adds Map.merge, computeIfAbsent, and CompletableFuture callback coverage."
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Java Functional Style"
+  short_description: "Lambda, method reference, and functional-interface style"
+  default_prompt: "Use $java-functional-style when writing, reviewing, or refactoring Java lambdas, method references, functional interfaces, identity functions, suppliers, predicates, consumers, callbacks, or no-op functional stages."

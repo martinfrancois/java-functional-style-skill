@@ -44,7 +44,7 @@ BEHAVIOR_WORDS = (
     "parse",
     "redact",
 )
-CRITERION_CATEGORIES = {"safety", "stream_quality", "maintainability"}
+CRITERION_CATEGORIES = {"safety", "functional_style", "maintainability"}
 EVIDENCE_TYPES = {
     "ordinary_lift",
     "focused_main",
@@ -60,10 +60,10 @@ INTERNAL_LABEL_ALLOW_PATTERNS = (
     r"\bbrief(?:ly)? uses\b.{0,120}\b(?:hard[- ]stop|checklist|scan|marker|skill)\b",
 )
 EXPLICIT_INVOCATION_PATTERNS = (
-    r"\$java-streams\b",
-    r"\buse\s+java-streams\b",
-    r"\buse\s+the\s+java-streams\s+skill\b",
-    r"\bjava-streams\s+skill\b",
+    r"\$java-functional-style\b",
+    r"\buse\s+java-functional-style\b",
+    r"\buse\s+the\s+java-functional-style\s+skill\b",
+    r"\bjava-functional-style\s+skill\b",
 )
 IDENTIFIER_STOP_WORDS = {
     "abstractmap",
@@ -80,28 +80,23 @@ IDENTIFIER_STOP_WORDS = {
     "exception",
     "filter",
     "function",
-    "gatherers",
     "hashmap",
     "integer",
-    "intstream",
     "foreach",
     "java",
     "list",
     "long",
-    "longstream",
     "map",
     "object",
     "objects",
     "optional",
     "parallel",
-    "parallelstream",
     "predicate",
     "private",
     "public",
     "record",
     "runtimeexception",
     "set",
-    "simpleimmutableentry",
     "size",
     "sorted",
     "static",
@@ -117,6 +112,63 @@ IDENTIFIER_STOP_WORDS = {
     "this",
     "unsupportedoperationexception",
     "void",
+    # Java keywords, JDK types, and the functional APIs this skill is about are not domain
+    # identifiers; sharing them between a task and a runtime reference is inherent, not leakage.
+    "accept",
+    "apply",
+    "bifunction",
+    "binaryoperator",
+    "break",
+    "catch",
+    "chronounit",
+    "clock",
+    "collect",
+    "groupingby",
+    "merge",
+    "compare",
+    "compareto",
+    "sort",
+    "comparingint",
+    "computeifabsent",
+    "consumer",
+    "continue",
+    "duration",
+    "equals",
+    "false",
+    "files",
+    "final",
+    "functional",
+    "get",
+    "identity",
+    "import",
+    "instant",
+    "ioexception",
+    "isblank",
+    "isempty",
+    "linkedhashmap",
+    "localdate",
+    "nullslast",
+    "orelse",
+    "orelseget",
+    "path",
+    "paths",
+    "readstring",
+    "requirenonnullelse",
+    "requirenonnullelseget",
+    "strip",
+    "style",
+    "supplier",
+    "test",
+    "thenapply",
+    "thencomparing",
+    "throws",
+    "tomap",
+    "trim",
+    "true",
+    "unaryoperator",
+    "uncheckedioexception",
+    "util",
+    "version",
 }
 SCENARIO_REFERENCE_FILES = (
     Path("README.md"),
@@ -125,14 +177,14 @@ SCENARIO_REFERENCE_FILES = (
     Path("evals/NUMBERING.md"),
     Path("evals-reference/NUMBERING.md"),
     Path("evals-regression/NUMBERING.md"),
-    Path("evals-regression/README.md"),
 )
 SCENARIO_REFERENCE_DIRS = (Path("docs"),)
 AGENT_DOC_FORBIDDEN_EXTERNAL_HISTORY_PATTERNS = (
     re.compile(r"\bissue\s+#?\d+\b", re.IGNORECASE),
     re.compile(r"\bpr\s+#?\d+\b", re.IGNORECASE),
     re.compile(r"https://github\.com/[^)\s]+/(?:issues|pull)/\d+", re.IGNORECASE),
-    re.compile(r"\b019e[a-f0-9-]{20,}\b", re.IGNORECASE),
+    # Hosted run IDs are UUIDv7 values; match the shape, not a prefix that expires.
+    re.compile(r"\b0[0-9a-f]{7}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}\b", re.IGNORECASE),
 )
 
 
@@ -343,7 +395,7 @@ def validate_scenario(scenario: Path, main_eval_root: Path | None) -> list[str]:
         if is_main_eval and category not in CRITERION_CATEGORIES:
             failures.append(
                 f"{criteria_file}: main eval checklist item {index} needs category "
-                f"safety, stream_quality, or maintainability"
+                f"safety, functional_style, or maintainability"
             )
         total_score += max_score
         if category in category_scores:
@@ -427,10 +479,10 @@ def validate_scenario(scenario: Path, main_eval_root: Path | None) -> list[str]:
             failures.append(f"{criteria_file}: main eval implementation scenario needs compile/artifact criteria")
         if behavior_score <= 0:
             failures.append(f"{criteria_file}: main eval implementation scenario needs behavior criteria")
-        if category_scores["stream_quality"] <= 0:
-            failures.append(f"{criteria_file}: main eval implementation scenario needs stream_quality criteria")
-    elif is_main_eval and task_type == "cleanup" and category_scores["stream_quality"] <= 0:
-        failures.append(f"{criteria_file}: main eval cleanup scenario needs stream_quality criteria")
+        if category_scores["functional_style"] <= 0:
+            failures.append(f"{criteria_file}: main eval implementation scenario needs functional_style criteria")
+    elif is_main_eval and task_type == "cleanup" and category_scores["functional_style"] <= 0:
+        failures.append(f"{criteria_file}: main eval cleanup scenario needs functional_style criteria")
 
     if "optionalint" in task_text.lower() or "optionalint" in str(data).lower():
         primitive_text = (task_text + json.dumps(data)).lower()
@@ -463,13 +515,14 @@ def validate_cross_suite_duplicates(dirs: list[Path]) -> list[str]:
 
 def validate_runtime_reference_overlap(dirs: list[Path]) -> list[str]:
     failures: list[str] = []
-    references_root = Path("skills/java-streams/references")
-    if not references_root.exists():
+    skill_root = Path("skills/java-functional-style")
+    if not skill_root.exists():
         return failures
 
-    runtime_text = "\n".join(
-        path.read_text(encoding="utf-8") for path in sorted(references_root.glob("*.md"))
-    )
+    # Everything the agent can read at runtime, plus the README the registry shows.
+    runtime_files = sorted(skill_root.glob("SKILL.md")) + sorted((skill_root / "references").glob("*.md"))
+    runtime_files += sorted(Path("rules").glob("*.md")) + [Path("README.md")]
+    runtime_text = "\n".join(path.read_text(encoding="utf-8") for path in runtime_files if path.exists())
     runtime_identifiers = domain_identifiers(runtime_text)
     runtime_grams = ngrams(normalized_words(runtime_text), 12)
     runtime_api_markers = api_markers(runtime_text)
@@ -574,7 +627,7 @@ def validate_scenario_path_references() -> list[str]:
 
 def validate_runtime_references() -> list[str]:
     failures: list[str] = []
-    root = Path("skills/java-streams/references")
+    root = Path("skills/java-functional-style/references")
     if not root.exists():
         return failures
     for path in sorted(root.glob("*.md")):
@@ -582,8 +635,8 @@ def validate_runtime_references() -> list[str]:
         for marker in ANSWER_KEY_MARKERS:
             if marker.lower() in text.lower():
                 failures.append(f"{path}: runtime reference contains answer-key marker {marker!r}")
-    if Path("skills/java-streams/evals/evals.json").exists():
-        failures.append("skills/java-streams/evals/evals.json: stale runtime-adjacent legacy eval file")
+    if Path("skills/java-functional-style/evals/evals.json").exists():
+        failures.append("skills/java-functional-style/evals/evals.json: stale runtime-adjacent legacy eval file")
     return failures
 
 
@@ -676,13 +729,13 @@ def main() -> int:
             )
         main_eval_total = sum(main_eval_category_scores.values())
         if main_eval_total:
-            stream_quality = main_eval_category_scores["stream_quality"]
+            functional_style = main_eval_category_scores["functional_style"]
             safety = main_eval_category_scores["safety"]
             maintainability = main_eval_category_scores["maintainability"]
-            if stream_quality < main_eval_total * 0.8:
+            if functional_style < main_eval_total * 0.8:
                 failures.append(
-                    "evals: main eval set should be primarily Stream-quality scoring "
-                    f"({stream_quality}/{main_eval_total})"
+                    "evals: main eval set should be primarily Functional-style scoring "
+                    f"({functional_style}/{main_eval_total})"
                 )
             if safety < main_eval_total * 0.05:
                 failures.append(

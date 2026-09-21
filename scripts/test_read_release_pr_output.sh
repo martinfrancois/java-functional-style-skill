@@ -18,7 +18,7 @@ if [[ "$*" != pr\ list* ]]; then
   exit 1
 fi
 
-if [[ "$*" == *"--head release-please--branches--main--components--java-streams"* ]]; then
+if [[ "$*" == *"--head release-please--branches--main--components--java-functional-style"* ]]; then
   printf '%s\n' "${GH_STUB_EXACT_OUTPUT:-}"
 else
   printf '%s\n' "${GH_STUB_FALLBACK_OUTPUT:-}"
@@ -65,27 +65,27 @@ run_case() {
 
 run_case \
   "release-pr-json" \
-  '{"title":"chore: release 1.2.3","headBranchName":"release-please--branches--main--components--java-streams"}' \
+  '{"title":"chore: release 1.2.3","headBranchName":"release-please--branches--main--components--java-functional-style"}' \
   "" \
   "" \
   "true" \
-  "release-please--branches--main--components--java-streams"
+  "release-please--branches--main--components--java-functional-style"
 
 run_case \
   "fallback-exact-branch-without-labels" \
   "" \
-  '{"title":"chore: release 1.2.3","headBranchName":"release-please--branches--main--components--java-streams"}' \
+  '{"title":"chore: release 1.2.3","headBranchName":"release-please--branches--main--components--java-functional-style"}' \
   "" \
   "true" \
-  "release-please--branches--main--components--java-streams"
+  "release-please--branches--main--components--java-functional-style"
 
 run_case \
   "fallback-prefix-without-labels" \
   "" \
   "" \
-  '{"title":"chore: release 1.2.3","headBranchName":"release-please--branches--main--components--java-streams"}' \
+  '{"title":"chore: release 1.2.3","headBranchName":"release-please--branches--main--components--java-functional-style"}' \
   "true" \
-  "release-please--branches--main--components--java-streams"
+  "release-please--branches--main--components--java-functional-style"
 
 run_case \
   "fallback-empty" \

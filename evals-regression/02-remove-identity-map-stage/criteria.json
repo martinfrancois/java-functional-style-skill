@@ -1,0 +1,43 @@
+{
+  "context": "Reference focused cleanup: no-op identity map stages should be removed, not replaced with another identity callback.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Creates coherent Java 17 artifact",
+      "category": "safety",
+      "max_score": 10,
+      "description": "Creates IdentityStageCleanup.java with the requested methods and Java 17-compatible code."
+    },
+    {
+      "name": "Preserves method behavior",
+      "category": "safety",
+      "max_score": 20,
+      "description": "Preserves present and absent Optional behavior, default fallback behavior, trimming/filtering behavior, list order, and NumberFormatException behavior for invalid parsed values."
+    },
+    {
+      "name": "Removes redundant identity stages",
+      "category": "functional_style",
+      "max_score": 45,
+      "description": "Removes redundant Optional and Stream identity map stages instead of keeping them or replacing x -> x with Function.identity() when the whole stage is unnecessary."
+    },
+    {
+      "name": "Keeps meaningful transformations",
+      "category": "functional_style",
+      "max_score": 15,
+      "description": "Keeps String::trim, the empty-label filter, and Integer::parseInt because those callbacks change values or behavior."
+    },
+    {
+      "name": "Keeps cleanup focused",
+      "category": "maintainability",
+      "max_score": 10,
+      "description": "Avoids unrelated API redesign, new null contracts, logging, caching, dependencies, or broad refactors."
+    }
+  ],
+  "metadata": {
+    "invocation": "natural",
+    "task_type": "cleanup",
+    "evidence_type": "solved_regression",
+    "regression_selection": "Hosted run 01a0bfa2-c49e-7178-a1a1-910db1b92785 (2026-09-20, Tessl default solver): both variants at 100/100. With-context rerun against the final bundle: 100/100 in run 01a0c1de-cc4b-70ef-a074-106a34a465c5.",
+    "weighting_note": "Weighting inherited from the first draft of this package; reweighting would change the rubric and require a rerun, and regression scenarios are not part of the public score."
+  }
+}

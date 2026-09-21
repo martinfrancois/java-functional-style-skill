@@ -1,0 +1,1 @@
+Remove redundant identity mapping stages in Optional and Stream code without replacing them with other identity callbacks.

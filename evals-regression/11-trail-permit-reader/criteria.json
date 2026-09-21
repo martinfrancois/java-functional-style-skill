@@ -1,0 +1,48 @@
+{
+  "context": "Reference implementation: checked IO boundary kept out of lambdas.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Creates the requested artifact",
+      "category": "safety",
+      "max_score": 8,
+      "description": "Creates PermitFiles.java with the method, the nested record, the provided parse method, needed imports, and Java 17-compatible code."
+    },
+    {
+      "name": "Preserves the exception contract",
+      "category": "safety",
+      "max_score": 7,
+      "description": "An IOException from Files.readString reaches the caller as an IOException (not UncheckedIOException), IllegalArgumentException from parse propagates unchanged, and file order is kept."
+    },
+    {
+      "name": "No try/catch inside a callback",
+      "category": "functional_style",
+      "max_score": 45,
+      "description": "No lambda or method reference body catches IOException; the code does not wrap the read in UncheckedIOException inside map or forEach."
+    },
+    {
+      "name": "Uses a visible checked boundary",
+      "category": "functional_style",
+      "max_score": 25,
+      "description": "Reads happen in a plain loop or a named helper method that declares IOException, so the checked boundary is visible at the call site."
+    },
+    {
+      "name": "No unwrap-rewrap ceremony",
+      "category": "functional_style",
+      "max_score": 10,
+      "description": "Does not throw UncheckedIOException in a stream and catch it again to rethrow the cause, and does not introduce a throwing-function wrapper type."
+    },
+    {
+      "name": "Stays focused",
+      "category": "maintainability",
+      "max_score": 5,
+      "description": "No unrelated abstractions, parallel reads, extra public API, or dependency changes."
+    }
+  ],
+  "metadata": {
+    "invocation": "natural",
+    "task_type": "implementation",
+    "evidence_type": "solved_regression",
+    "regression_selection": "Hosted run 01a0bfa2-c49e-7178-a1a1-910db1b92785 (2026-09-20, Tessl default solver): both variants at 100/100. With-context rerun against the final bundle: 100/100 in run 01a0c1de-cc4b-70ef-a074-106a34a465c5."
+  }
+}
