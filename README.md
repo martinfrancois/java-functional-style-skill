@@ -1,5 +1,7 @@
 # Java Functional Style Skill for AI Agents
 
+[![tessl](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Fmartinfrancois%2Fjava-functional-style)](https://tessl.io/registry/martinfrancois/java-functional-style)
+
 Java callbacks are easy to make plausible and hard to keep honest. A hand-written `x -> x` hides
 that an API wanted `Function.identity()`, a block lambda buries logic that belongs in a named
 method, an eager `orElse(load())` defeats the laziness the API offers, and a method reference can
