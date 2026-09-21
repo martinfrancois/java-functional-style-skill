@@ -25,6 +25,12 @@ Examples:
 USAGE
 }
 
+for arg in "$@"; do
+  case "$arg" in
+    -h|--help|help) usage; exit 0 ;;
+    --) break ;;
+  esac
+done
 if [[ $# -lt 2 ]]; then
   usage >&2
   exit 2
@@ -38,7 +44,6 @@ case "$suite" in
   main) source_dir="evals" ;;
   reference) source_dir="evals-reference" ;;
   regression) source_dir="evals-regression" ;;
-  -h|--help|help) usage; exit 0 ;;
   *) echo "Unknown suite: $suite" >&2; usage >&2; exit 2 ;;
 esac
 
@@ -62,12 +67,12 @@ if [[ ! -f "$domain_manifest" ]]; then
   echo "Not a Tessl plugin checkout: $domain_repo" >&2
   exit 1
 fi
-domain_skill_dir="$(find "$domain_repo/skills" -mindepth 1 -maxdepth 1 -type d | head -n 1)"
-if [[ -z "$domain_skill_dir" ]]; then
+mapfile -t domain_skill_dirs < <(find "$domain_repo/skills" -mindepth 1 -maxdepth 1 -type d | sort)
+if [[ "${#domain_skill_dirs[@]}" -eq 0 ]]; then
   echo "No skill directory under $domain_repo/skills" >&2
   exit 1
 fi
-domain_skill="$(basename "$domain_skill_dir")"
+domain_skill="$(basename "${domain_skill_dirs[0]}")"
 suite_path="$domain_repo/$source_dir"
 if [[ ! -d "$suite_path" ]]; then
   echo "Missing suite directory: $suite_path" >&2
@@ -81,7 +86,9 @@ trap 'rm -rf "$tmp_dir"' EXIT
 
 composed="$tmp_dir/composed-plugin"
 mkdir -p "$composed/.tessl-plugin" "$composed/skills" "$composed/rules"
-cp -a "$domain_skill_dir" "$composed/skills/$domain_skill"
+for skill_dir in "${domain_skill_dirs[@]}"; do
+  cp -a "$skill_dir" "$composed/skills/$(basename "$skill_dir")"
+done
 cp -a "$repo_root/skills/java-functional-style" "$composed/skills/java-functional-style"
 cp -a "$repo_root/rules/." "$composed/rules/"
 cat > "$composed/.tessl-plugin/plugin.json" <<JSON
@@ -109,7 +116,7 @@ else
   done
 fi
 
-echo "Composition check: $domain_skill + java-functional-style"
+echo "Composition check: $(printf "%s " "${domain_skill_dirs[@]##*/}")+ java-functional-style"
 echo "Domain repo:   $domain_repo ($(git -C "$domain_repo" rev-parse --short HEAD))"
 echo "Companion:     $(git -C "$repo_root" rev-parse --short HEAD)"
 echo "Suite:         $suite ($source_dir)"
@@ -119,5 +126,5 @@ echo "Variant:       with-context only"
 
 (
   cd "$repo_root"
-  tessl eval run --context "$composed" --skip-baseline --force "${extra_args[@]}" "$scenario_source"
+  tessl eval run --context "$composed" --skip-baseline --force ${extra_args[@]+"${extra_args[@]}"} "$scenario_source"
 )

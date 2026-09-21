@@ -80,28 +80,23 @@ IDENTIFIER_STOP_WORDS = {
     "exception",
     "filter",
     "function",
-    "gatherers",
     "hashmap",
     "integer",
-    "intstream",
     "foreach",
     "java",
     "list",
     "long",
-    "longstream",
     "map",
     "object",
     "objects",
     "optional",
     "parallel",
-    "parallelstream",
     "predicate",
     "private",
     "public",
     "record",
     "runtimeexception",
     "set",
-    "simpleimmutableentry",
     "size",
     "sorted",
     "static",
@@ -120,16 +115,16 @@ IDENTIFIER_STOP_WORDS = {
     # Java keywords, JDK types, and the functional APIs this skill is about are not domain
     # identifiers; sharing them between a task and a runtime reference is inherent, not leakage.
     "accept",
-    "active",
     "apply",
     "bifunction",
     "binaryoperator",
     "break",
-    "cache",
     "catch",
     "chronounit",
     "clock",
     "collect",
+    "groupingby",
+    "merge",
     "compare",
     "compareto",
     "sort",
@@ -137,32 +132,21 @@ IDENTIFIER_STOP_WORDS = {
     "computeifabsent",
     "consumer",
     "continue",
-    "count",
     "duration",
     "equals",
     "false",
-    "file",
     "files",
     "final",
     "functional",
     "get",
-    "id",
     "identity",
-    "ignored",
     "import",
     "instant",
     "ioexception",
     "isblank",
     "isempty",
-    "item",
-    "items",
-    "line",
-    "lines",
     "linkedhashmap",
     "localdate",
-    "name",
-    "names",
-    "now",
     "nullslast",
     "orelse",
     "orelseget",
@@ -171,8 +155,6 @@ IDENTIFIER_STOP_WORDS = {
     "readstring",
     "requirenonnullelse",
     "requirenonnullelseget",
-    "result",
-    "source",
     "strip",
     "style",
     "supplier",
@@ -180,15 +162,12 @@ IDENTIFIER_STOP_WORDS = {
     "thenapply",
     "thencomparing",
     "throws",
-    "today",
     "tomap",
     "trim",
     "true",
     "unaryoperator",
     "uncheckedioexception",
     "util",
-    "value",
-    "values",
     "version",
 }
 SCENARIO_REFERENCE_FILES = (
@@ -198,14 +177,14 @@ SCENARIO_REFERENCE_FILES = (
     Path("evals/NUMBERING.md"),
     Path("evals-reference/NUMBERING.md"),
     Path("evals-regression/NUMBERING.md"),
-    Path("evals-regression/README.md"),
 )
 SCENARIO_REFERENCE_DIRS = (Path("docs"),)
 AGENT_DOC_FORBIDDEN_EXTERNAL_HISTORY_PATTERNS = (
     re.compile(r"\bissue\s+#?\d+\b", re.IGNORECASE),
     re.compile(r"\bpr\s+#?\d+\b", re.IGNORECASE),
     re.compile(r"https://github\.com/[^)\s]+/(?:issues|pull)/\d+", re.IGNORECASE),
-    re.compile(r"\b019e[a-f0-9-]{20,}\b", re.IGNORECASE),
+    # Hosted run IDs are UUIDv7 values; match the shape, not a prefix that expires.
+    re.compile(r"\b0[0-9a-f]{7}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}\b", re.IGNORECASE),
 )
 
 
@@ -536,13 +515,14 @@ def validate_cross_suite_duplicates(dirs: list[Path]) -> list[str]:
 
 def validate_runtime_reference_overlap(dirs: list[Path]) -> list[str]:
     failures: list[str] = []
-    references_root = Path("skills/java-functional-style/references")
-    if not references_root.exists():
+    skill_root = Path("skills/java-functional-style")
+    if not skill_root.exists():
         return failures
 
-    runtime_text = "\n".join(
-        path.read_text(encoding="utf-8") for path in sorted(references_root.glob("*.md"))
-    )
+    # Everything the agent can read at runtime, plus the README the registry shows.
+    runtime_files = sorted(skill_root.glob("SKILL.md")) + sorted((skill_root / "references").glob("*.md"))
+    runtime_files += sorted(Path("rules").glob("*.md")) + [Path("README.md")]
+    runtime_text = "\n".join(path.read_text(encoding="utf-8") for path in runtime_files if path.exists())
     runtime_identifiers = domain_identifiers(runtime_text)
     runtime_grams = ngrams(normalized_words(runtime_text), 12)
     runtime_api_markers = api_markers(runtime_text)

@@ -326,35 +326,19 @@ collect_changed() {
 
   while IFS= read -r file; do
     [[ -z "$file" ]] && continue
+    scope="${file%%/*}"
+    scenario="$(cut -d/ -f2 <<<"$file")"
     # A scenario directory that was deleted on this branch has nothing to run.
     case "$file" in
       evals/*/*|evals-reference/*/*|evals-regression/*/*)
-        [[ -d "$(echo "$file" | awk -F/ '{print $1 "/" $2}')" ]] || continue
+        [[ -d "$scope/$scenario" ]] || continue
         ;;
     esac
 
-    case "$file" in
-      evals/*/*)
-        scope="${file%%/*}"
-        scenario="$(echo "$file" | awk -F/ '{print $2}')"
-        if [[ "$scope" == "evals" ]]; then
-          changed_main+=("$scenario")
-        fi
-        ;;
-      evals-reference/*/*)
-        scope="${file%%/*}"
-        scenario="$(echo "$file" | awk -F/ '{print $2}')"
-        if [[ "$scope" == "evals-reference" ]]; then
-          changed_reference+=("$scenario")
-        fi
-        ;;
-      evals-regression/*/*)
-        scope="${file%%/*}"
-        scenario="$(echo "$file" | awk -F/ '{print $2}')"
-        if [[ "$scope" == "evals-regression" ]]; then
-          changed_regression+=("$scenario")
-        fi
-        ;;
+    case "$scope" in
+      evals) changed_main+=("$scenario") ;;
+      evals-reference) changed_reference+=("$scenario") ;;
+      evals-regression) changed_regression+=("$scenario") ;;
     esac
   done < "$changed_list"
 
@@ -1134,10 +1118,10 @@ resolve_broad_order() {
 
 changed_runtime=false
 changed_runtime_paths="$(
-  git diff --name-only "$base_ref"...HEAD -- "$skill_dir" 2>/dev/null || true
-  git diff --name-only -- "$skill_dir" 2>/dev/null || true
-  git diff --cached --name-only -- "$skill_dir" 2>/dev/null || true
-  git ls-files -o --exclude-standard -- "$skill_dir" 2>/dev/null || true
+  git diff --name-only "$base_ref"...HEAD -- "$skill_dir" rules 2>/dev/null || true
+  git diff --name-only -- "$skill_dir" rules 2>/dev/null || true
+  git diff --cached --name-only -- "$skill_dir" rules 2>/dev/null || true
+  git ls-files -o --exclude-standard -- "$skill_dir" rules 2>/dev/null || true
 )"
 if [[ -n "$changed_runtime_paths" ]]; then
   changed_runtime=true

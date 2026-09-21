@@ -114,13 +114,13 @@ def tokenize(text: str) -> Counter[str]:
 
 def changed_files(repo_root: Path, base_ref: str, head_ref: str, skill_dir: str) -> list[Path]:
     files = set()
-    diff_output = run_git(["diff", "--name-only", f"{base_ref}...{head_ref}", "--", skill_dir], repo_root)
+    diff_output = run_git(["diff", "--name-only", f"{base_ref}...{head_ref}", "--", skill_dir, "rules"], repo_root)
     for line in diff_output.splitlines():
         if line:
             files.add(Path(line))
 
     if head_ref == "HEAD":
-        status_output = run_git(["status", "--short", "--", skill_dir], repo_root)
+        status_output = run_git(["status", "--short", "--", skill_dir, "rules"], repo_root)
         for line in status_output.splitlines():
             if len(line) > 3:
                 files.add(Path(line[3:]))
