@@ -15,3 +15,8 @@ scored both variants at 100/100:
 
 With-context rerun against the final runtime bundle on 2026-09-21: all eight at 100/100 in run
 `01a0c1de-cc4b-70ef-a074-106a34a465c5`.
+
+Rerun against the PR #18 runtime text on 2026-10-03 (default solver `deepseek-v4.1-flash`), run
+`01a10393-bc00-74b2-9943-a40df1e48b69`: seven at 100/100 and `06` at 99/100, where the scorer took
+one point from "Keeps review focused" for a side note on `Stream.toList()` mutability. The
+isolated rerun of `06` (`01a1039a-85bd-75c7-9345-f5ccab25e382`) scored 100/100.

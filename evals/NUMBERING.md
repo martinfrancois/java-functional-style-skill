@@ -34,3 +34,8 @@ solver already handles them; they remain as reference or regression coverage.
 
 Publish-time run for 0.1.0 on the registry (`01a0c202-7e44-7304-9a2f-32009bdb2c18`, Tessl default
 solver): without 93/300 (31%), with 299/300 (99.7%), 3.2x.
+
+Proof for the PR #18 runtime text on 2026-10-03. Before this window the Tessl default solver
+changed from `deepseek-v4-flash` to `deepseek-v4.1-flash`, and its baselines are higher. Main run
+`01a10386-baca-770d-883e-6bc877ec1c2d`: without 220/300 (73%), with 300/300 (100%), 1.36x.
+Per-scenario baselines: `09` 70, `14` 100, `15` 50. All three scored 100 with context.
