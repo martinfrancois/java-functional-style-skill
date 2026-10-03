@@ -20,3 +20,11 @@ so gaps here are scenarios that live in `evals/` or `evals-regression/`.
 
 Promoted to `evals/` on 2026-09-20: `09-podcast-episode-digests`, `14-aquarium-feeding-ledger`,
 `15-vineyard-harvest-summaries`. See `evals/NUMBERING.md`.
+
+With-context run against the PR #18 runtime text on 2026-10-03 (default solver
+`deepseek-v4.1-flash`), `01a1039d-6446-715f-b116-ce90aa5fe99d`: `04` 100, `07` 100, `12` 99 (a
+review aside about synchronization), `13` 71 (the solver moved the tie-break into a helper with an
+`if`/`else` chain instead of `thenComparingInt`). Isolated reruns: `12` 100 in
+`01a103ae-6281-76c5-8f81-6e58d91e2dc6`, `13` 100 in `01a103a7-5363-77f9-8b8b-8a8fe9cf428f`. Watch
+`13` if the with-context miss repeats; step 6 of the skill lists a tie-break rule as a reason to
+extract a helper, which pulls against the comparator composition sentence below it.

@@ -110,30 +110,25 @@ rehearsals.sort(Comparator.comparingInt(Rehearsal::durationMinutes));
 
 ```java
 // before
-rehearsals.sort((a, b) -> {
-    int dayOrder = a.day().compareTo(b.day());
-    if (dayOrder != 0) {
-        return dayOrder;
+venues.sort((a, b) -> {
+    if (a.region() == null || b.region() == null) {
+        return a.region() == null ? (b.region() == null ? 0 : -1) : 1;
     }
-    if (a.conductor() == null) {
-        return b.conductor() == null ? 0 : 1;
+    int regionOrder = a.region().compareTo(b.region());
+    if (regionOrder != 0) {
+        return regionOrder;
     }
-    if (b.conductor() == null) {
-        return -1;
-    }
-    int conductorOrder = a.conductor().compareTo(b.conductor());
-    return conductorOrder != 0 ? conductorOrder : Integer.compare(a.durationMinutes(), b.durationMinutes());
+    return Double.compare(b.rating(), a.rating());
 });
 
 // after
-rehearsals.sort(Comparator.comparing(Rehearsal::day)
-        .thenComparing(Rehearsal::conductor, Comparator.nullsLast(Comparator.naturalOrder()))
-        .thenComparingInt(Rehearsal::durationMinutes));
+venues.sort(Comparator.comparing(Venue::region, Comparator.nullsFirst(Comparator.naturalOrder()))
+        .thenComparing(Comparator.comparingDouble(Venue::rating).reversed()));
 ```
 
-Keep the key order, the null placement (`nullsLast` or `nullsFirst`), and the tie behavior
-exactly as the branches had them. Use `thenComparingInt`, `thenComparingLong`, or
-`thenComparingDouble` for primitive keys.
+Keep the key order, the null placement (`nullsFirst` or `nullsLast`), the direction (`reversed`),
+and the tie behavior exactly as the branches had them. Use `comparingInt`, `comparingLong`, or
+`comparingDouble` for primitive keys.
 
 ## Keep supplier fallbacks lazy
 
