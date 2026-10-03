@@ -3,7 +3,7 @@
     "invocation": "explicit",
     "task_type": "implementation",
     "evidence_type": "ordinary_lift",
-    "main_eval_selection": "Promoted 2026-09-20. Natural-invocation screening run 01a0c02f-abf8-776d-8038-3ae700a5d1e1: without 30/100, with 100/100. Explicit-invocation run 01a0c037-590b-7193-ab1e-9558506ca102 (current task text): without 44/100, with 100/100. Later full main runs scored the baseline at 42, 30, 35, and 35. Adds Map.merge, computeIfAbsent, and CompletableFuture callback coverage."
+    "main_eval_selection": "Promoted 2026-09-20. Natural-invocation screening run 01a0c02f-abf8-776d-8038-3ae700a5d1e1: without 30/100, with 100/100. Explicit-invocation run 01a0c037-590b-7193-ab1e-9558506ca102 (current task text): without 44/100, with 100/100. Later full main runs scored the baseline at 42, 30, 35, and 35. Adds Map.merge, computeIfAbsent, and CompletableFuture callback coverage. 1.0.0 proof on 2026-10-03 (default solver deepseek-v4.1-flash): main run 01a10386-baca-770d-883e-6bc877ec1c2d without 100/100, with 100/100; registry run 01a103c5-a9a2-761f-b784-4e8b17227cb6 the same. The new solver solves it without the skill, so it no longer adds lift."
   },
   "categories": {
     "Creates the requested artifact": "safety",
