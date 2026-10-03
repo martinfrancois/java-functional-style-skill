@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.0](https://github.com/martinfrancois/java-functional-style-skill/compare/v0.1.1...v1.0.0) (2026-10-03)
+
+
+### Bug Fixes
+
+* **skill:** close the wording gaps behind the registry misses ([#18](https://github.com/martinfrancois/java-functional-style-skill/issues/18)) ([6bcf92b](https://github.com/martinfrancois/java-functional-style-skill/commit/6bcf92b17613dfcffad6bfd6db1db95665eb69f2))
+
 ## [0.1.1](https://github.com/martinfrancois/java-functional-style-skill/compare/v0.1.0...v0.1.1) (2026-09-21)
 
 
