@@ -39,3 +39,6 @@ Proof for the PR #18 runtime text on 2026-10-03. Before this window the Tessl de
 changed from `deepseek-v4-flash` to `deepseek-v4.1-flash`, and its baselines are higher. Main run
 `01a10386-baca-770d-883e-6bc877ec1c2d`: without 220/300 (73%), with 300/300 (100%), 1.36x.
 Per-scenario baselines: `09` 70, `14` 100, `15` 50. All three scored 100 with context.
+
+Publish-time run for 1.0.0 on the registry (`01a103c5-a9a2-761f-b784-4e8b17227cb6`, default solver
+`deepseek-v4.1-flash`): without 220/300 (73%), with 300/300 (100%), 1.36x.
