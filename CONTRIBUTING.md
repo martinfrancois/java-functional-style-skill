@@ -53,7 +53,8 @@ Real Tessl publishes run only through the release workflow.
 
 Runtime skill text, references, and the rule must not contain answers to eval tasks: no helper
 names, identifiers, or criterion phrasing from any scenario. New scenarios start in
-`evals-reference/`, use fresh domains, and move to `evals/` only after an isolated hosted run and
+`evals-reference/`, use fresh domains, get screened locally first (`scripts/local_screen.sh`, see
+`docs/agents/local-screening.md`), and move to `evals/` only after an isolated hosted run and
 the classifier recommendation. See `docs/agents/evals.md`.
 
 Runtime changes must also pass the composition check: the sibling skills' evals, unchanged, run
