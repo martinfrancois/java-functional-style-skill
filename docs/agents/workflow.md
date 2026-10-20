@@ -48,7 +48,9 @@ exists, record that as expected for ordinary non-release changes and rely on the
 ## Hosted Evals
 
 Follow [Eval Guidance](evals.md) for suite rules and [Pre-Submit Gate](pre-submit-gate.md) for
-the budget-aware order. In short:
+the budget-aware order. Screen scenarios and skill changes locally first with
+`scripts/local_screen.sh` ([Local Screening With DeepSeek](local-screening.md)); it runs the model
+behind the default solver for a cent or two a run. Then, in short:
 
 1. Quality review at threshold 100 for any runtime skill, reference, or rule change. Fix quality
    before spending eval budget.
@@ -99,5 +101,6 @@ composition check in [Ownership Boundaries](ownership-boundaries.md) have passed
 - [Project Identity](project-identity.md)
 - [Ownership Boundaries](ownership-boundaries.md)
 - [Eval Guidance](evals.md)
+- [Local Screening With DeepSeek](local-screening.md)
 - [Public Metadata And OSS Readiness](public-metadata.md)
 - [Repository Settings](repository-settings.md)

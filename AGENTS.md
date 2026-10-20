@@ -23,6 +23,7 @@ that correction durable in the relevant file under `docs/agents/`.
 - [README Guidance](docs/agents/readme.md)
 - [Skill Behavior](docs/agents/skill-behavior.md)
 - [Eval Guidance](docs/agents/evals.md)
+- [Local Screening With DeepSeek](docs/agents/local-screening.md)
 - [Public Metadata And OSS Readiness](docs/agents/public-metadata.md)
 - [Repository Settings](docs/agents/repository-settings.md)
 - [Maintaining Agent Docs](docs/agents/maintaining-agent-docs.md)

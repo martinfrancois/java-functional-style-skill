@@ -51,7 +51,9 @@ lift.
 - `focused_main` / `focused_reference`: intentionally overlapping coverage of one behavior,
   reported separately from broad lift and never as generalization evidence. Requires
   `metadata.runtime_reference_overlap_rationale`.
-- `solved_regression`: hosted history shows both variants at 100. Only in `evals-regression/`.
+- `solved_regression`: both variants at 100, shown by hosted history or, until the hosted run
+  exists, by the local screen (baseline and skill arm at 98 to 100 in every run; the local judge
+  takes a point or two on focus items in otherwise correct runs). Only in `evals-regression/`.
 - `skill_context_dependent`: needs exact skill-provided text or commands. Only in
   `evals-regression/`.
 
@@ -64,7 +66,9 @@ lift.
 ## Classification And Promotion
 
 1. Draft new scenarios in `evals-reference/` (or `evals-regression/` when skill-context
-   dependent).
+   dependent), and screen them with `scripts/local_screen.sh` first
+   ([Local Screening With DeepSeek](local-screening.md)) so hosted credits go only to scenarios
+   whose baseline fails unaided.
 2. Run them in isolation with both variants: `scripts/run_eval_suite.sh reference <scenario>`.
 3. Save `tessl eval view <run-id> --json` and run
    `scripts/classify_eval_result.py <run-json> --scenario-dir <scenario-dir>`.
@@ -117,9 +121,21 @@ numbers live in `evals/NUMBERING.md`, `evals-reference/NUMBERING.md`,
   random on the free plan; `tessl eval retry <run>` creates a new run that reuses the completed
   cells.
 
+## Local Baseline Screening
+
+Hosted Tessl runs cost credits (20 per scenario with both variants on the free plan) and the
+daily pool is shared with the other skill repositories. `scripts/local_screen.sh` runs a scenario
+through the model behind Tessl's default solver for one to two cents, with the skill and `rules/`
+as context in skill mode, and grades it with a Claude judge. Setup, commands, placement
+thresholds, and the skill-tuning loop are in [Local Screening With DeepSeek](local-screening.md).
+Local numbers decide placement and go into the `NUMBERING.md` notes as local screening results.
+They are not hosted evidence: benchmark claims, release-readiness claims, and the registry score
+still need the hosted runs described above.
+
 ## References
 
 - [Workflow](workflow.md)
+- [Local Screening With DeepSeek](local-screening.md)
 - [Skill Behavior](skill-behavior.md)
 - [Pre-Submit Gate](pre-submit-gate.md)
 - [Ownership Boundaries](ownership-boundaries.md)
