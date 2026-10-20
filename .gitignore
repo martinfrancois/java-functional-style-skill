@@ -9,3 +9,4 @@ __pycache__/
 .mcp.json
 .vscode/
 .tessl-composition.*/
+.local-screen/
