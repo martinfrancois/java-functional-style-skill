@@ -30,11 +30,9 @@ this skill only changes how callbacks are written.
 1. Check the Java baseline first (build files, toolchains, CI, docs). If it is unclear, write Java
    8-compatible callbacks or state the assumption. See
    [java-functional-api.md](references/java-functional-api.md).
-2. Name the functional-interface contract before touching a callback: `Function`,
-   `UnaryOperator`, `Predicate`, `Supplier`, `Consumer`, `BiFunction`, `BinaryOperator`,
-   `Comparator`, or the callback parameter of `map`, `filter`, `orElseGet`, `computeIfAbsent`,
-   `merge`, `removeIf`, `replaceAll`, `thenApply`, or a listener. The contract decides which JDK
-   helper applies and which behaviors are observable.
+2. Name the functional-interface contract before touching a callback (`Function` or
+   `UnaryOperator`, `Supplier`, `Comparator`, the parameter type of `computeIfAbsent` or `merge`).
+   The contract decides which JDK helper applies and which behaviors are observable.
 3. Use the JDK identity helper when the API needs an identity callback. `Function.identity()`
    for a `Function<T, T>` (for example the value mapper of `Collectors.toMap`, a `groupingBy`
    downstream `mapping`, or a `Map<String, Function<...>>` "no transform" entry) and
@@ -77,25 +75,26 @@ this skill only changes how callbacks are written.
    still glue. Build a result object from derived values in one named method, not in the callback
    after two helper calls. Re-scan every extracted helper; a helper that still holds a block lambda
    is not done.
-   A multi-branch comparator lambda is the same smell: replace `if`/`else` chains of
-   `compareTo` calls with `Comparator.comparing(key).thenComparing(key2, nullsLast(naturalOrder()))
-   .thenComparingInt(intKey)`, keeping the same key order, null placement, and tie behavior.
-7. Keep supplier work lazy. Fallback construction, IO, prompts, parsing, and exception creation
+7. Compose comparators; never extract one. An `if`/`else` chain of `compareTo` calls, in a lambda
+   or in a helper, becomes `Comparator.comparing(key).thenComparing(key2, nullsLast(naturalOrder()))
+   .thenComparingInt(intKey)` with the same key order, null placement, and tie behavior. A helper
+   may compute a key; it never compares two elements itself.
+8. Keep supplier work lazy. Fallback construction, IO, prompts, parsing, and exception creation
    that should happen only on absence or miss belong inside the supplier passed to `orElseGet`,
    `orElseThrow`, `computeIfAbsent`, `Objects.requireNonNullElseGet`, or a logging supplier (see
    the first gotcha for the eager forms).
-8. Let the API produce the result. Do not mutate an external list, map, counter, or builder from
+9. Let the API produce the result. Do not mutate an external list, map, counter, or builder from
    a callback when the API can return the value (`toList`, `toMap`, `merge`, `reduce`). Keep a
    side-effecting callback only when the side effect is the requested outcome, and check it is
    safe for the execution mode (parallel, async, or listener threads).
-9. Keep checked exceptions at a visible boundary. Do not bury `try`/`catch` inside a callback to
+10. Keep checked exceptions at a visible boundary. Do not bury `try`/`catch` inside a callback to
    wrap an `IOException` unless the surrounding API already owns unchecked wrapping. Use a named
    helper that declares or converts the exception on purpose, or a plain loop or branch.
-10. Choose plain Java when it reads better: checked IO, prompts, parser boundaries, early exits,
+11. Choose plain Java when it reads better: checked IO, prompts, parser boundaries, early exits,
     sentinel-driven windows, mutation-heavy accumulation, and step-by-step control flow. When
     reviewing a functional rewrite of such code, reject the behavior change and recommend keeping
     the loop or branch; do not counter-propose another pipeline.
-11. Verify each changed callback for present and absent values, empty input, nulls, ordering,
+12. Verify each changed callback for present and absent values, empty input, nulls, ordering,
     laziness, exception type and timing, side effects, object identity where observable, and the
     Java baseline. Then run the `rg` scan from [hard-stops.md](references/hard-stops.md) over
     the touched files and reconcile every hit before finishing.
@@ -111,8 +110,6 @@ this skill only changes how callbacks are written.
   or null at creation time.
 - `Comparator.comparing(Item::price)` boxes primitives on every comparison; use `comparingInt`,
   `comparingLong`, or `comparingDouble`.
-- `Predicate.not` needs Java 11, `Optional.ifPresentOrElse` and `Optional.stream` need Java 9,
-  `Stream.toList()` needs Java 16.
 - A lambda that captures a loop variable or a mutable local only compiles when the variable is
   effectively final; copy it into a final local rather than switching to an array or holder hack.
 
