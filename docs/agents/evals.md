@@ -103,7 +103,8 @@ numbers live in `evals/NUMBERING.md`, `evals-reference/NUMBERING.md`,
 `evals-regression/NUMBERING.md`, and each scenario's `criteria-meta.json`, never here.
 
 - Main eval set: 3 scenarios, 300 checklist points, 2 natural and 1 explicit, all implementation
-  tasks: `09` helper extraction and named predicates in a pipeline, `14` `Map.merge`,
+  tasks (re-checked on 2026-10-21: 200 without the skill, 300 with it, run IDs in
+  `evals/NUMBERING.md`): `09` helper extraction and named predicates in a pipeline, `14` `Map.merge`,
   `computeIfAbsent`, and `CompletableFuture` callbacks (explicit invocation), `15` `Optional.map`
   and collector-downstream callbacks. Each carries 80 functional-style points, 15 safety, 5
   maintainability. No weight multipliers.

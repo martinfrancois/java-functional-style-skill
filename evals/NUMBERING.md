@@ -42,3 +42,10 @@ Per-scenario baselines: `09` 70, `14` 100, `15` 50. All three scored 100 with co
 
 Publish-time run for 1.0.0 on the registry (`01a103c5-a9a2-761f-b784-4e8b17227cb6`, default solver
 `deepseek-v4.1-flash`): without 220/300 (73%), with 300/300 (100%), 1.36x.
+
+Re-check of the 1.0.0 text on 2026-10-21, run `01a15e1e-cdaf-74ba-9a3f-d0068a24ea1e`, default
+solver `deepseek-v4.1-flash`, both arms: without 200/300 (67%), with 300/300 (100%), 1.5x.
+Per-scenario baselines: `09` 70, `14` 65, `15` 65. `14` had scored 100 unaided on both October
+runs and scores 65 here, so the explicit scenario is bimodal rather than solved; it keeps its
+slot. Baseline samples per scenario across all runs: `09` 20, 20, 20, 70, 70, 70; `14` 30, 44, 42,
+30, 35, 100, 100, 65; `15` 35, 35, 35, 50, 50, 65.
