@@ -32,6 +32,18 @@ scripts/run_composed_eval.sh ../java-streams-skill main
 scripts/run_composed_eval.sh ../java-optionals-skill main
 ```
 
+A result only counts when both skills were activated. Check every solution before reading its
+score:
+
+```bash
+tessl eval view <run-id> --json | jq -r '.data.attributes.scenarios[] | .path as $p
+  | .solutions[] | "\($p) \(.activation.activatedSkills)"'
+```
+
+Each line must list the domain skill and `java-functional-style`. Composition runs made before
+the runner passed `--skill` for both (all runs up to 2026-10-21) activated no skill and are not
+evidence either way.
+
 Every retained scenario must reach 100% with-context. Broaden to `reference` and `regression`
 when budget allows and always after a change that touches review wording. Criterion-level
 results must be equal or better at criterion level, not only in the total.
