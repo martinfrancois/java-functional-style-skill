@@ -17,6 +17,8 @@ scenarios source, and a temporary plugin that bundles both skills is passed as -
 
 Only the with-context variant runs (--skip-baseline): the baseline for this check is the domain
 skill's own published result, not a no-context run.
+Both skills are named with --skill so Tessl activates them; read activation.activatedSkills in
+`tessl eval view <id> --json` to confirm each scenario loaded them.
 
 Examples:
   scripts/run_composed_eval.sh ../java-streams-skill main
@@ -91,6 +93,13 @@ for skill_dir in "${domain_skill_dirs[@]}"; do
 done
 cp -a "$repo_root/skills/java-functional-style" "$composed/skills/java-functional-style"
 cp -a "$repo_root/rules/." "$composed/rules/"
+# Name every bundled skill, as run_eval_suite.sh does with one. Without --skill, Tessl injects
+# the composed plugin but activates no skill, so the "with context" run measures neither skill.
+skill_args=()
+for skill_dir in "${domain_skill_dirs[@]}"; do
+  skill_args+=(--skill "$(basename "$skill_dir")")
+done
+skill_args+=(--skill java-functional-style)
 cat > "$composed/.tessl-plugin/plugin.json" <<JSON
 {
   "name": "martinfrancois/composition-check",
@@ -126,5 +135,5 @@ echo "Variant:       with-context only"
 
 (
   cd "$repo_root"
-  tessl eval run --context "$composed" --skip-baseline --force ${extra_args[@]+"${extra_args[@]}"} "$scenario_source"
+  tessl eval run --context "$composed" "${skill_args[@]}" --skip-baseline --force ${extra_args[@]+"${extra_args[@]}"} "$scenario_source"
 )
