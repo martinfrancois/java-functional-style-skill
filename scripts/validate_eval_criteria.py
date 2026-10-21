@@ -794,7 +794,7 @@ def main() -> int:
                         main_eval_category_scores[category] += max_score
         if main_eval_dirs and not main_eval_invocations["natural"]:
             failures.append("evals: main eval set must include a natural invocation scenario")
-        # The mix rule spans two suites, so it only applies when both were given.
+        # The mix rule spans two suites, so it applies only when evals-reference was given.
         reference_root = Path("evals-reference")
         reference_given = reference_root.exists() and any(
             path.resolve() == reference_root.resolve() for path in paths if path.exists()
