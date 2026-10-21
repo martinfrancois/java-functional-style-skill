@@ -67,3 +67,19 @@ correctly composed comparator changed the order. With the starting code comparin
 leads too, the screen scored 100 in three runs of three in both arms, and `13` moved to
 regression. `10` rescreened at 100 in three runs with the skill after an earlier 68 the local judge
 had called a full pass in its own reasoning.
+
+### With the final skill and rule text (2026-10-21)
+
+All fifteen scenarios, skill arm, two runs each, after the comparator step, the rule-file line, and
+the removal of every tie-break mention: `06` 98 (95 to 100), `01`, `04`, `07`, `10`, `12` 99,
+every other scenario 100, including `09`, `14`, and `15` in main. The losses were focus points
+(public nested types, a method-reference rewrite the task did not ask for, a review side note).
+
+Hosted, both arms, on the text before the tie-break removal (`b1fb776`), run
+`01a15fdb-10b6-741d-936f-b1a4a16ab6ff`: `09` 70 and 100, `14` 65 and 100, `15` 50 and 100.
+Composition with both skills on the same text: java-optionals main
+(`01a15fdb-2f55-77bc-b029-2c401f3fceed`) six of seven at 100, `19` at 80 for `findFirst` (it did
+the same on the composition run against 1.0.0 and passed its rerun); java-streams main
+(`01a15fdb-1d8a-732e-a4be-f4326ee365dd`) `31` at 100, `43` at 45 (kept the loop), `56` at 80
+(line-level `flatMap` instead of `mapMulti`). The local composed screen with both skills and the
+rule scored all three at 100 in three runs each, so it does not reproduce the hosted misses.
