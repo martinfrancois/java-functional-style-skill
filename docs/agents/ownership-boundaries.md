@@ -40,9 +40,11 @@ tessl eval view <run-id> --json | jq -r '.data.attributes.scenarios[] | .path as
   | .solutions[] | "\($p) \(.activation.activatedSkills)"'
 ```
 
-Each line must list the domain skill and `java-functional-style`. Composition runs made before
-the runner passed `--skill` for both (all runs up to 2026-10-21) activated no skill and are not
-evidence either way.
+Each line must list the domain skill and `java-functional-style`. Composition runs up to
+2026-10-21 activated no skill and are not evidence either way: the runner built the composed
+plugin under a gitignored directory inside the repository, Tessl skips gitignored files when it
+reads a local `--context`, so the plugin it saw had no skills. The runner now builds the plugin
+outside the repository and names both skills with `--skill`.
 
 Every retained scenario must reach 100% with-context. Broaden to `reference` and `regression`
 when budget allows and always after a change that touches review wording. Criterion-level
