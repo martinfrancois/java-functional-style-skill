@@ -3,7 +3,7 @@
     "invocation": "natural",
     "task_type": "implementation",
     "evidence_type": "ordinary_lift",
-    "reference_selection": "Kept as reference after rerun 01a0c02f-abf8-776d-8038-3ae700a5d1e1: without 97/100, with 100/100; identity mappers are already solved by the default solver, so this is coverage, not lift."
+    "reference_selection": "Hosted rerun 01a0c02f-abf8-776d-8038-3ae700a5d1e1 scored 97 without the skill; the local screen on 2026-10-21 scored 44, 88, 94, 40, 94 unaided (bimodal) and 100 with the skill, so it stays reference as lift material rather than solved."
   },
   "categories": {
     "Creates the requested artifact": "safety",

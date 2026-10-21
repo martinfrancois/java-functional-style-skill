@@ -35,26 +35,26 @@ Every scenario went through the local screen in `docs/agents/local-screening.md`
 Flash as the solver, a Claude Haiku judge; percentages, mean over the runs, range in brackets).
 Not hosted evidence. The four prompts that named the skill became natural first, since no source
 shows the maintainer naming it; `12` stays explicit as the one explicit scenario the two lift
-suites need between them. The placement rule: baseline 98 to 100 in every run with the skill arm
-at 98 or more is regression; baseline at least 30 under 100 with the skill arm at 100 is main;
-everything else is reference.
+suites need between them. The placement rule is the sibling repositories' rule. Baseline 98 to
+100 in every run with the skill arm at 98 or more is regression; baseline at least 30 under 100 with the skill arm at 100 is main;
+everything else is reference. The `04`, `10`, and `14` rows count their natural runs only.
 
 | Scenario | Runs | Without skill | With skill (1.0.0 text) | Suite |
 | --- | --- | --- | --- | --- |
 | `01-to-map-function-identity-mapper` | 2 | 98 (97 to 99) | 99 (98 to 99) | reference |
 | `02-remove-identity-map-stage` | 2 | 100 | 100 | regression |
 | `03-extract-block-callback-helper` | 2 | 92 (84 to 100) | 100 | reference |
-| `04-keep-supplier-fallback-lazy` (natural now) | 5 | 96 (87 to 99) | 99 (97 to 100) | reference |
+| `04-keep-supplier-fallback-lazy` (natural now) | 3 | 98 (96 to 99) | 99 (97 to 100) | reference |
 | `05-checked-boundary-plain-branch` | 2 | 100 | 99 (99 to 100) | regression |
 | `06-do-not-force-functional-style` | 2 | 99 (97 to 100) | 100 | reference, focused |
 | `07-library-loan-index` | 5 | 71 (40 to 94) | 100 | reference, bimodal unaided |
 | `08-track-name-normalizers` | 2 | 100 | 100 | regression |
 | `09-podcast-episode-digests` | 2 | 21 (20 to 22) | 100 | main |
-| `10-bike-station-fallbacks` (natural now) | 5 | 100 | 84 (68 to 99), judge noise on a plain branch | regression, rescreened below |
+| `10-bike-station-fallbacks` (natural now) | 3 | 100 | 84 (68 to 99), judge noise on a plain branch | regression, rescreened below |
 | `11-trail-permit-reader` | 2 | 100 | 100 (99 to 100) | regression |
 | `12-chess-pairing-method-reference-review` (explicit) | 5 | 96 (94 to 98) | 99 (98 to 99) | reference |
 | `13-volunteer-shift-ordering` | 5 | 80 (50 to 100) | 70 (50 to 90) | regression after the fix below |
-| `14-aquarium-feeding-ledger` (natural now) | 5 | 40 (35 to 46) | 100 | main |
+| `14-aquarium-feeding-ledger` (natural now) | 3 | 37 (35 to 41) | 100 | main |
 | `15-vineyard-harvest-summaries` | 2 | 35 | 100 | main |
 
 `01`, `03`, and `06` left regression because one run of each dipped under 98 unaided.

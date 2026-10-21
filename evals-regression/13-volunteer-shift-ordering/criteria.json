@@ -1,5 +1,5 @@
 {
-  "context": "Reference cleanup: comparator composition replacing a block comparator lambda.",
+  "context": "Regression cleanup: comparator composition replacing a block comparator lambda.",
   "type": "weighted_checklist",
   "checklist": [
     {

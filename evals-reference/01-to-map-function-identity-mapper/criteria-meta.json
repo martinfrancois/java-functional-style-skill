@@ -5,7 +5,7 @@
     "evidence_type": "ordinary_lift",
     "regression_selection": "Hosted run 01a0bfa2-c49e-7178-a1a1-910db1b92785 (2026-09-20, Tessl default solver): both variants at 100/100. With-context rerun against the final bundle: 100/100 in run 01a0c1de-cc4b-70ef-a074-106a34a465c5.",
     "weighting_note": "Weighting inherited from the first draft of this package; reweighting would change the rubric and require a rerun, and regression scenarios are not part of the public score.",
-    "reference_selection": "Local baseline 97 and 99 (one run under 98), skill arm 94 to 99 on the 1.0.0 text; lift material rather than solved."
+    "reference_selection": "Local baseline 97 and 99 (one run under 98), skill arm 98 and 99 on the 1.0.0 text once the judge stopped counting the harness rules file; lift material rather than solved."
   },
   "categories": {
     "Creates coherent Java 17 artifact": "safety",
