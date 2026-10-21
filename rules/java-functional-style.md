@@ -8,9 +8,11 @@ glue that names a single step of the value flow.
 - Remove no-op stages such as `.map(x -> x)` or `.map(Function.identity())` when removing them
   preserves behavior; do not replace one identity callback with another.
 - Extract a named helper, or use a plain branch, when a callback needs branching, local
-  temporaries, loops, checked exception handling, a merge or tie-break rule, formatting, more than
+  temporaries, loops, checked exception handling, a merge rule, formatting, more than
   one meaningful condition, or a nested fluent chain. Re-scan the helper afterwards; relocating a
   block lambda is not extraction.
+- Compose a comparator from `Comparator.comparing`, `thenComparing`, `nullsLast`, and the
+  primitive `comparingInt` forms; never extract a method that compares two elements itself.
 - Keep fallback work lazy: inside `orElseGet`, `computeIfAbsent`, `requireNonNullElseGet`, or the
   supplier the API takes, never computed before the absence check.
 - Prefer a method reference only when it keeps receiver timing, overload choice, argument order,
