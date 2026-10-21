@@ -1,6 +1,6 @@
 # Review fallback laziness
 
-Use `$java-functional-style` to create `review.md`. Assume Java 17.
+Create `review.md`. Assume Java 17.
 
 Review this proposed cleanup. Keep the review concise and include a safer replacement snippet if
 you recommend changes.

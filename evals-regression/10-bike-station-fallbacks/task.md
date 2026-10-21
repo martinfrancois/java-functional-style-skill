@@ -1,6 +1,6 @@
 # Bike station fallbacks
 
-Use `$java-functional-style` to create `StationResolver.java`. Assume Java 17.
+Create `StationResolver.java`. Assume Java 17.
 
 Implement a final class `StationResolver` with these methods and keep the nested types in the
 same file:

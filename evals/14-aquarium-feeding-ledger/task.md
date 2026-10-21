@@ -1,6 +1,6 @@
 # Aquarium feeding ledger
 
-Use `$java-functional-style` to create `FeedingLedger.java`. Assume Java 17.
+Create `FeedingLedger.java`. Assume Java 17.
 
 Implement a final class `FeedingLedger` with these methods and keep the nested records in the same
 file:
