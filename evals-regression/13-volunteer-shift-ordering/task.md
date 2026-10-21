@@ -22,18 +22,18 @@ final class ShiftOrdering {
             if (byStart != 0) {
                 return byStart;
             }
-            if (a.lead() == null && b.lead() == null) {
-                return 0;
-            }
-            if (a.lead() == null) {
-                return 1;
-            }
-            if (b.lead() == null) {
-                return -1;
-            }
-            int byLead = a.lead().compareTo(b.lead());
-            if (byLead != 0) {
-                return byLead;
+            if (a.lead() == null || b.lead() == null) {
+                if (a.lead() != null) {
+                    return -1;
+                }
+                if (b.lead() != null) {
+                    return 1;
+                }
+            } else {
+                int byLead = a.lead().compareTo(b.lead());
+                if (byLead != 0) {
+                    return byLead;
+                }
             }
             return Integer.compare(a.slots(), b.slots());
         });
