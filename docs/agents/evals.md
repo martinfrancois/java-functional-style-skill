@@ -102,22 +102,25 @@ Update this section whenever active eval membership or scoring changes. Run IDs 
 numbers live in `evals/NUMBERING.md`, `evals-reference/NUMBERING.md`,
 `evals-regression/NUMBERING.md`, and each scenario's `criteria-meta.json`, never here.
 
-- Main eval set: 3 scenarios, 300 checklist points, 2 natural and 1 explicit, all implementation
-  tasks (re-checked on 2026-10-21: 200 without the skill, 300 with it, run IDs in
-  `evals/NUMBERING.md`): `09` helper extraction and named predicates in a pipeline, `14` `Map.merge`,
-  `computeIfAbsent`, and `CompletableFuture` callbacks (explicit invocation), `15` `Optional.map`
-  and collector-downstream callbacks. Each carries 80 functional-style points, 15 safety, 5
-  maintainability. No weight multipliers.
-- Reference suite: 4 scenarios, 400 points. `07` identity mappers and `12` method-reference
-  receiver binding are ordinary coverage with a baseline near 100. `04` supplier laziness and
-  `13` comparator composition are focused reference coverage because they share a shape with a
-  runtime example; `13` also has an unstable baseline.
-- Regression suite: 8 solved scenarios, 800 points, run with context only. Five of them keep the
-  weighting of the package's first draft; their metadata says why.
+- Main eval set: 3 scenarios, 300 checklist points, all natural: `09` helper extraction and named
+  predicates in a pipeline, `14` `Map.merge`, `computeIfAbsent`, and `CompletableFuture`
+  callbacks, `15` `Optional.map` and collector-downstream callbacks. Each carries 80
+  functional-style points, 15 safety, 5 maintainability. `14` became natural on 2026-10-21 (no
+  source shows the skill being named) and its local baseline fell from 45 to 37 with that.
+- Reference suite: 6 scenarios, 600 points. `01` identity value mappers, `03` block-callback
+  extraction, `04` supplier laziness, `06` a review that must keep a loop (focused, shares review
+  wording with the runtime guidance), `07` identity mappers and merge callbacks (bimodal unaided),
+  `12` method-reference receiver binding (the one explicit scenario). `01`, `03`, and `06` came
+  out of regression on 2026-10-21 because one local run of each dipped under 98 unaided.
+- Regression suite: 6 scenarios, 600 points, run with context only: `02`, `05`, `08`, `10`,
+  `11`, and `13` comparator composition (solved once its starting code matched its checklist).
+  Every one scored 98 to 100 unaided in every local run; `10` became natural on 2026-10-21 and
+  kept its 100 unaided.
 - The public score measures the main suite only: callback extraction in pipelines, merge and
   completion callbacks, and Optional and collector-downstream callbacks. Identity functions,
-  supplier laziness, checked boundaries, and method-reference reviews are regression or reference
-  coverage because the default solver already handles them; say so wherever the score is quoted.
+  supplier laziness, checked boundaries, comparator composition, and method-reference reviews are
+  regression or reference coverage because the default solver handles them on most runs; say so
+  wherever the score is quoted.
 - Model selection is a paid-plan feature, so no stronger-model check exists. Sandbox cells drop at
   random on the free plan; `tessl eval retry <run>` creates a new run that reuses the completed
   cells.

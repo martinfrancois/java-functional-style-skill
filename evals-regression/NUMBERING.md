@@ -20,3 +20,11 @@ Rerun against the PR #18 runtime text on 2026-10-03 (default solver `deepseek-v4
 `01a10393-bc00-74b2-9943-a40df1e48b69`: seven at 100/100 and `06` at 99/100, where the scorer took
 one point from "Keeps review focused" for a side note on `Stream.toList()` mutability. The
 isolated rerun of `06` (`01a1039a-85bd-75c7-9345-f5ccab25e382`) scored 100/100.
+
+## Rebuild by local baseline (2026-10-21)
+
+`01`, `03`, and `06` moved to `evals-reference/` because one local run of each dipped under 98
+unaided; `13` arrived from reference after its starting comparator was made consistent with its
+checklist (100 in both arms, three runs each). `10` became natural and kept its 100 unaided. The
+table of every screen is in `evals-reference/NUMBERING.md`; hosted with-context confirmation of
+the current members is recorded here when it runs.
