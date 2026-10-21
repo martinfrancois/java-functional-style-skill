@@ -81,20 +81,22 @@ if [[ ! -d "$suite_path" ]]; then
   exit 1
 fi
 
-# Everything Tessl reads must sit inside this repository, because `tessl eval run` resolves the
-# Tessl project from the scenarios path. The staging directory is gitignored.
+# The scenarios must sit inside this repository, because `tessl eval run` resolves the Tessl
+# project from the scenarios path; their staging directory is gitignored. The composed plugin
+# must sit outside it: Tessl skips gitignored files when it reads a local --context, so a plugin
+# under the staging directory has no skills and the run activates none.
 tmp_dir="$(mktemp -d "$repo_root/.tessl-composition.XXXXXX")"
-trap 'rm -rf "$tmp_dir"' EXIT
+plugin_dir="$(mktemp -d "${TMPDIR:-/tmp}/tessl-composed-plugin.XXXXXX")"
+trap 'rm -rf "$tmp_dir" "$plugin_dir"' EXIT
 
-composed="$tmp_dir/composed-plugin"
+composed="$plugin_dir/composed-plugin"
 mkdir -p "$composed/.tessl-plugin" "$composed/skills" "$composed/rules"
 for skill_dir in "${domain_skill_dirs[@]}"; do
   cp -a "$skill_dir" "$composed/skills/$(basename "$skill_dir")"
 done
 cp -a "$repo_root/skills/java-functional-style" "$composed/skills/java-functional-style"
 cp -a "$repo_root/rules/." "$composed/rules/"
-# Name every bundled skill, as run_eval_suite.sh does with one. Without --skill, Tessl injects
-# the composed plugin but activates no skill, so the "with context" run measures neither skill.
+# Name every bundled skill, as run_eval_suite.sh does with one, so Tessl activates them.
 skill_args=()
 for skill_dir in "${domain_skill_dirs[@]}"; do
   skill_args+=(--skill "$(basename "$skill_dir")")
