@@ -28,7 +28,7 @@ result is 100 in every sample, but the default solver's baseline came in at 20, 
 `01a0c091-df78-7652-b356-8f1d6afda35e`. The mean delta is
 under the 30 pp floor, so it is reference coverage.
 
-`09` and `15` are natural-activation implementation tasks; `14` invokes the skill explicitly so the main suite keeps both styles (explicit run above). Identity-function, supplier-laziness,
+`09` and `15` are natural-activation implementation tasks; `14` invoked the skill explicitly until 2026-10-21 (explicit run above) and is natural now. Identity-function, supplier-laziness,
 checked-boundary, and method-reference scenarios did not clear the floor because the default
 solver already handles them; they remain as reference or regression coverage.
 
@@ -46,6 +46,6 @@ Publish-time run for 1.0.0 on the registry (`01a103c5-a9a2-761f-b784-4e8b17227cb
 Re-check of the 1.0.0 text on 2026-10-21, run `01a15e1e-cdaf-74ba-9a3f-d0068a24ea1e`, default
 solver `deepseek-v4.1-flash`, both arms: without 200/300 (67%), with 300/300 (100%), 1.5x.
 Per-scenario baselines: `09` 70, `14` 65, `15` 65. `14` had scored 100 unaided on both October
-runs and scores 65 here, so the explicit scenario is bimodal rather than solved; it keeps its
+runs and scores 65 here, so the scenario is bimodal rather than solved; it keeps its
 slot. Baseline samples per scenario across all runs: `09` 20, 20, 20, 70, 70, 70; `14` 30, 44, 42,
 30, 35, 100, 100, 65; `15` 35, 35, 35, 50, 50, 65.
