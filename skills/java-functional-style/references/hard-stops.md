@@ -27,7 +27,7 @@ Fix or explicitly classify each of these before finalizing:
 - A helper extraction that only relocated the block lambda. Re-scan helper bodies and extract
   again, or use plain code, until every callback is glue.
 - A predicate with more than one meaningful condition and no name.
-- A callback body with local temporaries, branching, formatting, merge or tie-break rules,
+- A callback body with local temporaries, branching, formatting, merge rules,
   severity selection, or record construction from derived values. Extract a helper.
 - A method reference that changes behavior: a receiver expression evaluated once at creation
   (`lookup()::method`), a receiver that can be null at creation, a different overload than the
