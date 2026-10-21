@@ -69,7 +69,7 @@ this skill only changes how callbacks are written.
    Supplier<Config> b = () -> registry.current().config(); // runs on every get()
    ```
 6. Keep lambdas as one-expression glue. Extract a named helper when a callback needs branching,
-   local temporaries, loops, formatting, a merge or tie-break rule, more than one condition, or a
+   local temporaries, loops, formatting, a merge rule, more than one condition, or a
    nested fluent chain, then pass `this::isEligible` or `item -> toSummary(item, today)`. Name
    multi-condition predicates; composing named predicates with `and`, `or`, `negate`, or `&&` is
    still glue. Build a result object from derived values in one named method, not in the callback
