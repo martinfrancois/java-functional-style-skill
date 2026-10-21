@@ -17,7 +17,7 @@ If the baseline is unclear, prefer Java 8-compatible code or state the assumptio
 | `Predicate` | 8 | Use for boolean tests; extract named predicates when more than one meaningful condition hurts readability. |
 | `Supplier` | 8 | Use to keep fallback work lazy. Do not compute expensive values before passing the supplier. |
 | `Consumer` | 8 | Use for side effects only when the side effect is the requested outcome and safe. |
-| `BiFunction` / `BinaryOperator` | 8 | Use for merge and combination callbacks; extract helpers for tie-breaking, nulls, or branching. |
+| `BiFunction` / `BinaryOperator` | 8 | Use for merge and combination callbacks; extract helpers for null handling or branching; compose comparators instead of extracting them. |
 | `Comparator` | 8 | Prefer comparing helpers when a comparison needs normalization, null handling, or multiple branches. |
 | `Optional` callbacks | 8 | `map`, `flatMap`, `filter`, `orElseGet`, and `ifPresent` take callbacks; which Optional operation to use is the `java-optionals` skill's job. |
 | Stream callbacks | 8 | `map`, `flatMap`, `filter`, and collector callbacks take callbacks; which stream operation or collector to use is the `java-streams` skill's job. |
