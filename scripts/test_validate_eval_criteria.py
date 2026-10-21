@@ -212,6 +212,50 @@ class ValidateEvalCriteriaTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("natural scenario explicitly invokes the skill", result.stderr)
 
+    def main_checklist(self) -> list[dict[str, object]]:
+        return [
+            {"name": "Creates artifact", "category": "safety", "max_score": 5, "description": "Creates Example.java."},
+            {"name": "Preserves behavior", "category": "safety", "max_score": 10, "description": "Returns the requested output."},
+            {"name": "Keeps callbacks short", "category": "functional_style", "max_score": 80, "description": "Uses one-expression callbacks."},
+            {"name": "Keeps it focused", "category": "maintainability", "max_score": 5, "description": "Adds nothing unrequested."},
+        ]
+
+    def plain_task(self, prompt: str) -> str:
+        return f"# Fixture\n\nCreate `Example.java`. Assume Java 17.\n\n{prompt}\n"
+
+    def test_main_without_natural_scenario_fails(self) -> None:
+        temp, root = self.with_repo()
+        with temp:
+            write_scenario(
+                root, "evals", "01-explicit", self.plain_task("Use `$java-functional-style` to tidy `Example`."),
+                invocation="explicit", checklist=self.main_checklist(),
+            )
+            result = self.run_validator(root, root / "evals")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("must include a natural invocation scenario", result.stderr)
+
+    def test_main_alone_with_only_natural_passes(self) -> None:
+        temp, root = self.with_repo()
+        with temp:
+            write_scenario(root, "evals", "01-natural", self.plain_task("Tidy `Example` for readability."), checklist=self.main_checklist())
+            result = self.run_validator(root, root / "evals")
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_main_and_reference_need_both_invocation_styles(self) -> None:
+        temp, root = self.with_repo()
+        with temp:
+            write_scenario(root, "evals", "01-natural", self.plain_task("Tidy `Example` for readability."), checklist=self.main_checklist())
+            write_scenario(root, "evals-reference", "02-natural", self.plain_task("Clean up `Other` for readability."))
+            missing = self.run_validator(root, root / "evals", root / "evals-reference")
+            write_scenario(
+                root, "evals-reference", "03-explicit", self.plain_task("Use `$java-functional-style` to tidy `Third`."),
+                invocation="explicit",
+            )
+            both = self.run_validator(root, root / "evals", root / "evals-reference")
+        self.assertNotEqual(missing.returncode, 0)
+        self.assertIn("both natural and explicit invocation scenarios", missing.stderr)
+        self.assertEqual(both.returncode, 0, both.stderr)
+
     def test_task_names_skill_and_metadata_says_explicit_passes(self) -> None:
         temp, root = self.with_repo()
         with temp:
