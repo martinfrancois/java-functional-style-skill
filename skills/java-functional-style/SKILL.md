@@ -90,7 +90,8 @@ this skill only changes how callbacks are written.
 10. Keep checked exceptions at a visible boundary. Do not bury `try`/`catch` inside a callback to
    wrap an `IOException` unless the surrounding API already owns unchecked wrapping. Use a named
    helper that declares or converts the exception on purpose, or a plain loop or branch.
-11. Choose plain Java when it reads better: checked IO, prompts, parser boundaries, early exits,
+11. Choose plain Java when it reads better: checked IO, prompts, parser boundaries, complex early
+    exits (a loop that only stops at the first match is a stream question, not a callback one),
     sentinel-driven windows, mutation-heavy accumulation, and step-by-step control flow. When
     reviewing a functional rewrite of such code, reject the behavior change and recommend keeping
     the loop or branch; do not counter-propose another pipeline.

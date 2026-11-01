@@ -56,7 +56,8 @@ Fix or explicitly classify each of these before finalizing:
   an inline ternary when the comparator and tie behavior match.
 - Keep supplier work lazy even when the supplier body is a single method call, if that method has
   meaningful cost or side effects.
-- For stateful windows, sentinel loops, early exits, checked IO, prompts, parser boundaries, or
+- For stateful windows, sentinel loops, complex early exits (a loop that only stops at the first
+  match is a stream question, not a callback one), checked IO, prompts, parser boundaries, or
   mutation-heavy accumulation, recommend keeping the loop or branch. In a rejection review, do not
   offer an alternative pipeline snippet even as a counterexample; it distracts from the safe
   direction and can introduce new defects.
