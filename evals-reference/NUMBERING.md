@@ -83,3 +83,29 @@ the same on the composition run against 1.0.0 and passed its rerun); java-stream
 (`01a15fdb-1d8a-732e-a4be-f4326ee365dd`) `31` at 100, `43` at 45 (kept the loop), `56` at 80
 (line-level `flatMap` instead of `mapMulti`). The local composed screen with both skills and the
 rule scored all three at 100 in three runs each, so it does not reproduce the hosted misses.
+
+## Hosted runs against 1.0.1 (2026-11-02)
+
+Both arms, run `01a1997c-8c36-7623-aef6-8abac5070cfc`, every with-skill cell with the skill
+activated:
+
+| Scenario | Baseline | With skill |
+| --- | --- | --- |
+| `01` | 100 | 100 |
+| `03` | 100 | 100 |
+| `04` | 98 | 100 |
+| `06` | 95 | 99 |
+| `07` | 47 | 100 |
+| `12` | 97 | 100 |
+
+`06` lost 1 point on "Keeps review focused" for a note on work performed in the early-exit
+section, the same point it lost on the targeted run of the #61 text
+(`01a19902-f052-75b6-97d1-d5f05f26b06e`, 99); its isolated rerun then scored 100
+(`01a19906-579b-7705-933f-17156355580a`). It stays in reference.
+
+Composition with both skills on the 1.0.1 text, from #51: java-streams main `31`, `43`, `56` and
+java-optionals main `10`, `19`, `35`, `37`, `51`, `55`, `57` all scored 100 with both skills
+activated. The runs: `01a19906-4b01-7455-9358-de08cbc59412` (31, 56),
+`01a19961-d009-7293-8a49-50398f764497` (43), `01a1991a-857a-74c6-a15b-c3e98aa16b79` (10, 19, 35,
+51, 57), `01a19954-6adc-70ff-b418-cb20b9c91b4a` (37), `01a19957-8e47-7796-ab0a-26ebd550c5d2`
+(55, an isolated rerun after a 35 that used `isPresent()` then `get()`).
