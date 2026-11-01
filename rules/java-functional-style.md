@@ -17,10 +17,11 @@ glue that names a single step of the value flow.
   supplier the API takes, never computed before the absence check.
 - Prefer a method reference only when it keeps receiver timing, overload choice, argument order,
   boxing, and exception behavior unchanged.
-- Keep plain loops and branches for checked IO, prompts, parser boundaries, early exits,
-  sentinel-driven windows, and mutation-heavy accumulation. Do not force streams, Optionals, or
-  callback chains where a branch or loop is clearer, and in a review of such a rewrite recommend
-  keeping the loop rather than proposing a cleverer pipeline.
+- Keep plain loops and branches for checked IO, prompts, parser boundaries, complex early exits (a
+  loop that only stops at the first match is a stream question, not a callback one), sentinel-driven
+  windows, and mutation-heavy accumulation. Do not force streams, Optionals, or callback chains
+  where a branch or loop is clearer, and in a review of such a rewrite recommend keeping the loop
+  rather than proposing a cleverer pipeline.
 - Preserve ordering, laziness, exception behavior, side effects, mutability, observable object
   identity, and the project's Java baseline in every change.
 - In user-facing output such as `review.md`, explain the Java behavior only; do not mention rules,
