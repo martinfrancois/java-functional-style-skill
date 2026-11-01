@@ -28,3 +28,8 @@ unaided; `13` arrived from reference after its starting comparator was made cons
 checklist (100 in both arms, three runs each). `10` became natural and kept its 100 unaided. The
 table of every screen is in `evals-reference/NUMBERING.md`; hosted with-context confirmation of
 the current members is recorded here when it runs.
+
+## Hosted run against 1.0.1 (2026-11-02)
+
+With context, run `01a1997c-777f-7580-8bce-21e89a86d379`: `02`, `05`, `08`, `10`, `11`, and `13`
+all scored 100 with the skill activated.
