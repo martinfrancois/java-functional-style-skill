@@ -94,10 +94,10 @@ which runs `tessl plugin publish`; Tessl then runs the main suite server-side an
 on the registry. The publish workflow needs the `tessl-release` environment and the `TESSL_TOKEN`
 secret, both already set.
 
-The first release should be `0.1.0`. With no tag behind the manifest, Release Please would pick
-its own initial version, so type `Release-As: 0.1.0` by hand into the body of the squash commit
-that lands the package on `main` (the default squash body is the commit list; replace it). The
-first changelog will also list the scaffold and Renovate commits already on `main`.
+Release Please picks the next version from the commits since the latest `v*` tag: `fix` bumps
+the patch, `feat` the minor, and a breaking change the major. To pick a version yourself, type
+`Release-As: <version>` by hand into the body of the squash commit (the default squash body is
+the commit list; replace it). `v0.1.0` and `v1.0.0` were cut that way.
 
 Runtime changes are not done until the hosted checks in [Eval Guidance](evals.md) and the
 composition check in [Ownership Boundaries](ownership-boundaries.md) have passed.

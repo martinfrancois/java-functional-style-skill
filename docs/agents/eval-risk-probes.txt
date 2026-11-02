@@ -1,10 +1,7 @@
-# Historical Eval Risk Probes
-
-This file is intentionally empty for the new package until hosted functional-style eval history
-exists.
-
-Add entries only after scored with-context failures are observed during tuning, using:
-
-```text
-<suite>:<scenario-name>
-```
+# Historical eval risk probes for scripts/pre_submit_gate.sh. One suite:scenario entry per line,
+# where suite is main, reference, or regression. For a runtime change the gate adds the entries,
+# in file order and up to --risk-limit (default 6), to its targeted pass.
+#
+# No entries yet. Hosted eval history exists in evals/NUMBERING.md,
+# evals-reference/NUMBERING.md, and evals-regression/NUMBERING.md, but no probes have been picked
+# from it. Add entries only for scored with-context failures observed during tuning.
