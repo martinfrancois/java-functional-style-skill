@@ -28,7 +28,10 @@ This page captures the internal pre-submission procedure for skill and eval chan
 - Never use unbounded loops for hosted evals, reviews, or other quota-consuming commands.
 - If unexpected background work appears, audit process ancestry and Codex session logs before
   explaining the cause.
-- If Tessl eval access is blocked, stop and record exact blocked commands.
+- If Tessl eval access is blocked, stop and record exact blocked commands. `credits.blocked: true`
+  or a run that Tessl refuses with "run out of credits" counts as blocked; going past the monthly
+  credit allowance (`credits.overLimit: true`) does not. While blocked, the local screen
+  (`scripts/local_screen.sh`) is the fallback, but hosted confirmation is still owed.
 
 ## Composition Check
 
