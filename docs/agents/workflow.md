@@ -42,9 +42,11 @@ tessl plugin publish --dry-run --bump patch .
 tessl plugin publish --dry-run .
 ```
 
-  Tessl caches a review per skill text, and the judge varies by a few points from run to run, so
-  the gates in CI and in the publish script pass `--force`: a text that once scored 97 would
-  otherwise return 97 on every rerun. Use `--force` locally too when a score has to be fresh.
+  No CI workflow runs this review, publish included. Each run costs 10 Tessl credits, and the
+  judge has scored unchanged text anywhere from 94 to 100, so a CI gate would mean paying for
+  re-rolls. Run it by hand whenever the skill text changes. Tessl caches a review per skill text,
+  so a text that once scored 97 returns 97 on every rerun; pass `--force` when a score has to be
+  fresh.
 
 If `tessl plugin publish --dry-run .` fails only because the current manifest version already
 exists, record that as expected for ordinary non-release changes and rely on the patch-bump dry-run.

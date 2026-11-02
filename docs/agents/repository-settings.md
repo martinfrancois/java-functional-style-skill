@@ -37,7 +37,8 @@ GitHub secrets are not readable and must not be copied.
 
 Required secret:
 
-- `TESSL_TOKEN` is required for authenticated Tessl review, dry-run publish, and real publish.
+- `TESSL_TOKEN` is required for dry-run publish and real publish. No workflow runs
+  `tessl review run`; run it by hand (see [Workflow](workflow.md)).
 
 Real publish runs only through the release workflow. Runtime changes are not done until the
 hosted checks and the composition check pass.
