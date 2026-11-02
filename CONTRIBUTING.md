@@ -54,6 +54,9 @@ tessl plugin publish --dry-run .
 
 Real Tessl publishes run only through the release workflow.
 
+CI doesn't run `tessl review run`. Each run costs 10 Tessl credits, so run it by hand when the
+skill text or its references change.
+
 ## Eval Integrity
 
 Runtime skill text, references, and the rule must not contain answers to eval tasks: no helper
