@@ -1,8 +1,8 @@
 # Agent Instructions
 
-Java Functional Style is a private-for-now Tessl-compatible skill that helps AI coding agents write,
-review, and refactor Java lambdas, method references, functional interfaces, identity functions,
-suppliers, predicates, consumers, callbacks, and no-op functional stages without changing behavior.
+Java Functional Style is a Tessl-compatible skill that helps AI coding agents write, review, and
+refactor Java lambdas, method references, functional interfaces, identity functions, suppliers,
+predicates, consumers, callbacks, and no-op functional stages without changing behavior.
 
 Before starting any task, open [Workflow](docs/agents/workflow.md) and follow it.
 
