@@ -66,9 +66,10 @@ lift.
 ## Classification And Promotion
 
 1. Draft new scenarios in `evals-reference/` (or `evals-regression/` when skill-context
-   dependent), and screen them with `scripts/local_screen.sh` first
-   ([Local Screening With DeepSeek](local-screening.md)) so hosted credits go only to scenarios
-   whose baseline fails unaided.
+   dependent). If the user chose a local screen (see
+   [Local Baseline Screening](#local-baseline-screening)), screen them with
+   `scripts/local_screen.sh` first so hosted credits go only to scenarios whose baseline fails
+   unaided.
 2. Run them in isolation with both variants: `scripts/run_eval_suite.sh reference <scenario>`.
 3. Save `tessl eval view <run-id> --json` and run
    `scripts/classify_eval_result.py <run-json> --scenario-dir <scenario-dir>`.
@@ -127,14 +128,21 @@ numbers live in `evals/NUMBERING.md`, `evals-reference/NUMBERING.md`,
 
 ## Local Baseline Screening
 
-Hosted Tessl runs cost credits (20 per scenario with both variants on the free plan) and the
-daily pool is shared with the other skill repositories. `scripts/local_screen.sh` runs a scenario
-through the model behind Tessl's default solver for one to two cents, with the skill and `rules/`
-as context in skill mode, and grades it with a Claude judge. Setup, commands, placement
-thresholds, and the skill-tuning loop are in [Local Screening With DeepSeek](local-screening.md).
-Local numbers decide placement and go into the `NUMBERING.md` notes as local screening results.
-They are not hosted evidence: benchmark claims, release-readiness claims, and the registry score
-still need the hosted runs described above.
+Hosted Tessl runs cost credits (20 per scenario with both variants on the free plan), shared with
+the other skill repositories. Hosted runs and reviews may go past the plan's 1,000-credit monthly
+allowance. `credits.overLimit: true` in `tessl org usage --json` is not a reason to stop, ask, or
+switch to the local screen. Only `credits.blocked: true`, or a run that Tessl refuses with "run out
+of credits", stops hosted runs and reviews; the local screen is then the fallback.
+
+Before the first hosted run of a task, ask the user once whether to screen locally first with
+DeepSeek V4.1 Flash or go straight to hosted Tessl runs, unless the user already said which, and
+follow the answer. The local screen, `scripts/local_screen.sh`, runs a scenario through the same
+model as Tessl's default solver, with the skill and `rules/` as context in skill mode, costs one
+to two cents a run, grades it with a Claude judge, and spends no Tessl credits.
+[Local Screening With DeepSeek](local-screening.md) covers setup, commands, placement thresholds,
+and the skill-tuning loop. Local numbers decide placement and go into the `NUMBERING.md` notes as
+local screening results. They are not hosted evidence: benchmark claims, release-readiness claims,
+and the registry score still need the hosted runs described above.
 
 ## References
 

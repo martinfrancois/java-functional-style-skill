@@ -46,8 +46,9 @@ plugin under a gitignored directory inside the repository, Tessl skips gitignore
 reads a local `--context`, so the plugin it saw had no skills. The runner now builds the plugin
 outside the repository and names both skills with `--skill`.
 
-Every retained scenario must reach 100% with-context. Broaden to `reference` and `regression`
-when budget allows and always after a change that touches review wording. Criterion-level
+Every retained scenario must reach 100% with-context. Always broaden to `reference` and `regression`
+after a change that touches review wording. After other changes, broaden too unless Tessl blocks
+hosted runs; going past the monthly credit allowance is no reason to skip them. Criterion-level
 results must be equal or better at criterion level, not only in the total.
 
 Run the check after any change to `skills/java-functional-style/` or `rules/`. If it regresses a

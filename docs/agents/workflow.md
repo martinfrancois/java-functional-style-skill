@@ -54,9 +54,10 @@ exists, record that as expected for ordinary non-release changes and rely on the
 ## Hosted Evals
 
 Follow [Eval Guidance](evals.md) for suite rules and [Pre-Submit Gate](pre-submit-gate.md) for
-the budget-aware order. Screen scenarios and skill changes locally first with
-`scripts/local_screen.sh` ([Local Screening With DeepSeek](local-screening.md)); it runs the model
-behind the default solver for a cent or two a run. Then, in short:
+the budget-aware order. Before the first hosted run, ask the user whether to screen scenarios and
+skill changes locally first with `scripts/local_screen.sh`, as
+[Local Baseline Screening](evals.md#local-baseline-screening) describes; that section also says
+when credits stop hosted runs. Then, in short:
 
 1. Quality review at threshold 100 for any runtime skill, reference, or rule change. Fix quality
    before spending eval budget.
