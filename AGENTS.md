@@ -26,4 +26,5 @@ that correction durable in the relevant file under `docs/agents/`.
 - [Local Screening With DeepSeek](docs/agents/local-screening.md)
 - [Public Metadata And OSS Readiness](docs/agents/public-metadata.md)
 - [Repository Settings](docs/agents/repository-settings.md)
+- [Contributing For Someone Else](docs/agents/contributing-for-someone-else.md)
 - [Maintaining Agent Docs](docs/agents/maintaining-agent-docs.md)

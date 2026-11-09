@@ -3,3 +3,6 @@ contact_links:
   - name: Security vulnerability
     url: https://github.com/martinfrancois/java-functional-style-skill/security/advisories/new
     about: Report suspected vulnerabilities privately instead of opening a public issue.
+  - name: Propose a feature
+    url: https://github.com/martinfrancois/java-functional-style-skill/discussions/categories/ideas
+    about: Feature ideas start in Discussions. Once a feature is approved there, I open an issue for it that you can claim with /take.

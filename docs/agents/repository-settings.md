@@ -8,6 +8,7 @@ repository's own settings; check them with `gh repo view` and
 
 - Visibility: public
 - Issues: enabled
+- Discussions: enabled
 - Wiki: disabled
 - Projects: disabled
 - Delete branch on merge: enabled
